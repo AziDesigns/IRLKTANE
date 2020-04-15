@@ -77,5 +77,6 @@ Fritzing - The program used to create the components layout and wiring diagram.
 AziAssassin
 
 5. Credits
-Thanks to reddit u/advicevice for making me realize the potential this idea had.
-Keep Talking and Nobody Explodes - the game that inspired me.
+Thanks to calingeorgeadrian && ema1ih for setting the ground work for me to learn and get the basics of how they wrote their version of a select few of these modules.
+Thanks to reddit u/advicevice for making me realize the potential this idea had to become a phyical game.
+Last but not least: Keep Talking and Nobody Explodes - the game that inspired me in the first place.
