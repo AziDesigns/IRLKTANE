@@ -9,7 +9,7 @@
 #define PIN_MEMORY_LED_2 33 // stage 2 complete LED
 #define PIN_MEMORY_LED_3 35 // stage 3 complete LED
 #define PIN_MEMORY_LED_4 37 // stage 4 complete LED
-#define PIN_MEMORY_LED_GREEN 41 // module complete LED
+#define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
 LedControl lc = LedControl(18, 16, 17, 1); //DIN, CLK, LOAD, No. DRIVER
 

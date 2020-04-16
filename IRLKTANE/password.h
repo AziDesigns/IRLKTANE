@@ -5,20 +5,20 @@ refactor it, everything stopped working so I decided to keep it like this
 */
 
 #define LCD_PASSWORD_CONTRAST 40
-#define PIN_PASSWORD_LED_GREEN 19
+#define PIN_PASSWORD_LED_GREEN 25
 
-#define PIN_PASSWORD_BUTTON_1 64
-#define PIN_PASSWORD_BUTTON_2 62
-#define PIN_PASSWORD_BUTTON_3 60
-#define PIN_PASSWORD_BUTTON_4 58
-#define PIN_PASSWORD_BUTTON_5 56
-#define PIN_PASSWORD_BUTTON_6 54
-#define PIN_PASSWORD_BUTTON_7 52
-#define PIN_PASSWORD_BUTTON_8 50
-#define PIN_PASSWORD_BUTTON_9 48
-#define PIN_PASSWORD_BUTTON_10 46
+#define PIN_PASSWORD_BUTTON_1 62 // letter 1 up
+#define PIN_PASSWORD_BUTTON_2 61 // letter 2 up
+#define PIN_PASSWORD_BUTTON_3 60 // letter 3 up
+#define PIN_PASSWORD_BUTTON_4 58 // letter 4 up
+#define PIN_PASSWORD_BUTTON_5 56 // letter 5 up
+#define PIN_PASSWORD_BUTTON_6 54 // letter 1 down
+#define PIN_PASSWORD_BUTTON_7 52 // letter 2 down
+#define PIN_PASSWORD_BUTTON_8 59 // letter 3 down
+#define PIN_PASSWORD_BUTTON_9 57 // letter 4 down
+#define PIN_PASSWORD_BUTTON_10 53 // letter 5 down
 
-LiquidCrystal lcdPassword(29, 27, 41, 43, 45, 47);
+LiquidCrystal lcdPassword(28, 30, 34, 49, 51, 55);
 int passWordGen;
 
 void passwordModuleDefusedPrint()
