@@ -9,6 +9,8 @@
 #define PIN_MEMORY_LED_2 33 // stage 2 complete LED
 #define PIN_MEMORY_LED_3 35 // stage 3 complete LED
 #define PIN_MEMORY_LED_4 37 // stage 4 complete LED
+// I think there should be a stage 5 complete LED even though that means the module is defused. 
+// Unless its going to just be always off? Need to see how KTANE handles that module
 #define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
 LedControl lc = LedControl(18, 16, 17, 1); //DIN, CLK, LOAD, No. DRIVER
