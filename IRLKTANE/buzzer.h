@@ -1,4 +1,4 @@
-// The sounds for the buzzer
+// The buzzer sounds for bomb diffused, bomb explosion, module diffused, and strike added.
 
 #define BUZZER 24
 

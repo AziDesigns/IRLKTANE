@@ -1,12 +1,11 @@
-// The Button Module
+// On the Subject of Buttons
 /* 
 I know there is a lot of repetitive code inside this. 
-I will be rewriting it once I fix the "not declared in this scope" errors.
-Errors are on defusedModuleBuzzer();  and  sec;   and  mins
+I will rewrite after getting other modules updated and working.
 */
 
 #define LCD_BUTTON_CONTRAST 40
-#define PIN_THE_BUTTON_LED_GREEN 19
+#define PIN_BUTTON_LED_GREEN 19 // module complete LED
 #define BTN_PIN 26
 #define LEFT_LED_RED_PIN 7
 #define LEFT_LED_GREEN_PIN 8
@@ -40,6 +39,13 @@ void buttonModuleDefusedPrint()
    setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 0);
    buttonModuleDefused = true;
    defusedModuleBuzzer();
+   digitalWrite(PIN_BUTTON_LED_GREEN, HIGH);
+   lcdButton.clear();
+   lcdButton.setCursor(1, 0);
+   lcdButton.print("MODULE DEFUSED");
+   lcdButton.setCursor(0, 1);
+   lcdButton.print("Serial: ");
+   lcdButton.print(serialCode);
 }
 
 void buttonModuleBoom()
@@ -51,6 +57,7 @@ void buttonModuleBoom()
   lcdButton.print("BOMB");
   lcdButton.setCursor(4, 1);
   lcdButton.print("EXPLODED"); 
+  digitalWrite(PIN_BUTTON_LED_GREEN, LOW);
 }
 
 bool checkClock(int value)
@@ -98,17 +105,6 @@ void printWord() {
   }
 }
 
-void printModuleDefused() 
-{
-  buttonModuleDefusedPrint();
-  lcdButton.clear();
-  lcdButton.setCursor(1, 0);
-  lcdButton.print("MODULE DEFUSED");
-  lcdButton.setCursor(0, 1);
-  lcdButton.print("Serial: ");
-  lcdButton.print(serialCode);
-}
-
 void buttonSetup()
 {
   pinMode(LEFT_LED_RED_PIN, OUTPUT);
@@ -118,7 +114,7 @@ void buttonSetup()
   pinMode(RIGHT_LED_GREEN_PIN, OUTPUT);
   pinMode(RIGHT_LED_BLUE_PIN, OUTPUT);
   pinMode(BTN_PIN, INPUT);
-  pinMode(PIN_THE_BUTTON_LED_GREEN, OUTPUT);
+  pinMode(PIN_BUTTON_LED_GREEN, OUTPUT);
   pinMode(V0_PIN, OUTPUT);
 
   analogWrite(V0_PIN, LCD_BUTTON_CONTRAST);
@@ -132,7 +128,7 @@ void buttonSetup()
   rightLedColor = random(1, 5);
   btnWordGen = random(1, 4);
  
-  switch(leftLedColor)
+  switch(leftLedColor) // left color is the button color
   {
     case 1: {
       setColor(LEFT_LED_RED_PIN, 0, LEFT_LED_GREEN_PIN, 0, LEFT_LED_BLUE_PIN, 255);
@@ -151,7 +147,8 @@ void buttonSetup()
     }
     break;
   }
-  switch(rightLedColor){
+  switch(rightLedColor) // right color is the light strip color for press and hold
+  {  
     case 1: {
       setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 255);
     }
@@ -206,9 +203,8 @@ void buttonLoop()
               if(btnState == HIGH)
               {
                 moduleFinished = 1;
-                digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                buttonModuleDefusedPrint();
                 Serial.println("Finished: Left led is blue + Abort");
-                printModuleDefused();
               }
             }
           }
@@ -227,9 +223,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(4))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is blue + Right led is blue, button has been held");
-                      printModuleDefused();
                   }
                   else if(btnState == LOW && !checkClock(4))
                   {
@@ -250,9 +245,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(3))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is blue + Right led is red, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(3))
                     {
@@ -273,9 +267,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(5))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is blue + Right led is green, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(5))
                     {
@@ -296,9 +289,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(1))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is blue + Right led is white, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(1))
                     {
@@ -324,9 +316,8 @@ void buttonLoop()
               if(btnState == HIGH)
               {
                 moduleFinished = 1;
-                digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                buttonModuleDefusedPrint();
                 Serial.println("Finished: Left led is red + Hold");
-                printModuleDefused();
               }
             }
           }
@@ -345,9 +336,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(4))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is red + Right led is blue, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(4))
                     {
@@ -368,9 +358,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(3))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is red + Right led is red, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(3))
                     {
@@ -391,9 +380,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(5))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is red + Right led is green, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(5))
                     {
@@ -414,9 +402,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(1))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left Led is red + Right led is white, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(1))
                     {
@@ -442,9 +429,8 @@ void buttonLoop()
               if(btnState == HIGH)
               {
                 moduleFinished = 1;
-                digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                buttonModuleDefusedPrint();
                 Serial.println("Finished: Left led is green + Detonate");
-                printModuleDefused();
               }
             }
           }
@@ -463,9 +449,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(4))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is green + Right led is blue, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(4))
                     {
@@ -486,9 +471,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(3))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is green + Right led is red, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(3))
                     {
@@ -509,9 +493,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(5))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is green + Right led is green, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(5))
                     {
@@ -532,9 +515,8 @@ void buttonLoop()
                   if(btnState == LOW && checkClock(1))
                   {
                       moduleFinished = 1;
-                      digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                      buttonModuleDefusedPrint();
                       Serial.println("Finished: Left led is green + Right led is white, button has been held");
-                      printModuleDefused();
                   }
                     else if(btnState == LOW && !checkClock(1))
                     {
@@ -563,9 +545,8 @@ void buttonLoop()
                     if(btnState == LOW && checkClock(4))
                     {
                         moduleFinished = 1;
-                        digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                        buttonModuleDefusedPrint();
                         Serial.println("Finished: Left led is white + Right led is blue, button has been held");
-                        printModuleDefused();
                     }
                     else if(btnState == LOW && !checkClock(4))
                     {
@@ -586,9 +567,8 @@ void buttonLoop()
                     if(btnState == LOW && checkClock(3))
                     {
                         moduleFinished = 1;
-                        digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                        buttonModuleDefusedPrint();
                         Serial.println("Finished: Left led is white + Right led is red, button has been held");
-                        printModuleDefused();
                     }
                     else if(btnState == LOW && !checkClock(3))
                     {
@@ -609,9 +589,8 @@ void buttonLoop()
                     if(btnState == LOW && checkClock(5))
                     {
                         moduleFinished = 1;
-                        digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                        buttonModuleDefusedPrint();
                         Serial.println("Finished: Left led is white + Right led is green, button has been held");
-                        printModuleDefused();
                     }
                     else if(btnState == LOW && !checkClock(5))
                     {
@@ -632,9 +611,8 @@ void buttonLoop()
                     if(btnState == LOW && checkClock(1))
                     {
                         moduleFinished = 1;
-                        digitalWrite(PIN_THE_BUTTON_LED_GREEN, HIGH);
+                        buttonModuleDefusedPrint();
                         Serial.println("Finished: Left led is white + Right led is white, button has been held");
-                        printModuleDefused();
                     }
                     else if(btnState == LOW && !checkClock(1))
                     {

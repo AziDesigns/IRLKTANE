@@ -1,4 +1,4 @@
-// Memory Module
+// On the Subject of Memory
 
 #define PIN_MEMORY_BUTTON_1 A6 // position 1 button
 #define PIN_MEMORY_BUTTON_2 A7 // position 2 button

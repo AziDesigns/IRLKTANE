@@ -1,4 +1,4 @@
-//Capacitor Discharge Module
+// On the Subject of Capacitor Discharge
 
 #define PIN_DISCHARGE_YELLOW_LED 7 // Yellow LED for showing active discharge occuring
 #define PIN_DISCHARGE_LEVER 8 // lever that is pressed to discharge the module

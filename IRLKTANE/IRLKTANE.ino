@@ -34,19 +34,20 @@ void generateSerialCode() // function that generates the serial number for the b
     serialCode[i] = alphanumeric[random(0, 35)];
 }
 
-// list all modules that should be included
+// list all modules/ header files that should be included 
+// ** buzzer.h and time.h must be at the top as they are called by other functions
 
-#include "button.h"
 #include "buzzer.h"
-#include "discharge.h"
-//#include "knob.h"
-//#include "maze.h"
-#include "memory.h"
-//#include "morse.h"
-//#include "password.h"
-//#include "simon.h"
 #include "time.h"
-//#include "Venting.h"
+#include "button.h"
+#include "discharge.h"
+#include "knob.h"
+#include "maze.h"
+#include "memory.h"
+#include "morse.h"
+#include "password.h"
+#include "simon.h"
+#include "venting.h"
 #include "who.h"
 
 void setup() // this section includes all setups for all modules to define INPUTS/OUTPUTS/DEFAULT VALUES/ ETC

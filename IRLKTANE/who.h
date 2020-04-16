@@ -1,4 +1,4 @@
-// Who's on First Module
+// On the Subject of Who's on First
 
 #define LABELS_LENGTH 28
 

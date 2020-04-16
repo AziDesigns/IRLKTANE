@@ -1,4 +1,4 @@
-// The Timer
+// The Overall Bomb Timer/ Clock
 
 #define PIN_CLK 14 // countdown clock CLK
 #define PIN_DIO 15 // countdown clock DIO
