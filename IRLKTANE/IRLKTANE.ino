@@ -12,7 +12,7 @@
 
 bool defused = false, exploded = false; // is bomb defused or exploded default values false
 
-// are modules defused? Default is False
+// on new bomb all modules start with default "is difused" state of False
 bool 
 buttonModuleDefused = false, 
 mazeModuleDefused = false,
@@ -36,7 +36,7 @@ void generateSerialCode() // function that generates the serial number for the b
 
 // list all modules that should be included
 
-//#include "button.h"
+#include "button.h"
 #include "buzzer.h"
 #include "discharge.h"
 //#include "knob.h"
@@ -64,7 +64,7 @@ void setup() // this section includes all setups for all modules to define INPUT
 
   generateSerialCode();
 
-//  buttonSetup();
+  buttonSetup();
   dischargeSetup();
 //  knobSetup();
 //  mazeSetup();
@@ -82,7 +82,7 @@ void bombExploded() // what should each module do when exploded
 {
   exploded = true;
   boomBuzzer();
-//  buttonModuleBoom();
+  buttonModuleBoom();
   dischargeModuleBoom();
 //  knobModuleBoom();
 //  mazeModuleBoom();
@@ -118,7 +118,7 @@ void loop()
 
   if (!defused && !exploded)
   {
-//    buttonLoop();
+    buttonLoop();
     dischargeLoop();
 //    knobLoop();
 //    mazeLoop();
@@ -131,7 +131,7 @@ void loop()
   }
 
   if (!exploded && (
-//   buttonModuleDefused && 
+   buttonModuleDefused && 
 //   mazeModuleDefused &&
    memoryModuleDefused && 
 //   morseModuleDefused &&
