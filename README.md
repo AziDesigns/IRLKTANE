@@ -31,11 +31,11 @@ These instructions will get you a copy of the project up and running.
 #### 1.1 Prerequisites
 In order for the code to work, you will need the following libraries:
 
-    SevenSegmentTM1637
-    LedControl
-    LiquidCrystal
-    LiquidCrystal_I2C
-    The files in this repository
+- SevenSegmentTM1637 - [link](https://github.com/bremme/arduino-tm1637) 
+- LedControl - [link](https://github.com/wayoda/LedControl)
+- LiquidCrystal - [link](https://www.arduinolibraries.info/libraries/liquid-crystal)
+- LiquidCrystal_I2C - [link](https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c?fbclid=IwAR016eH4yHLd4HKqA-OcUghdO19ukQlUcGXE2mY0AUaA8aWecJZJvaQrt5E)
+- The files in this repository
 
 #### 1.2 Installation
     1 - Download the .zip files for the libraries
@@ -72,13 +72,16 @@ Next, connect the Arduino board to your computer and load the program to the boa
     Many Resistors, Capacitors, and Jumpers
 
 #### 3. Built With
-Arduino - The IDE used to code the modules logic.
-Fritzing - The program used to create the components layout and wiring diagram.
+[Arduino](https://www.arduino.cc/en/main/software) - The IDE used to code the modules logic.
+
+[Fritzing](http://fritzing.org/home/) - The program used to create the components layout and wiring diagram.
 
 #### 4. Authors
 AziAssassin
 
 #### 5. Credits
 Thanks to calingeorgeadrian && ema1ih for setting the ground work for me to learn and get the basics of how they wrote their version of a select few of these modules.
+
 Thanks to reddit u/advicevice for making me realize the potential this idea had to become a phyical game.
-Last but not least: Keep Talking and Nobody Explodes - the game that inspired me in the first place.
+
+Last but not least: Keep Talking and Nobody Explodes - the [game](https://keeptalkinggame.com/) that inspired me in the first place.
