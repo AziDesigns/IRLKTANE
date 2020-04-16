@@ -11,3 +11,18 @@
 
 unsigned long lastLeverPressTime = 0; //TIME SINCE LAST VENT
 unsigned long currentMillis = 0; //TIME UNTIL NEXT VENT NEEDED
+
+void ventingSetup()
+{
+  
+}
+
+void ventingLoop()
+{
+
+}
+
+void ventingModuleBoom()
+{
+
+}

@@ -12,7 +12,7 @@
 
 bool defused = false, exploded = false; // is bomb defused or exploded default values false
 
-// on new bomb all modules start with default "is difused" state of False
+// on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool 
 buttonModuleDefused = false, 
 mazeModuleDefused = false,
@@ -67,14 +67,14 @@ void setup() // this section includes all setups for all modules to define INPUT
 
   buttonSetup();
   dischargeSetup();
-//  knobSetup();
-//  mazeSetup();
+  knobSetup();
+  mazeSetup();
   memorySetup();
-//  morseSetup();
-//  passwordSetup();
-//  defusedSimonSetup();
+  morseSetup();
+  passwordSetup();
+  simonSetup();
   timeSetup();
-//  ventingSetup();
+  ventingSetup();
   whoSetup();
 
 }
@@ -85,14 +85,14 @@ void bombExploded() // what should each module do when exploded
   boomBuzzer();
   buttonModuleBoom();
   dischargeModuleBoom();
-//  knobModuleBoom();
-//  mazeModuleBoom();
+  knobModuleBoom();
+  mazeModuleBoom();
   memoryModuleBoom();
-//  morseModuleBoom();
-//  passwordModuleBoom();
-//  simonModuleBoom();
+  morseModuleBoom();
+  passwordModuleBoom();
+  simonModuleBoom();
   timeModuleBoom();
-//  ventingModuleBoom();
+  ventingModuleBoom();
   whoModuleBoom();
 }
 
@@ -121,23 +121,23 @@ void loop()
   {
     buttonLoop();
     dischargeLoop();
-//    knobLoop();
-//    mazeLoop();
+    knobLoop();
+    mazeLoop();
     memoryLoop();
-//    morseLoop();
-//    passwordLoop();
-//    simonLoop();
-//    VentingLoop();
+    morseLoop();
+    passwordLoop();
+    simonLoop();
+    ventingLoop();
     whoLoop();
   }
 
   if (!exploded && (
    buttonModuleDefused && 
-//   mazeModuleDefused &&
+   mazeModuleDefused &&
    memoryModuleDefused && 
-//   morseModuleDefused &&
-//   passwordModuleDefused &&
-//   simonModuleDefused && 
+   morseModuleDefused &&
+   passwordModuleDefused &&
+   simonModuleDefused && 
    whoModuleDefused))
   {
     victoryBuzzer();

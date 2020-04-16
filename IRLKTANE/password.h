@@ -258,6 +258,7 @@ void printPasswordModuleDefused()
   lcdPassword.setCursor(1, 0);
   lcdPassword.print("MODULE DEFUSED");
   lcdPassword.setCursor(0, 1);
+  passwordModuleDefused = true;
 }
 
 void passwordSetup()
