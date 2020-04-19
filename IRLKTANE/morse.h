@@ -106,7 +106,7 @@ void morseDash(){
 }
 
 void morseBlinkWord(){ // not expanded for other words as only 1 word array is built for testing
-  if (morseCorrectNumber=1) {
+  if (morseCorrectNumber==1) {
     for (int i = 0; i < 20; i = i + 1) {
       if(i == 1){
         morseDot();
@@ -123,7 +123,7 @@ void morseBlinkWord(){ // not expanded for other words as only 1 word array is b
         }
       }
       morseWordFinishedtimer = millis () ;
-      while (millis () - morseWordFinishedtimer < morseWordFinishedtimer){
+      while (millis () - morseWordFinishedtimer < morseWordLEDDelay){
       Serial.print(millis () - morseWordFinishedtimer);
       morseDelayCounter+1 ;
       }
