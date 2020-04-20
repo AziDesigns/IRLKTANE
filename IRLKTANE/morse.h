@@ -27,12 +27,11 @@ int lastButtonRightState=0; // previous state of the right button
 int lastButtonSubmitState=0; // previous state of the submit button
 int morseCorrectNumber=1; // will become random number selection from array in the future, set to dummy for testing
 
-const unsigned long morseYellowLEDDot = 100; // how long should the dot last
-const unsigned long morseYellowLEDDash = 400; // how long should the dash last
-const unsigned long morseLetterLEDDelay = 500; // how long should the delay between letters be
-const unsigned long morseDotDashLEDDelay = 200; // lenthg of delay for between dot and dash in same letter
-const unsigned long morseWordLEDDelay = 1500; // delay for morse code between word repeat
-unsigned long morseDelayCounter = 0; //a value that will count up while waiting for new letter/word //pointless action for while loop
+const unsigned long morseYellowLEDDot = 200; // how long should the dot last
+const unsigned long morseYellowLEDDash = 600; // how long should the dash last
+const unsigned long morseLetterLEDDelay = 800; // how long should the delay between letters be
+const unsigned long morseDotDashLEDDelay = 250; // lenthg of delay for between dot and dash in same letter
+const unsigned long morseWordLEDDelay = 4000; // delay for morse code between word repeat
 
 unsigned long morseYellowLEDtimerOn;
 unsigned long morseYellowLEDtimerOff;
@@ -44,7 +43,7 @@ unsigned char morseTable[]=
 // 0x3f="0",0x06="1",0x5b="2",0x4f="3",0x66="4",0x6d="5",0x7d="6",0x07="7",0x7f="8",0x6f="9",
 //0x77="A",0x7c="b",0x39="C",0x5e="d",0x79="E",0x71="F",0x00="OFF"
 
-int morseWord1[] = {1,1,1,0,1,1,1,1,0,1,0,1,2,1,1,0,1,2,1,1}; //word shell where 1=dot 2=dash, 0=new letter pause
+int morseWord1[] = {1,1,1,0,1,1,1,1,0,1,0,1,2,1,1,0,1,2,1,1,3}; //word shell where 1=dot 2=dash, 0=new letter pause
 int morseCurrentDotDash=0;
 
 
@@ -87,49 +86,47 @@ void morseYellowLEDOff ()
   morseYellowLEDtimerOff = millis ();  
   }  // end of turn on yellow LED
 
-void morseDot(){
-  if ((digitalRead (PIN_MORSE_LED_1) == LOW) && ((millis () - morseYellowLEDtimerOff) >= morseDotDashLEDDelay)) {
-    morseYellowLEDOn ();
-  }
-  else if ( (millis () - morseYellowLEDtimerOn) >= morseYellowLEDDot) {
-     morseYellowLEDOff ();
-  }
+// -----------------------------------------------------------------------------
+void morseDotDash ( unsigned long  duration )
+{
+    digitalWrite  (PIN_MORSE_LED_1, HIGH);
+    delay (duration);
+    digitalWrite  (PIN_MORSE_LED_1, LOW);
+    delay (morseDotDashLEDDelay);
 }
 
-void morseDash(){
-  if ((digitalRead (PIN_MORSE_LED_1) == LOW) && ((millis () - morseYellowLEDtimerOff) >= morseDotDashLEDDelay)) {
-    morseYellowLEDOn ();
-  }
-  else if ( (millis () - morseYellowLEDtimerOn) >= morseYellowLEDDash) {
-     morseYellowLEDOff ();
-  }
-}
+// -----------------------------------------------------------------------------
 
-void morseBlinkWord(){ // not expanded for other words as only 1 word array is built for testing
-  if (morseCorrectNumber==1) {
-    for (int i = 0; i < 20; i = i + 1) {
-      if(i == 1){
-        morseDot();
-      }
-      else if(i == 2){
-        morseDash();
-      }
-      else if(i == 0){ 
-        morseLetterFinishedtimer = millis () ;
-        Serial.print(morseLetterFinishedtimer);
-        while (millis () - morseLetterFinishedtimer < morseLetterLEDDelay){
-        Serial.print(millis () - morseWordFinishedtimer);
-        morseDelayCounter+1 ;
-        }
-      }
-      morseWordFinishedtimer = millis () ;
-      while (millis () - morseWordFinishedtimer < morseWordLEDDelay){
-      Serial.print(millis () - morseWordFinishedtimer);
-      morseDelayCounter+1 ;
-      }
+void
+morseBlinkWord ()
+{
+    Serial.println (__func__);
+
+    static unsigned i = 0;
+
+    switch (morseWord1 [i])  {
+    case 3:
+        delay (morseWordLEDDelay);
+        break;
+    
+    case 2:
+        morseDotDash (morseYellowLEDDash);
+        break;
+
+    case 1:
+        morseDotDash (morseYellowLEDDot);
+        break;
+
+    case 0:
+    default:
+        delay (morseLetterLEDDelay);
+        break;
     }
-  }
+
+    i = i < (sizeof(morseWord1)/sizeof(int))-1 ? i+1 : 0;
 }
+
+// -----------------------------------------------------------------------------
 
 void morseLeftButtonPressed(){
   if (morseCurrentDisplayNumber > 0)  {
