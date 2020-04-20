@@ -18,14 +18,14 @@ int morseLatch=9;  // 74HC595  pin 9 STCP
 int morseClock=10; // 74HC595  pin 10 SHCP
 int morseData=8;   // 74HC595  pin 8 DS
 
-int morseCurrentDisplayNumber=1; // what station is displayed, default starting is 1
+int morseCurrentDisplayNumber=0; // what station is displayed, default starting is 0
 int buttonLeftState=0; // current state of the left button 
 int buttonRightState=0; // current state of the right button
 int buttonSubmitState=0; // current state of the submit button
 int lastButtonLeftState=0; // previous state of the left button 
 int lastButtonRightState=0; // previous state of the right button
 int lastButtonSubmitState=0; // previous state of the submit button
-int morseCorrectNumber=1; // will become random number selection from array in the future, set to dummy for testing
+int morseCorrectNumber=0; // picks which word will be correct is made random in setup.
 
 const unsigned long morseYellowLEDDot = 200; // how long should the dot last
 const unsigned long morseYellowLEDDash = 600; // how long should the dash last
@@ -38,14 +38,51 @@ unsigned long morseYellowLEDtimerOff;
 unsigned long morseLetterFinishedtimer;
 unsigned long morseWordFinishedtimer;
 
+// this is the table that controls which LED # is shown.
 unsigned char morseTable[]=
 {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x00}; 
 // 0x3f="0",0x06="1",0x5b="2",0x4f="3",0x66="4",0x6d="5",0x7d="6",0x07="7",0x7f="8",0x6f="9",
 //0x77="A",0x7c="b",0x39="C",0x5e="d",0x79="E",0x71="F",0x00="OFF"
 
-int morseWord1[] = {1,1,1,0,1,1,1,1,0,1,0,1,2,1,1,0,1,2,1,1,3}; //word shell where 1=dot 2=dash, 0=new letter pause
-int morseCurrentDotDash=0;
+// morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause
+int morseWord0[] = {1,1,1,0,1,1,1,1,0,1,0,1,2,1,1,0,1,2,1,1,3}; // shell - 3.505 MHz
+int morseWord1[] = {1,1,1,1,0,1,2,0,1,2,1,1,0,1,2,1,1,0,1,1,1,3}; // halls - 3.515 MHz
+int morseWord2[] = {1,1,1,0,1,2,1,1,0,1,1,0,2,1,2,1,0,2,1,2,3}; // slick - 3.522 MHz
+int morseWord3[] = {2,0,1,2,1,0,1,1,0,2,1,2,1,0,2,1,2,3}; // trick - 3.532 MHz
+int morseWord4[] = {2,1,1,1,0,2,2,2,0,2,1,1,2,0,1,0,1,1,1,3}; // boxes - 3.535 MHz
+int morseWord5[] = {1,2,1,1,0,1,0,1,2,0,2,1,2,0,1,1,1,3}; // leaks - 3.542 MHz
+int morseWord6[] = {1,1,1,0,2,0,1,2,1,0,2,2,2,0,2,1,1,1,0,1,3}; // strobe - 3.545 MHz
+int morseWord7[] = {2,1,1,1,0,1,1,0,1,1,1,0,2,0,1,2,1,0,2,2,2,3}; // bistro - 3.552 MHz
+int morseWord8[] = {1,1,2,1,0,1,2,1,1,0,1,1,0,2,1,2,1,0,2,1,2,3}; // flick - 3.555 MHz
+int morseWord9[] ={2,1,1,1,0,2,2,2,0,2,2,0,2,1,1,1,0,1,1,1,3}; // bombs - 3.565 MHz
+int morseWord10[] ={2,1,1,1,0,1,2,1,0,1,0,1,2,0,2,1,2,3}; // break - 3.572 MHz
+int morseWord11[] ={2,1,1,1,0,1,2,1,0,1,1,0,2,1,2,1,0,2,1,2,3}; // brick - 3.582 MHz
+int morseWord12[] ={1,1,1,0,2,0,1,1,0,2,1,0,2,2,1,3}; // sting - 3.592 MHz
+int morseWord13[] ={1,1,1,2,0,1,0,2,1,2,1,0,2,0,2,2,2,0,1,2,1,3}; // vector - 3.595 MHz
+int morseWord14[] ={2,1,1,1,0,1,0,1,2,0,2,0,1,1,1,3}; // beats - 3.600 MHz
 
+// array of all possible morse words // an array and pointers to arrays.
+const int* arr_list[15];
+const int arr_sizes[15] = { 21, 22, 21, 18, 20, 18, 21, 22, 22, 21, 18, 21, 16, 22, 16 };  // array of the array sizes
+
+void map_arrays() {          // list of pointers with the addresses of the
+// arrays
+  arr_list[0] = morseWord0;
+  arr_list[1] = morseWord1;
+  arr_list[2] = morseWord2;
+  arr_list[3] = morseWord3;
+  arr_list[4] = morseWord4;
+  arr_list[5] = morseWord5;
+  arr_list[6] = morseWord6;
+  arr_list[7] = morseWord7;
+  arr_list[8] = morseWord8;
+  arr_list[9] = morseWord9;
+  arr_list[10] = morseWord10;
+  arr_list[11] = morseWord11;
+  arr_list[12] = morseWord12;
+  arr_list[13] = morseWord13;
+  arr_list[14] = morseWord14;
+}
 
 void morseSetup()
 {
@@ -61,6 +98,9 @@ void morseSetup()
   morseYellowLEDtimerOff = millis ();
   morseLetterFinishedtimer = millis ();
   morseWordFinishedtimer = millis ();
+  morseCorrectNumber=random(15);
+  Serial.print(morseCorrectNumber);
+  map_arrays();
 }
 
 void morseDisplay(unsigned char num)
@@ -100,11 +140,11 @@ void morseDotDash ( unsigned long  duration )
 void
 morseBlinkWord ()
 {
-    Serial.println (__func__);
+    //Serial.println (__func__);
 
     static unsigned i = 0;
-
-    switch (morseWord1 [i])  {
+    //Serial.print(arr_list[morseCorrectNumber][i]);
+    switch (arr_list[morseCorrectNumber] [i])  { // THIS APPEARS TO WORK BUT BECAUSE THE BELOW i = i ... statement is failing I cant be sure
     case 3:
         delay (morseWordLEDDelay);
         break;
@@ -122,8 +162,9 @@ morseBlinkWord ()
         delay (morseLetterLEDDelay);
         break;
     }
-
-    i = i < (sizeof(morseWord1)/sizeof(int))-1 ? i+1 : 0;
+    // NEED TO SOMEHOW POINT THIS TO THE WORD ARRAY THAT WAS GENERATED. arr_sizes[morseCorrectNumber]
+    //Serial.print(i);
+    i = i < arr_sizes[morseCorrectNumber]-1 ? i+1 : 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -138,7 +179,7 @@ void morseLeftButtonPressed(){
     }
 }
 void morseRightButtonPressed(){
-  if  (morseCurrentDisplayNumber < 15)  {
+  if  (morseCurrentDisplayNumber < 14)  {
     morseCurrentDisplayNumber=morseCurrentDisplayNumber+1;
     morseDisplay(morseCurrentDisplayNumber);
     delay(MORSE_BUTTON_PRESS_DELAY);
@@ -223,38 +264,6 @@ void morseLoop()
   morseDisplay(morseCurrentDisplayNumber);
   
   if (!morseModuleDefused) morseBlinkWord();
-  
-/*
- * Interpret the signal from the flashing light (the flashing should start as soon as the bomb starts countdown) 
- * using the Morse Code chart to spell one of the words on the table.
- * The signal will loop, with a long gap between repetitions. (timing between letters and words will be important to get right)
- * Once the word is identified, set the corresponding frequency and press the transmit (TX) button.
-
-If the word is:   Respond at frequency:   Pattern (1=dot,2=dash)
-shell             3.505 MHz               111 1111 1 1211 1211
-halls             3.515 MHz               1111 12 1211 1211 111
-slick             3.522 MHz               111 1211 11 2121 212
-trick             3.532 MHz               2 121 11 2121 212
-boxes             3.535 MHz               2111 222 2112 1 111
-leaks             3.542 MHz               1211 1 12 212 111
-strobe            3.545 MHz               111 2 121 222 2111 1
-bistro            3.552 MHz               2111 11 111 2 121 222
-flick             3.555 MHz               1121 1211 11 2121 212
-bombs             3.565 MHz               2111 222 22 2111 111
-break             3.572 MHz               2111 121 1 12 212
-brick             3.582 MHz               2111 121 11 2121 212
-sting             3.592 MHz               111 2 11 21 221
-vector            3.595 MHz               1112 1 2121 2 222 121
-beats             3.600 MHz               2111 1 12 2 111
-
-
- * A strike will be recorded if:
- * The TX button is pressed with an incorrect frequency set.
-
- * The module will be disarmed when:
- * The TX button is pressed with the correct frequency set.
- */
-  
 }
 
 void morseModuleBoom()
