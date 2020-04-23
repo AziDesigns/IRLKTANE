@@ -42,8 +42,8 @@ unsigned char morseTable[]=
 // 0x3f="0",0x06="1",0x5b="2",0x4f="3",0x66="4",0x6d="5",0x7d="6",0x07="7",0x7f="8",0x6f="9",
 //0x77="A",0x7c="b",0x39="C",0x5e="d",0x79="E",0x71="F",0x00="OFF"
 
-// morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause
-int morseWord0[] = {1,4,1,4,1,0,1,4,1,4,1,4,1,0,1,0,1,4,2,4,1,4,1,0,1,4,2,4,1,4,1,3}; // shell - 3.505 MHz
+// morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause, 4=new dot/dash pause
+int morseWord0[] = {1,4,1,4,1,0,1,4,1,4,1,4,1,0,1,0,1,4,2,4,1,4,1,3}; // shell - 3.505 MHz
 int morseWord1[] = {1,4,1,4,1,4,1,0,1,4,2,0,1,4,2,4,1,4,1,0,1,4,2,4,1,4,1,0,1,4,1,4,1,3}; // halls - 3.515 MHz
 int morseWord2[] = {1,4,1,4,1,0,1,4,2,4,1,4,1,0,1,4,1,0,2,4,1,4,2,4,1,0,2,4,1,4,2,3}; // slick - 3.522 MHz
 int morseWord3[] = {2,0,1,4,2,4,1,0,1,4,1,0,2,4,1,4,2,4,1,0,2,4,1,4,2,3}; // trick - 3.532 MHz
@@ -54,14 +54,15 @@ int morseWord7[] = {2,4,1,4,1,4,1,0,1,4,1,0,1,4,1,4,1,0,2,0,1,4,2,4,1,0,2,4,2,4,
 int morseWord8[] = {1,4,1,4,2,4,1,0,1,4,2,4,1,4,1,0,1,4,1,0,2,4,1,4,2,4,1,0,2,4,1,4,2,3}; // flick - 3.555 MHz
 int morseWord9[] = {2,4,1,4,1,4,1,0,2,4,2,4,2,0,2,4,2,0,2,4,1,4,1,4,1,0,1,4,1,4,1,3}; // bombs - 3.565 MHz
 int morseWord10[] ={2,4,1,4,1,4,1,0,1,4,2,4,1,0,1,0,1,4,2,0,2,4,1,4,2,3}; // break - 3.572 MHz
-int morseWord11[] ={2,4,1,4,1,4,1,0,1,4,2,4,1,0,1,4,1,0,2,4,1,4,2,4,1,0,2,4,1,4,2,3}; // brick - 3.582 MHz
-int morseWord12[] ={1,4,1,4,1,0,2,0,1,4,1,0,2,4,1,0,2,4,2,4,1,3}; // sting - 3.592 MHz
-int morseWord13[] ={1,4,1,4,1,4,2,0,1,0,2,4,1,4,2,4,1,0,2,0,2,4,2,4,2,0,1,4,2,4,1,3}; // vector - 3.595 MHz
-int morseWord14[] ={2,4,1,4,1,4,1,0,1,0,1,4,2,0,2,0,1,4,1,4,1,3}; // beats - 3.600 MHz
+int morseWord11[] ={2,4,1,4,1,4,1,0,1,4,2,4,1,0,1,4,1,0,2,4,1,4,2,4,1,0,2,4,1,4,2,3}; // brick - 3.575 MHz
+int morseWord12[] ={1,4,1,4,1,0,2,0,1,0,1,4,2,0,2,4,1,4,2,3}; // steak - 3.582 MHz
+int morseWord13[] ={1,4,1,4,1,0,2,0,1,4,1,0,2,4,1,0,2,4,2,4,1,3}; // sting - 3.592 MHz
+int morseWord14[] ={1,4,1,4,1,4,2,0,1,0,2,4,1,4,2,4,1,0,2,0,2,4,2,4,2,0,1,4,2,4,1,3}; // vector - 3.595 MHz
+int morseWord15[] ={2,4,1,4,1,4,1,0,1,0,1,4,2,0,2,0,1,4,1,4,1,3}; // beats - 3.600 MHz
 
 // array of all possible morse words // an array and pointers to arrays.
-const int* arr_list[15];
-const int arr_sizes[15] = { 21, 22, 21, 18, 20, 18, 21, 22, 22, 21, 18, 21, 16, 22, 16 };  // array of the array sizes
+const int* arr_list[16];
+const int arr_sizes[16] = { 24, 34, 32, 26, 30, 26, 30, 32, 34, 32, 26, 32, 20, 22, 32, 22 };  // array of the array sizes
 
 void map_arrays() {          // list of pointers with the addresses of the
 // arrays
@@ -80,6 +81,7 @@ void map_arrays() {          // list of pointers with the addresses of the
   arr_list[12] = morseWord12;
   arr_list[13] = morseWord13;
   arr_list[14] = morseWord14;
+  arr_list[14] = morseWord15;
 }
 
 void morseSetup()
@@ -92,7 +94,7 @@ void morseSetup()
   pinMode(PIN_MORSE_BUTTON_1,INPUT);
   pinMode(PIN_MORSE_BUTTON_2,INPUT);
   pinMode(PIN_MORSE_BUTTON_3,INPUT);
-  morseCorrectNumber=random(15);
+  morseCorrectNumber=random(16);
   Serial.println("Morse Correct Number: ");
   Serial.println(morseCorrectNumber);
   map_arrays();
@@ -109,7 +111,7 @@ void morseLeftButtonPressed(){
   if (morseCurrentDisplayNumber > 0)  {
     morseCurrentDisplayNumber=morseCurrentDisplayNumber-1;
     morseDisplay(morseCurrentDisplayNumber);
-    delay(MORSE_BUTTON_PRESS_DELAY);
+    //delay(MORSE_BUTTON_PRESS_DELAY);
   } else {
     morseDisplay(morseCurrentDisplayNumber);
     }
@@ -118,7 +120,7 @@ void morseRightButtonPressed(){
   if  (morseCurrentDisplayNumber < 14)  {
     morseCurrentDisplayNumber=morseCurrentDisplayNumber+1;
     morseDisplay(morseCurrentDisplayNumber);
-    delay(MORSE_BUTTON_PRESS_DELAY);
+    //delay(MORSE_BUTTON_PRESS_DELAY);
   } else {
     morseDisplay(morseCurrentDisplayNumber);
     }
@@ -135,8 +137,8 @@ void morseSubmitButtonPressed(){
   }
   else { 
   addStrike();
-  morseDisplay(0); // flashes 0000 and goes back to number entered to emphasize strike.
-  delay(morseWrongTXDelay); // Holds for short time
+  morseDisplay(16); // flashes 0000 and goes back to number entered to emphasize strike.
+  delay(morseWrongTXDelay); // need to update this from a delay to a millis() comparison like BlinkWithoutDelay
   morseDisplay(morseCurrentDisplayNumber); // goes back to number submitted incorrectly
   }
 }

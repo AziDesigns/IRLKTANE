@@ -1,3 +1,5 @@
+//THIS BOMB USES KTANE BOMB DEFUSAL MANUAL VERSION 1 VERIFICATION CODE #241 ONLY
+
 #include <LiquidCrystal.h>
 #include <LiquidCrystal_I2C.h>
 #include <LedControl.h>
