@@ -31,7 +31,7 @@ int ledStates[4] = {0, 0, 0, 0};
 
 int ledsNumber = 1;
 int blinkingTime = 500;
-unsigned long previousMillis = 0;
+unsigned long simonPreviousMillis = 0;
 int ledSequence[4];
 
 // array that contains the answers when the serial number contains a vowel
@@ -192,9 +192,9 @@ void blinkLed(int led,int &ledState)
 {
   unsigned long currentMillis = millis();
     
-  if (currentMillis - previousMillis >= blinkingTime) 
+  if (currentMillis - simonPreviousMillis >= blinkingTime) 
   {
-    previousMillis = currentMillis;
+    simonPreviousMillis = currentMillis;
 
     if (ledState == LOW) 
     {

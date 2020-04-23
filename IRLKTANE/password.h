@@ -283,6 +283,7 @@ void passwordSetup()
 
   printPassWord();
   lcdPassword.setCursor(0, 1);
+  Serial.println("Correct Password Generated: ");
   Serial.println(passWordGen);
 }
 

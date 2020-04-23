@@ -2,10 +2,10 @@
 
 #define LABELS_LENGTH 28
 
-#define PIN_WHO_LED_1 3 // stage 1 complete LED
-#define PIN_WHO_LED_2 4 // stage 2 complete LED
-#define PIN_WHO_LED_3 5 // stage 3 complete LED
-#define PIN_WHO_LED_GREEN 6 // module complete LED
+#define PIN_WHO_LED_1 93 // stage 1 complete LED
+#define PIN_WHO_LED_2 94 // stage 2 complete LED
+#define PIN_WHO_LED_3 95 // stage 3 complete LED
+#define PIN_WHO_LED_GREEN 96 // module complete LED
 
 #define PIN_WHO_BUTTON_1 A15 // Select button for Column 1 Row 1
 #define PIN_WHO_BUTTON_2 A14 // Select button for Column 1 Row 2
