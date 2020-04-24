@@ -9,7 +9,7 @@ Some modules are obviously not as realistic (ex. wire sequences) if I want it to
 
 *I do not plan to make any moded modules at this time but may in the future if all other modules are completed and optimized.*
 
-The game is played with a minimum of 2 players, with one player as the "Defuser" and the remaining player(s) as the "Experts" reading the official bomb defusal manual from KTaNE. I am not going to cover all game rules here, just go look at the manual on their site.
+The game is played with a minimum of 2 players, with one player as the "Defuser" and the remaining player(s) as the "Experts" reading the official bomb defusal manual from KTaNE VERSION 1 - VERIFICATION CODE #241 ONLY. I am not going to cover all game rules here, just go look at the manual on their site.
 
 Currently it is being built with fixed variables but the goal will be once all modules are working as intended, you can create/ customize the difficulty by turning specific modules on/off as well as adjusting things like # of strikes (3 by default) or starting time (7 minutes by default).
 *Fixed Variables include things like ports, batteries, & lit indicators.*
