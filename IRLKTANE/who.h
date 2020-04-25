@@ -1,4 +1,9 @@
 // On the Subject of Who's on First
+/*
+  KNOWN ISSUES:
+  MODULE IS MOSTLY DONE BUT HAS NOT BEEN TESTED AT ALL.
+  NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
+*/
 
 #define LABELS_LENGTH 28
 
@@ -20,34 +25,34 @@ char labels[LABELS_LENGTH][10] = { "YES", "FIRST", "DISPLAY", "OKAY", "SAYS", "N
 char allLabels[LABELS_LENGTH][10] = { "YES", "BLANK", "NOTHING", "DONE", "LIKE", "FIRST", "NEXT", "HOLD", "UHHH", "UH UH", "UH HUH", "LEFT", "MIDDLE", "RIGHT", "OKAY", "PRESS", "NO", "READY", "SURE", "WAIT", "U", "UR", "YOU", "YOUR", "YOU'RE", "YOU ARE", "WHAT", "WHAT?"  };
 
 int indexOfButtonLabels[LABELS_LENGTH][15] = {{ 14, 13, 8, 12, 5, 26, 15, 17, 2, 0}, // the words for the first label, 0 is the first label from allLabels[]
-                                              { 19, 13, 14, 12, 1}, // the words for the second label
-                                              { 8, 13, 14, 12, 0, 1, 16, 15, 11, 26, 19, 5, 2},
-                                              { 18, 10, 6, 27, 23, 21, 24, 7, 4, 22, 20, 25, 9, 3},
-                                              { 24, 6, 20, 21, 7, 3, 9, 27, 10, 22, 4},
-                                              { 11, 14, 0, 12, 16, 13, 2, 8, 19, 17, 1, 26, 15, 5},
-                                              { 27, 10, 9, 23, 7, 18, 6},
-                                              { 25, 20, 3, 9, 22, 21, 18, 27, 24, 6, 7},
-                                              { 17, 2, 11, 26, 14, 0, 13, 16, 15, 1, 8},
-                                              { 21, 20, 25, 24, 6, 9},
-                                              { 10},
-                                              { 13, 11},
-                                              { 1, 17, 14, 26, 2, 15, 16, 19, 11, 12},
-                                              { 0, 2, 17, 15, 16, 19, 26, 13},
-                                              { 12, 16, 5, 0, 8, 2, 19, 14},
-                                              { 13, 12, 0, 17, 15},
-                                              { 1, 8, 19, 5, 26, 17, 13, 0, 2, 11, 15, 14, 16},
-                                              { 0, 14, 26, 12, 11, 15, 13, 1, 17},
-                                              { 25, 3, 4, 24, 22, 7, 10, 21, 18},
-                                              { 8, 16, 1, 14, 0, 11, 5, 15, 26, 19},
-                                              { 10, 18, 6, 27, 24, 21, 9, 3, 20},
-                                              { 3, 20, 21},
-                                              { 18, 25, 23, 24, 6, 10, 21, 7, 27, 22},
-                                              { 9, 25, 10, 23},
-                                              { 22, 24},
-                                              { 23, 6, 4, 10, 27, 3, 9, 7, 22, 20, 24, 18, 21, 25},
-                                              { 8, 26},
-                                              {  22, 7, 24, 23, 20, 3, 9, 4, 25, 10, 21, 6, 27}
-                                            };
+  { 19, 13, 14, 12, 1}, // the words for the second label
+  { 8, 13, 14, 12, 0, 1, 16, 15, 11, 26, 19, 5, 2},
+  { 18, 10, 6, 27, 23, 21, 24, 7, 4, 22, 20, 25, 9, 3},
+  { 24, 6, 20, 21, 7, 3, 9, 27, 10, 22, 4},
+  { 11, 14, 0, 12, 16, 13, 2, 8, 19, 17, 1, 26, 15, 5},
+  { 27, 10, 9, 23, 7, 18, 6},
+  { 25, 20, 3, 9, 22, 21, 18, 27, 24, 6, 7},
+  { 17, 2, 11, 26, 14, 0, 13, 16, 15, 1, 8},
+  { 21, 20, 25, 24, 6, 9},
+  { 10},
+  { 13, 11},
+  { 1, 17, 14, 26, 2, 15, 16, 19, 11, 12},
+  { 0, 2, 17, 15, 16, 19, 26, 13},
+  { 12, 16, 5, 0, 8, 2, 19, 14},
+  { 13, 12, 0, 17, 15},
+  { 1, 8, 19, 5, 26, 17, 13, 0, 2, 11, 15, 14, 16},
+  { 0, 14, 26, 12, 11, 15, 13, 1, 17},
+  { 25, 3, 4, 24, 22, 7, 10, 21, 18},
+  { 8, 16, 1, 14, 0, 11, 5, 15, 26, 19},
+  { 10, 18, 6, 27, 24, 21, 9, 3, 20},
+  { 3, 20, 21},
+  { 18, 25, 23, 24, 6, 10, 21, 7, 27, 22},
+  { 9, 25, 10, 23},
+  { 22, 24},
+  { 23, 6, 4, 10, 27, 3, 9, 7, 22, 20, 24, 18, 21, 25},
+  { 8, 26},
+  {  22, 7, 24, 23, 20, 3, 9, 4, 25, 10, 21, 6, 27}
+};
 
 
 char words[7][10];
@@ -58,6 +63,9 @@ int currentButton, prevButton;
 
 void whoModuleBoom() // if the bomb explodes what should the module display
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   digitalWrite(PIN_WHO_LED_1, LOW);
   digitalWrite(PIN_WHO_LED_2, LOW);
   digitalWrite(PIN_WHO_LED_3, LOW);
@@ -72,6 +80,9 @@ void whoModuleBoom() // if the bomb explodes what should the module display
 
 void whoModuleDefusedPrint() // the module has been defused
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   digitalWrite(PIN_WHO_LED_1, LOW);
   digitalWrite(PIN_WHO_LED_2, LOW);
   digitalWrite(PIN_WHO_LED_3, LOW);
@@ -86,8 +97,11 @@ void whoModuleDefusedPrint() // the module has been defused
 }
 
 // function that displays the labels
-void printLabels() 
+void printLabels()
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   lcd.setCursor((20 - strlen(words[0])) / 2, 0);
   lcd.print(words[0]);
 
@@ -156,6 +170,9 @@ int findCorrectButton(int index) // function that returns the right button
 
 void generateWords() // function that generates the words of the current stage
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   int number = random(LABELS_LENGTH);
   for (int i = 0; i < 100; i++) number = random(LABELS_LENGTH);
 
@@ -176,15 +193,19 @@ void generateWords() // function that generates the words of the current stage
   correctButton = findCorrectButton(index);
 
   // print the answer to the current stage
-  Serial.print("Who's on First Stage ");
-  Serial.print(whoLevel);
-  Serial.print(" : ");
-  Serial.println(correctButton);
-
+  if (DEBUG_LEVEL >= 1) {
+    Serial.print("Who's on First Stage ");
+    Serial.print(whoLevel);
+    Serial.print(" : ");
+    Serial.println(correctButton);
+  }
 }
 
 void nextLevel() // moves you to the next stage of who
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   whoLevel++;
   if (whoLevel == 2) digitalWrite(PIN_WHO_LED_1, HIGH);
   else if (whoLevel == 3) digitalWrite(PIN_WHO_LED_2, HIGH);
@@ -192,8 +213,7 @@ void nextLevel() // moves you to the next stage of who
     digitalWrite(PIN_WHO_LED_3, HIGH);
     whoModuleDefusedPrint();
   }
-  if (whoLevel != 4) // if the module hasn't been defused yet, go to the next stage
-  {
+  if (whoLevel != 4) { // if the module hasn't been defused yet, go to the next stage 
     lcd.clear();
     generateWords();
     printLabels();
@@ -202,9 +222,11 @@ void nextLevel() // moves you to the next stage of who
 
 void whoReset() // function that resets the module
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   addStrike();
-  if (nrStrikes < 3)
-  {
+  if (nrStrikes < 3) {
     whoLevel = 1;
     digitalWrite(PIN_WHO_LED_1, LOW);
     digitalWrite(PIN_WHO_LED_2, LOW);
@@ -217,6 +239,9 @@ void whoReset() // function that resets the module
 
 void whoSetup() // define outputs and inputs for who
 {
+  if (DEBUG_LEVEL >= 3) {
+    Serial.println (__func__);
+  }
   lcd.init();
   lcd.backlight();
 
@@ -252,9 +277,11 @@ int whoPressedButton() // function that returns the pressed button
 
 void whoCheckButton() // function that checks if a button is pressed
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   currentButton = whoPressedButton();
-  if (currentButton != prevButton && currentButton != 0)
-  {
+  if (currentButton != prevButton && currentButton != 0) {
     if (currentButton == correctButton) nextLevel(); // if you pressed the right answer, go to the next stage
     else whoReset();
   }
@@ -262,6 +289,9 @@ void whoCheckButton() // function that checks if a button is pressed
 
 void whoLoop()
 {
+  if (DEBUG_LEVEL >= 3) {
+    Serial.println (__func__);
+  }
   if (!whoModuleDefused)
     whoCheckButton();
 }

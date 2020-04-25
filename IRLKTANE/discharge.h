@@ -1,5 +1,8 @@
 // On the Subject of Capacitor Discharge
-
+/*
+  KNOWN ISSUES:
+  MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
+*/
 #define PIN_DISCHARGE_YELLOW_LED 20 // Yellow LED for showing active discharge occuring
 #define PIN_DISCHARGE_LEVER 21 // lever that is pressed to discharge the module
 #define PIN_DISCHARGE_CLK 22 // discharge display CLK
@@ -14,32 +17,38 @@ SevenSegmentExtended dischargeTimer(PIN_DISCHARGE_CLK, PIN_DISCHARGE_DIO);
 
 void dischargeSetup() //turn on lights, display
 {
-pinMode(PIN_DISCHARGE_YELLOW_LED,OUTPUT);
-dischargeTimer.begin();
-dischargeTimer.setBacklight(100);
-dischargeTimer.print(disSec);
+  if (DEBUG_LEVEL >= 3) {
+    Serial.println (__func__);
+  }
+  pinMode(PIN_DISCHARGE_YELLOW_LED, OUTPUT);
+  dischargeTimer.begin();
+  dischargeTimer.setBacklight(100);
+  dischargeTimer.print(disSec);
 }
 
 void dischargeLoop() //loop to decrease time or increase time on timer.
 {
+  if (DEBUG_LEVEL >= 3) {
+    Serial.println (__func__);
+  }
   if (disSec == -1) {
     bombExploded(); // if the time hits zero, the bomb will go off
     digitalWrite(PIN_DISCHARGE_YELLOW_LED, LOW); //TURN DISCHARGE LED OFF
   }
-  
+
   else if ((leverPressed == LEVER_PRESSED) && (disSec < DISCHARGE_TIMER_SECONDS)) {
     disSec = disSec + 1; //if lever is pressed add time back
     digitalWrite(PIN_DISCHARGE_YELLOW_LED, HIGH); //TURN DISCHARGE LED ON
     dischargeTimer.print(disSec);
     delay(1000);
   }
-  
+
   else if ((leverPressed == LEVER_PRESSED) && (disSec = DISCHARGE_TIMER_SECONDS)) {
     digitalWrite(PIN_DISCHARGE_YELLOW_LED, HIGH); //TURN DISCHARGE LED ON
     dischargeTimer.print(disSec);
     delay(1000);
   }
-  
+
   else if (leverPressed == LEVER_RELEASED) {
     disSec = disSec - 1; //if lever is not pressed reduce seconds by 1
     digitalWrite(PIN_DISCHARGE_YELLOW_LED, LOW); //TURN DISCHARGE LED OFF
@@ -50,5 +59,8 @@ void dischargeLoop() //loop to decrease time or increase time on timer.
 
 void dischargeModuleBoom() // if the bomb explodes what should the module display
 {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
   dischargeTimer.print("00");
 }
