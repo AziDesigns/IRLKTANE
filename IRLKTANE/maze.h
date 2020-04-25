@@ -1,19 +1,10 @@
 //On the Subject of Mazes
 /*
-  IDEA BOARD: USE A SINGLE ARRAY OF A 18X18 GRID INSTEAD OF 9 SEPARATE 6X6 GRIDS TO TRACK VALID POSITIONS
-  THEN YOU CAN SIMPLY MARK BETWEEN BOARDS AS INVALID SELECTIONS TO ADD A STRIKE
-  USE THE PLAYER POSITION TO DETERMINE WHICH GREEN LED'S SHOULD BE LIT UP
-  USE THE PLAYER POSITION AND GREEN LED'S TO DETERMINE AN AVAILIBLE SPACE FOR THE RED LED THAT IS NOT OCCUPIED IN THE SAME 6X6
-
   KNOWN ISSUES:
-  MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
-  MAIN ISSUE IS WITH THE ACTUAL DISPLAY OUTPUT.
-  - CURRENTLY THE DISPLAY SHOWS WHERE YOU ARE ACTUALLY AT IN THE MAZE WITH THE WALLS
-  - WALLS ARE HIDDEN AS THE DISPLAY ONLY IS SET TO SHOW HIGH FOR CURRENT POSITION, FINAL POSITION, AND CIRCLES
-  - BELIVED FIX IS TO HAVE A 2ND VERSION OF EACH MAZE ARRAY THAT ONLY STORES MY POSITION, GOAL, CIRCLES, AND NO WALLS.
-    - THEN WILL NEED TO UPDATE ADDITIONAL VARIABLES UPON BUTTON PRESSES TO CONTROL WHAT IS DISPLAYED.
-  SECOND ISSUE IS I AM OUT OF BUTTONS SO HAD TO REUSE BUTTONS FROM THE MORSE AND BUTTON MODULE. WHEN NEW BUTTONS ARRIVE I WILL FIX AND POINT TO CORRECT PINS
-*/
+  I AM OUT OF BUTTONS SO HAD TO REUSE BUTTONS FROM THE MORSE AND BUTTON MODULE. WHEN NEW BUTTONS ARRIVE I WILL FIX AND POINT TO CORRECT PINS
+  STARTING AND FINISHING POINTS ARE FIXED CURRENTLY
+    - IDEALLY THESE WOULD NOT BE FIXED AND WOULD BE RANDOM EVENTUALLY
+  CURRENTLY PROGRAMED FOR RED ONLY LED MATRIX. WAITING ON HARDWARE TO WRITE/ UPDATE FOR RGB
 /*
    The Maze module is a module that consists of a 6x6 grid of squares with two of the squares containing green indicator circles,
    one square containing a white square, and one square containing a red triangle as well as four directional buttons around the maze.
@@ -70,8 +61,12 @@ LedControl lc = LedControl(MAZE_OUTPUT_DATA_PIN, MAZE_OUTPUT_CLOCK_PIN, MAZE_OUT
 /**
    GAME
 */
+// these are for movement/ play
 const int MAZE_LEVELS_ROWS = 13; // number of rows of each level
 const int MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each level
+// these are for matrix display only
+const int MAZE_DISPLAY_LEVELS_ROWS = 8; // number of rows of each level
+const int MAZE_DISPLAY_LEVELS_COLUMNS = MAZE_DISPLAY_LEVELS_ROWS; // number of columns of each level
 
 /**
    'c': green circle position
@@ -80,101 +75,287 @@ const int MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each l
    'X': Wall
    ' ': Movement zone
 */
+
+// these are for MOVEMENT/ PLAY
 const char MAZE_LEVELS[][MAZE_LEVELS_ROWS][MAZE_LEVELS_COLUMNS] = {
   // Level 1
   {
-    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-    {'X', ' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', 'X'},
-    {'X', ' ', 'X', 'X', 'X', ' ', 'X', ' ', 'X', 'X', 'X', 'X', 'X'},
-    {'X', 'c', 'X', 's', ' ', ' ', 'X', 'f', ' ', ' ', ' ', ' ', 'X'},
-    {'X', ' ', 'X', ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', ' ', 'X'},
-    {'X', ' ', 'X', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', 'c', 'X'},
-    {'X', ' ', 'X', 'X', 'X', ' ', 'X', ' ', 'X', 'X', 'X', ' ', 'X'},
-    {'X', ' ', 'X', ' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'},
-    {'X', ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', ' ', 'X'},
-    {'X', ' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X', ' ', 'X'},
-    {'X', ' ', 'X', 'X', 'X', ' ', 'X', ' ', 'X', 'X', 'X', ' ', 'X'},
-    {'X', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X', ' ', ' ', ' ', 'X'},
-    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-  }
-  // testing with just 1 level for morse
-  /*,
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X','X','X',' ','X',' ','X','X','X','X','X'},
+    {'X','c','X','s',' ',' ','X','f',' ',' ',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ',' ',' ','c','X'},
+    {'X',' ','X','X','X',' ','X',' ','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ',' ',' ','X',' ',' ',' ','X'},
+    {'X',' ','X','X','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X','X','X',' ','X',' ','X','X','X',' ','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ','X',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
     // Level 2
     {
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ',' ',' ','X'},
+    {'X','X','X',' ','X','X','X',' ','X',' ','X','X','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ','X','c',' ','f','X'},
+    {'X',' ','X','X','X',' ','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X',' ','X','X','X',' ','X'},
+    {'X',' ',' ','c','X',' ',' ',' ','X',' ','X',' ','X'},
+    {'X',' ','X','X','X',' ','X','X','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ',' ',' ','s','X'},
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
     },
     // Level 3
     {
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ','X',' ',' ',' ','X'},
+    {'X',' ','X','X','X',' ','X',' ','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ',' ',' ','X',' ','X'},
+    {'X','X','X',' ','X',' ','X','X','X','X','X',' ','X'},
+    {'X',' ',' ',' ','X',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X','c','X','s','X','c','X'},
+    {'X',' ','X',' ','X',' ','X',' ','X',' ','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ','X',' ','X','f','X'},
+    {'X',' ','X','X','X','X','X',' ','X',' ','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ',' ',' ','X',' ',' ',' ','X'},
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
-    }
-  */
-  /*
-    // Level Template
+    },
+    // Level 4
+    {
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X','c',' ',' ','X',' ',' ',' ',' ','f',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ','X',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X',' ','X',' ','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X','X','X',' ','X'},
+    {'X','c','X',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X','X','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ',' ',' ',' ','s','X',' ','X'},
+    {'X',' ','X','X','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
+    // Level 5
     {
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
     {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
-    {'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ',' ','s',' ',' ','X',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X','X','X','X','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ','X','c',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ','X',' ',' ',' ',' ',' ','X',' ','X',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ',' ','f',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ',' ','c',' ',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
+    // Level 6
+    {
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ','c',' ',' ','X'},
+    {'X',' ','X',' ','X',' ','X','X','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ','X','X','X',' ','X'},
+    {'X',' ',' ',' ','X',' ','X',' ','X',' ',' ',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X',' ','X','X','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ','X',' ','X',' ','X'},
+    {'X','X','X',' ','X',' ','X',' ','X',' ','X',' ','X'},
+    {'X',' ',' ','f','X','c','X',' ','X',' ',' ','s','X'},
+    {'X',' ','X','X','X','X','X',' ','X','X','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ',' ',' ','X',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
+    // Level 7
+    {
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X',' ',' ','c',' ',' ',' ',' ','X',' ',' ',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X',' ','X',' ','X'},
+    {'X',' ','X',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ','X','s',' ',' ','X'},
+    {'X','X','X','X','X',' ','X','X','X',' ','X','X','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ','X',' ',' ',' ',' ',' ','X','f','X'},
+    {'X',' ','X','X','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ',' ','c',' ',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
+    // Level 8
+    {
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X',' ','X','f',' ',' ',' ','c','X',' ',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X',' ','X',' ','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X','X','X','X','X','X','X','X','X',' ','X'},
+    {'X',' ','X',' ',' ',' ',' ',' ',' ',' ','X',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ','X',' ',' ','c','X',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X','X','X',' ','X','X','X','X','X','X','X'},
+    {'X',' ','X',' ','X',' ',' ',' ',' ',' ',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X','X','X','X','X'},
+    {'X',' ',' ',' ',' ','s',' ',' ',' ',' ',' ',' ','X'},
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    },
+    // Level 9
+    {
+    {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
+    {'X',' ','X',' ',' ',' ',' ','f',' ',' ',' ',' ','X'},
+    {'X',' ','X',' ','X','X','X','X','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X','c',' ',' ','X',' ','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X','X','X',' ','X',' ','X'},
+    {'X',' ',' ',' ',' ',' ','X',' ',' ',' ','X',' ','X'},
+    {'X',' ','X','X','X','X','X',' ','X','X','X',' ','X'},
+    {'X',' ','X',' ','X',' ',' ',' ','X',' ',' ',' ','X'},
+    {'X',' ','X',' ','X',' ','X','X','X','X','X',' ','X'},
+    {'X','c','X',' ','X',' ','X',' ',' ','s','X',' ','X'},
+    {'X',' ','X',' ','X',' ','X',' ',' ',' ','X','X','X'},
+    {'X',' ',' ',' ','X',' ',' ',' ',' ',' ',' ',' ','X'},
     {'X','X','X','X','X','X','X','X','X','X','X','X','X'},
     }
-  */
 };
 
+// these are for DISPLAY ONLY
+const char MAZE_DISPLAY_LEVELS[][MAZE_DISPLAY_LEVELS_ROWS][MAZE_DISPLAY_LEVELS_COLUMNS] = {
+  // Level 1
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'c', 's', ' ', 'f', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', 'c', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 2
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', 'c', 'f', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', 'c', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', 's', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 3
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', 'c', 's', 'c', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', 'f', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 4
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', 'c', ' ', ' ', ' ', 'f', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'c', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', 's', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 5
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', 's', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', 'c', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', 'f', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', 'c', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 6
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', ' ', 'c', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', 'f', 'c', ' ', ' ', 's', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 7
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', 'c', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', 's', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', 'f', 'X'},
+    {'X', ' ', 'c', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 8
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', 'f', ' ', 'c', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', 'c', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', 's', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  },
+  // Level 9
+  {
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+    {'X', ' ', ' ', ' ', 'f', ' ', ' ', 'X'},
+    {'X', ' ', ' ', 'c', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'c', ' ', ' ', ' ', 's', ' ', 'X'},
+    {'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+    {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+  }
+};
+  
 /**
    GAME STATE
 */
-int mazeCurrentLevel = 0; // Current level paying // will become random int between 0-8
+int mazeCurrentLevel = random(9); // Current level paying // FOR TESTING USE = 0;
 int mazeCurrentX; // Current player X position
 int mazeCurrentY; // Current player Y position
 int mazeStartX; // Current level start X position
 int mazeStartY; // Current level start Y position
 int mazeFinishX; // Current level finish X position
 int mazeFinishY; // Current level finish Y position
+int mazeDisplayCurrentX; // Current player X DISPLAY position
+int mazeDisplayCurrentY; // Current player Y DISPLAY position
+int mazeDisplayStartX; // Current DISPLAY level start X position
+int mazeDisplayStartY; // Current DISPLAY level start Y position
+int mazeDisplayFinishX; // Current level finish X position
+int mazeDisplayFinishY; // Current level finish Y position
 enum mazeMove { Left, Right, Up, Down }; // Possible directions to move the player
 
-void mazePrintLevel() 
+void mazePrintLevel() // DISPLAYS THE FRIENDLY VERSION NOT THE MOVEMENT/ PLAY VERSION
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (int x = 0; x < MAZE_LEVELS_ROWS; x++) {
-    for (int y = 0; y < MAZE_LEVELS_COLUMNS; y++) {
-      if (MAZE_LEVELS[mazeCurrentLevel][x][y] == 'c') {
+  for (int x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
+    for (int y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
+      if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'c') {
         lc.setLed(0, x, y, true);
       }
-      else if (MAZE_LEVELS[mazeCurrentLevel][x][y] == 'f') {
+      else if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'f') {
         lc.setLed(0, x, y, true);
       }
     }
@@ -188,7 +369,7 @@ void mazeInitLevel()
   }
   lc.clearDisplay(0);
 
-  // sets startX, startY, finishX and finishY
+  // sets startX, startY, finishX and finishY for MOVEMENT/ PLAY
   for (int x = 0; x < MAZE_LEVELS_ROWS; x++) {
     for (int y = 0; y < MAZE_LEVELS_COLUMNS; y++) {
       if (MAZE_LEVELS[mazeCurrentLevel][x][y] == 's') {
@@ -200,9 +381,23 @@ void mazeInitLevel()
       }
     }
   }
+  // sets startX, startY, finishX and finishY for DISPLAY
+  for (int x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
+    for (int y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
+      if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 's') {
+        mazeDisplayStartX = x;
+        mazeDisplayStartY = y;
+      } else if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'f') { 
+        mazeDisplayFinishX = x;
+        mazeDisplayFinishY = y;
+      }
+    }
+  }
 
   mazeCurrentX = mazeStartX;
   mazeCurrentY = mazeStartY;
+  mazeDisplayCurrentX = mazeDisplayStartX;
+  mazeDisplayCurrentY = mazeDisplayStartY;
 
   mazePrintLevel();
 }
@@ -212,7 +407,7 @@ void mazeShowPlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lc.setLed(0, mazeCurrentX, mazeCurrentY, true);
+  lc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, true);
 }
 
 void mazeHidePlayer() 
@@ -220,7 +415,7 @@ void mazeHidePlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lc.setLed(0, mazeCurrentX, mazeCurrentY, false);
+  lc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, false);
 }
 
 void mazeCheckWin() 
@@ -255,6 +450,7 @@ void mazeTryToMove(mazeMove movement)
     // Checks what would happen if we apply the possible new position
     if (MAZE_LEVELS[mazeCurrentLevel][mazePossibleX][mazePossibleY] != 'X') {
       mazeCurrentY = mazePossibleY - 1;
+      mazeDisplayCurrentY = mazeDisplayCurrentY - 1;
     }
     else addStrike();
     mazeShowPlayer();
@@ -265,6 +461,7 @@ void mazeTryToMove(mazeMove movement)
     // Checks what would happen if we apply the possible new position
     if (MAZE_LEVELS[mazeCurrentLevel][mazePossibleX][mazePossibleY] != 'X') {
       mazeCurrentY = mazePossibleY + 1;
+      mazeDisplayCurrentY = mazeDisplayCurrentY + 1;
     }
     else addStrike();
     mazeShowPlayer();
@@ -275,6 +472,7 @@ void mazeTryToMove(mazeMove movement)
     // Checks what would happen if we apply the possible new position
     if (MAZE_LEVELS[mazeCurrentLevel][mazePossibleX][mazePossibleY] != 'X') {
       mazeCurrentX = mazePossibleX - 1;
+      mazeDisplayCurrentX = mazeDisplayCurrentX - 1;
     }
     else addStrike();
     mazeShowPlayer();
@@ -285,6 +483,7 @@ void mazeTryToMove(mazeMove movement)
     // Checks what would happen if we apply the possible new position
     if (MAZE_LEVELS[mazeCurrentLevel][mazePossibleX][mazePossibleY] != 'X') {
       mazeCurrentX = mazePossibleX + 1;
+      mazeDisplayCurrentX = mazeDisplayCurrentX + 1;
     }
     else addStrike();
     mazeShowPlayer();
@@ -296,6 +495,10 @@ void mazeSetup()
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
+  }
+  if (DEBUG_LEVEL >= 1) {
+    Serial.println("Maze Level Number 0-8: ");
+    Serial.println (mazeCurrentLevel);
   }
   //Setup Led
   /*
@@ -319,8 +522,6 @@ void mazeLoop()
   mazeShowPlayer();
 
   if (!mazeModuleDefused) {
-    //mazeHidePlayer(); // run every time a player moves instead
-    //mazeShowPlayer(); // run this every time the player moves a direction?
 
     /**
        NOTE: The following movement directions are setted supposing
@@ -411,7 +612,6 @@ void mazeLoop()
     // save the current state as the last state, for next time through the loop
     lastMazeButtonDownState = mazeButtonDownState;
 
-    //mazeCheckWin(); //moved to check after each move is made.
   }
 }
 
