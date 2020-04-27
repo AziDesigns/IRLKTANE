@@ -21,9 +21,10 @@ There will NOT be any 3d models released as I plan to make this out of wood, she
 - 1.1. Needed Libraries/ Files
 - 1.2. Installation
 2. Components
-3. Built With
-4. Authors
-5. Credits
+3. Modules
+4. Built With
+5. Authors
+6. Credits
 
 #### 1. Getting Started
 These instructions will get you a copy of the project up and running.
@@ -71,15 +72,41 @@ Next, connect the Arduino board to your computer and load the program to the boa
     1 - large fake capacitor //for the needy module aesthetics
     Many Resistors, Capacitors, and Jumpers
 
-#### 3. Built With
+
+#### 3. Modules
+
+| Module Type  | Module Name         | Sketched         | Coded            | Made             |
+| ------------ | ------------------- |:----------------:|:----------------:|:----------------:|
+| Normal       | Button              |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Needy        | Capacitor Discharge |:heavy_check_mark:|                  |                  |
+| Needy        | Knob                |:heavy_check_mark:|                  |                  |
+| Normal       | Maze                |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Normal       | Memory              |:heavy_check_mark:|:heavy_check_mark:|                  |
+| Normal       | Morse               |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Normal       | Password            |:heavy_check_mark:|                  |                  |
+| Normal       | Simon Says          |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Needy        | Venting Gas         |:heavy_check_mark:|                  |                  |
+| Normal       | Who's On First      |:heavy_check_mark:|:heavy_check_mark:|                  |
+| Widget       | Buzzer              |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Widget       | Timer               |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Widget       | Strikes             |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Widget       | Batteries           |:heavy_check_mark:|                  |                  |
+| Widget       | Indicators          |:heavy_check_mark:|                  |                  |
+| Widget       | Ports               |:heavy_check_mark:|                  |                  |
+| Normal       | Complicated Wires   |                  |                  |                  |
+| Normal       | Keypad (Symbols)    |                  |                  |                  |
+| Normal       | Wire Sequence       |                  |                  |                  |
+| Normal       | Wires               |                  |                  |                  |
+
+#### 4. Built With
 [Arduino](https://www.arduino.cc/en/main/software) - The IDE used to code the modules logic.
 
 [Fritzing](http://fritzing.org/home/) - The program used to create the components layout and wiring diagram.
 
-#### 4. Authors
+#### 5. Authors
 AziAssassin
 
-#### 5. Credits
+#### 6. Credits
 Thanks to calingeorgeadrian && ema1ih for setting the ground work for me to learn and get the basics of how they wrote their version of a select few of these modules.
 
 Thanks to reddit u/advicevice for making me realize the potential this idea had to become a phyical game.
