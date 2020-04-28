@@ -27,10 +27,10 @@
 */
 
 #define PIN_MAZE_LED_GREEN 44
-#define PIN_MAZE_UP 25
-#define PIN_MAZE_RIGHT 26
-#define PIN_MAZE_DOWN 23
-#define PIN_MAZE_LEFT 24
+#define PIN_MAZE_UP A5
+#define PIN_MAZE_RIGHT A6
+#define PIN_MAZE_DOWN A7
+#define PIN_MAZE_LEFT A8
 
 int mazeButtonLeftState = 0; // current state of the left button
 int mazeButtonRightState = 0; // current state of the right button
@@ -330,7 +330,7 @@ const char MAZE_DISPLAY_LEVELS[][MAZE_DISPLAY_LEVELS_ROWS][MAZE_DISPLAY_LEVELS_C
 /**
    GAME STATE
 */
-int mazeCurrentLevel = random(9); // Current level paying // FOR TESTING USE = 0;
+int mazeCurrentLevel; // Current level paying // FOR TESTING USE = 0;
 int mazeCurrentX; // Current player X position
 int mazeCurrentY; // Current player Y position
 int mazeStartX; // Current level start X position
@@ -496,6 +496,7 @@ void mazeSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
+  mazeCurrentLevel = random(9);
   if (DEBUG_LEVEL >= 1) {
     Serial.println("Maze Level Number 0-8: ");
     Serial.println (mazeCurrentLevel);

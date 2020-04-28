@@ -53,7 +53,7 @@ unsigned char morseTable[] =
 //0x77="A",0x7c="b",0x39="C",0x5e="d",0x79="E",0x71="F",0x00="OFF"
 
 // morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause, 4=new dot/dash pause
-int morseWord0[] = {1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 4, 1, 4, 1, 3}; // shell - 3.505 MHz
+int morseWord0[] = {1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 3}; // shell - 3.505 MHz
 int morseWord1[] = {1, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 3}; // halls - 3.515 MHz
 int morseWord2[] = {1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // slick - 3.522 MHz
 int morseWord3[] = {2, 0, 1, 4, 2, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // trick - 3.532 MHz
@@ -72,7 +72,7 @@ int morseWord15[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 0, 1, 4, 1, 4,
 
 // array of all possible morse words // an array and pointers to arrays.
 const int* arr_list[16];
-const int arr_sizes[16] = { 24, 34, 32, 26, 30, 26, 30, 32, 34, 32, 26, 32, 20, 22, 32, 22 };  // array of the array sizes
+const int arr_sizes[16] = { 32, 34, 32, 26, 30, 26, 30, 32, 34, 32, 26, 32, 20, 22, 32, 22 };  // array of the array sizes
 
 void map_arrays() 
 {

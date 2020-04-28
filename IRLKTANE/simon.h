@@ -5,15 +5,15 @@
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
 */
 
-#define RED_LED_PIN 42
-#define GREEN_LED_PIN 40
-#define YELLOW_LED_PIN 38
-#define BLUE_LED_PIN 36
+#define RED_LED_PIN 45
+#define GREEN_LED_PIN 48
+#define YELLOW_LED_PIN 47
+#define BLUE_LED_PIN 46
 #define RED_BTN_PIN A1
-#define GREEN_BTN_PIN A2
+#define GREEN_BTN_PIN A4
 #define YELLOW_BTN_PIN A3
-#define BLUE_BTN_PIN A4
-#define PIN_SIMON_LED_GREEN 44
+#define BLUE_BTN_PIN A2
+#define PIN_SIMON_LED_GREEN 49
 
 unsigned long lastDebounceTimeRed = 0;
 unsigned long lastDebounceTimeGreen = 0;
@@ -31,7 +31,7 @@ int greenLedState = 0;
 int yellowLedState = 0;
 int blueLedState = 0;
 
-int ledPins[4] = {42, 40, 38, 36};
+int ledPins[4] = {RED_LED_PIN, GREEN_LED_PIN, YELLOW_LED_PIN, BLUE_LED_PIN};
 int ledStates[4] = {0, 0, 0, 0};
 
 int ledsNumber = 1;
@@ -75,12 +75,13 @@ void simonModuleDefusedPrint()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  defusedModuleBuzzer();
   simonModuleDefused = true;
-  if (whoModuleDefused && simonModuleDefused && memoryModuleDefused && buttonModuleDefused) {
-    victoryBuzzer();
-    defused = true;
-  }
+  digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(GREEN_LED_PIN, LOW);
+  digitalWrite(YELLOW_LED_PIN, LOW);
+  digitalWrite(BLUE_LED_PIN, LOW);
+  digitalWrite(PIN_SIMON_LED_GREEN, HIGH);
+  defusedModuleBuzzer();
 }
 
 // function that checks if there's a vowel in the serial code and returns an answer accordingly
@@ -96,7 +97,7 @@ bool checkForVowel()
 // turns on the specific led
 void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, unsigned long &currentMillis, int &ledState)
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   int reading = digitalRead(btnPin);
@@ -123,7 +124,6 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
             currentLed = -1;
             if (ledsNumber > 4) {
               simonModuleDefusedPrint();
-              digitalWrite(PIN_SIMON_LED_GREEN, HIGH);
               currentLed = ledsNumber + 2;
             }
           }
@@ -144,7 +144,6 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
             beforeAnimationMillis = millis();
             if (ledsNumber > 4) {
               simonModuleDefusedPrint();
-              digitalWrite(PIN_SIMON_LED_GREEN, HIGH);
               currentLed = ledsNumber + 2;
             }
           }
@@ -187,7 +186,7 @@ void generateLedSequence()
 // function that makes a led blink when a button is pressed
 void blinkLed(int led, int &ledState)
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   unsigned long currentMillis = millis();
@@ -209,7 +208,7 @@ void blinkLed(int led, int &ledState)
 // function that makes the leds blink in the order dictated by the led sequence that needs to be solved at the current stage
 void ledAnimation()
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   if (currentLed == -1 && millis() - beforeAnimationMillis > beforeAnimationDelay)

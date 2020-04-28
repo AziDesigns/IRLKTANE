@@ -39,9 +39,11 @@ void victoryBuzzer() // the sound of the buzzer when the team wins
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (thisNote = 0; thisNote < 3; thisNote++) {
-    tone(BUZZER, victoryMelody[thisNote], victoryMelodyDuration);
-    delay(500);
+  for (int i = 0; i < 3; i++) {
+    for (thisNote = 0; thisNote < 3; thisNote++) {
+      tone(BUZZER, victoryMelody[thisNote], victoryMelodyDuration);
+      delay(500);
+    }
   }
   /*
     delay(700);
@@ -64,9 +66,11 @@ void boomBuzzer() // the sound of the buzzer when the team loses
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (thisNote = 0; thisNote < 3; thisNote++) {
-    tone(BUZZER, boomMelody[thisNote], boomMelodyDuration);
-    delay(1000);
+  for (int i = 0; i < 3; i++) {
+    for (thisNote = 0; thisNote < 3; thisNote++) {
+      tone(BUZZER, boomMelody[thisNote], boomMelodyDuration);
+      delay(1000);
+    }
   }
   /*
     delay(700);
@@ -112,8 +116,10 @@ void strikeBuzzer() // the sound of the buzzer when the team makes a mistake
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (thisNote = 0; thisNote < 2; thisNote++) {
-    tone(BUZZER, strikeMelody[thisNote], strikeMelodyDuration);
+  if (exploded==false) {
+    for (thisNote = 0; thisNote < 2; thisNote++) {
+      tone(BUZZER, strikeMelody[thisNote], strikeMelodyDuration);
+    }
   }
   /*
     tone(BUZZER, 800);
