@@ -51,6 +51,7 @@ A Fritzing scheme will be added to this repository with instructions to build th
 Next, connect the Arduino board to your computer and load the program to the board.
 
 #### 2. Components
+    1 - Arduino MEGA 2560 R3
     2 - Neopixel Stick
     1 - Red 7-segment clock display
     3 - 7 Segment Display (2-Digit)
