@@ -14,6 +14,7 @@
    This word corresponds to a radio frequency that the expert must tell the defuser to transmit.
    The defuser must scroll to that frequency, and press the TX button to solve the module.
 */
+#include "LedControl.h"
 
 #define PIN_MORSE_LED_1 29 // yellow flashing LED for morse
 #define PIN_MORSE_LED_GREEN 27 // module complete LED
@@ -98,14 +99,16 @@ void map_arrays()
   arr_list[15] = morseWord15;
 }
 
+LedControl lc=LedControl(9,12,10,1);
+
 void morseSetup()
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(morseLatch, OUTPUT);
-  pinMode(morseClock, OUTPUT);
-  pinMode(morseData, OUTPUT);
+  lc.shutdown(0,false);
+  lc.setIntensity(0,8);
+  lc.clearDisplay(0);
   pinMode(PIN_MORSE_LED_1, OUTPUT);
   pinMode(PIN_MORSE_LED_GREEN, OUTPUT);
   pinMode(PIN_MORSE_BUTTON_1, INPUT);
@@ -126,9 +129,90 @@ void morseDisplay(unsigned char num)
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  digitalWrite(morseLatch, LOW);
-  shiftOut(morseData, morseClock, MSBFIRST, morseTable[num]);
-  digitalWrite(morseLatch, HIGH);
+  if (num==0) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,0,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==1) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,1,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==2) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,2,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==3) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,3,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==4) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,3,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==5) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,4,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==6) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,4,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==7) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,5,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==8) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,5,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==9) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,6,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==10) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,7,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==11) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,7,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==12) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,8,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==13) {
+    lc.setDigit(0,3,2,false);
+    lc.setDigit(0,2,9,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==14) {
+    lc.setDigit(0,3,5,false);
+    lc.setDigit(0,2,9,false);
+    lc.setDigit(0,1,5,false);
+    lc.setDigit(0,0,3,true);
+  } else if (num==15) {
+    lc.setDigit(0,3,0,false);
+    lc.setDigit(0,2,0,false);
+    lc.setDigit(0,1,6,false);
+    lc.setDigit(0,0,3,true);
+  }
+
+//morseTable[num]
+
 }
 
 void morseLeftButtonPressed() 

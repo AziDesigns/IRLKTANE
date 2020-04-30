@@ -28,7 +28,7 @@ bool defused = false, exploded = false, victorySong = false; // is bomb defused 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
 buttonModuleDefused = false,
-mazeModuleDefused = false,
+//mazeModuleDefused = false,
 //memoryModuleDefused = false,
 morseModuleDefused = false,
 //passwordModuleDefused = false,
@@ -60,7 +60,7 @@ void generateSerialCode() // function that generates the serial number for the b
 #include "button.h"
 //#include "discharge.h"
 //#include "knob.h"
-#include "maze.h"
+//#include "maze.h"
 //#include "memory.h"
 #include "morse.h"
 //#include "password.h"
@@ -89,7 +89,7 @@ void setup() // this section includes all setups for all modules to define INPUT
   buttonSetup();
   //dischargeSetup();
   //knobSetup();
-  mazeSetup();
+  //mazeSetup();
   //memorySetup();
   morseSetup();
   //passwordSetup();
@@ -108,7 +108,7 @@ void bombExploded() // what should each module do when exploded
   buttonModuleBoom();
   //dischargeModuleBoom();
   //knobModuleBoom();
-  mazeModuleBoom();
+  //mazeModuleBoom();
   //memoryModuleBoom();
   morseModuleBoom();
   //passwordModuleBoom();
@@ -148,7 +148,7 @@ void loop()
     buttonLoop();
     //dischargeLoop();
     //knobLoop();
-    mazeLoop();
+    //mazeLoop();
     //memoryLoop();
     morseLoop();
     //passwordLoop();
@@ -159,7 +159,7 @@ void loop()
 
   if (!exploded && (
         buttonModuleDefused &&
-        mazeModuleDefused &&
+        //mazeModuleDefused &&
         //memoryModuleDefused &&
         morseModuleDefused &&
         //passwordModuleDefused &&

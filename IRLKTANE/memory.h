@@ -17,7 +17,7 @@
 // Unless its going to just be always off? Need to see how KTANE handles that module
 #define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
-LedControl lc = LedControl(18, 16, 17, 1); //DIN, CLK, LOAD, No. DRIVER
+LedControl lc = LedControl(9, 12, 10, 1); //DIN, CLK, LOAD, No. DRIVER
 
 int previousButton, button; //the previos and the current button
 int rightPoz; //the answer to the current stage
