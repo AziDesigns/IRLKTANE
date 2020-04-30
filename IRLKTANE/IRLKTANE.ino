@@ -7,6 +7,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <LedControl.h>
 #include <SevenSegmentExtended.h>
+#include "LedControl.h"
 
 #define BOMB_TIMER_MINUTES 7 // total bomb starting time min
 #define BOMB_TIMER_SECONDS 0 // total bomb starting time sec

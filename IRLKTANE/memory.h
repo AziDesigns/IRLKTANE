@@ -3,6 +3,7 @@
   KNOWN ISSUES:
   MODULE IS MOSTLY DONE BUT HAS NOT BEEN TESTED AT ALL.
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
+  LedControl needs to be mapped to the correct pins once able to physically test.
 */
 #define PIN_MEMORY_BUTTON_1 A6 // position 1 button
 #define PIN_MEMORY_BUTTON_2 A7 // position 2 button
@@ -17,7 +18,7 @@
 // Unless its going to just be always off? Need to see how KTANE handles that module
 #define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
-LedControl lc = LedControl(9, 12, 10, 1); //DIN, CLK, LOAD, No. DRIVER
+LedControl lc = LedControl(x, x, x, 2); //DIN, CLK, LOAD, No. DRIVER
 
 int previousButton, button; //the previos and the current button
 int rightPoz; //the answer to the current stage

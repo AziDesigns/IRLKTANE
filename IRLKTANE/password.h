@@ -2,6 +2,7 @@
 /*
   KNOWN ISSUES:
   MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
+  PIN ASSIGMENTS ARE ALL KINDS OF WRONG :)
 */
 /*
   I know there is a lot of repetitive code inside this but when I tried to

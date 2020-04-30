@@ -1,11 +1,6 @@
 // On the Subject of Buttons
 /*
-  I know there is a lot of repetitive code inside this.
-  I will rewrite after getting other modules updated and working.
-
   KNOWN ISSUES:
-  NEED TO PREVENT LIGHTS FROM COMING ON BEFORE ALL MODULES START AND TIMER STARTS
-  NEED TO PREVENT "RIGHT LED" FROM SHOWING A COLOR BEFORE THE BUTTON IS DEPRESSED
 */
 
 #define LCD_BUTTON_CONTRAST 40

@@ -3,10 +3,6 @@
   KNOWN ISSUES:
   THE FIRST LED FLASH IS SHORTER THAN ALL OTHERS FOR SOME REASON.
   - I BELIEVE THIS IS DUE TO WHERE I AM SETTING THE STARTING morsePreviousMillis value in setup rather than it being in the loop?
-  THE MODULE ONLY SHOWS [1111] OR [7777] FOR EXAMPLE ON THE RADIO DISPLAY INSTEAD OF REAL MHZ VALUES DUE TO MISSING COMPONENTS - MAX7219
-  - THIS WILL BE UPDATED ONCE THE MAX7219'S ARRIVE
-  FOR SOME REASON AFTER BOMB EXPLOSION THE 7SEGMENT DISPLAY AND YELLOW LED STAY ON EVEN THOUGH THEY ARE TOLD TO TURN OFF IN 2 PLACES...
-  NEED TO UPDATE BUTTON CALLS TO INCLUDE THE WORD MORSE TO PREVENT POSSIBLE OVERLAPS WITH OTHER MODULES IN THE FUTURE & FOR CONSISTENCY.
 */
 /*
    The Morse Code module is a module that consists of a light flashing in Morse Code, a radio with a displayed frequency and a TX button.
@@ -14,7 +10,6 @@
    This word corresponds to a radio frequency that the expert must tell the defuser to transmit.
    The defuser must scroll to that frequency, and press the TX button to solve the module.
 */
-#include "LedControl.h"
 
 #define PIN_MORSE_LED_1 29 // yellow flashing LED for morse
 #define PIN_MORSE_LED_GREEN 27 // module complete LED
@@ -24,17 +19,17 @@
 
 #define MORSE_BUTTON_PRESS_DELAY 50 // time required to prevent button bounce
 
-int morseLatch = 9; // 74HC595  pin 9 STCP
-int morseClock = 28; // 74HC595  pin 10 SHCP
-int morseData = 8; // 74HC595  pin 8 DS
+int morseLatch = 10; // 74HC595  pin 9 STCP
+int morseClock = 12; // 74HC595  pin 10 SHCP
+int morseData = 9; // 74HC595  pin 8 DS
 
 int morseCurrentDisplayNumber = 0; // what station is displayed, default starting is 0
-int buttonLeftState = 0; // current state of the left button
-int buttonRightState = 0; // current state of the right button
-int buttonSubmitState = 0; // current state of the submit button
-int lastButtonLeftState = 0; // previous state of the left button
-int lastButtonRightState = 0; // previous state of the right button
-int lastButtonSubmitState = 0; // previous state of the submit button
+int morseButtonLeftState = 0; // current state of the left button
+int morseButtonRightState = 0; // current state of the right button
+int morseButtonSubmitState = 0; // current state of the submit button
+int lastMorseButtonLeftState = 0; // previous state of the left button
+int lastMorseButtonRightState = 0; // previous state of the right button
+int lastMorseButtonSubmitState = 0; // previous state of the submit button
 int morseCorrectNumber = 0; // picks which word will be correct is made random in setup.
 bool morseDisplayActivated = false;
 
@@ -46,12 +41,6 @@ const unsigned long morseWordLEDDelay = 4000; // delay for morse code between wo
 const unsigned long morseWrongTXDelay = 1500; // delay for wrong TX submited
 
 unsigned long morsePreviousMillis;
-
-// this is the table that controls which LED # is shown.
-unsigned char morseTable[] =
-{0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x00};
-// 0x3f="0",0x06="1",0x5b="2",0x4f="3",0x66="4",0x6d="5",0x7d="6",0x07="7",0x7f="8",0x6f="9",
-//0x77="A",0x7c="b",0x39="C",0x5e="d",0x79="E",0x71="F",0x00="OFF"
 
 // morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause, 4=new dot/dash pause
 int morseWord0[] = {1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 3}; // shell - 3.505 MHz
@@ -99,7 +88,7 @@ void map_arrays()
   arr_list[15] = morseWord15;
 }
 
-LedControl lc=LedControl(9,12,10,1);
+LedControl lc=LedControl(morseData,morseClock,morseLatch,1);
 
 void morseSetup()
 {
@@ -209,9 +198,12 @@ void morseDisplay(unsigned char num)
     lc.setDigit(0,2,0,false);
     lc.setDigit(0,1,6,false);
     lc.setDigit(0,0,3,true);
+  } else if (num==16) {
+    lc.setDigit(0,3,0,false);
+    lc.setDigit(0,2,0,false);
+    lc.setDigit(0,1,0,false);
+    lc.setDigit(0,0,0,false);
   }
-
-//morseTable[num]
 
 }
 
@@ -257,7 +249,7 @@ void morseSubmitButtonPressed()
     }
     digitalWrite(PIN_MORSE_LED_GREEN, HIGH); // turn on module complete light
     digitalWrite(PIN_MORSE_LED_1, LOW); // turn off flashing light upon success
-    morseDisplay(16); //shows "    " on module tx display
+    lc.shutdown(0,true); //shows "    " on module tx display
     defusedModuleBuzzer();
   } else {
     addStrike();
@@ -275,66 +267,57 @@ void morseLoop()
   }
   if (!morseModuleDefused) {
     // read the pushbutton input pins:
-    buttonLeftState = digitalRead(PIN_MORSE_BUTTON_1);
-    buttonRightState = digitalRead(PIN_MORSE_BUTTON_2);
-    buttonSubmitState = digitalRead(PIN_MORSE_BUTTON_3);
+    morseButtonLeftState = digitalRead(PIN_MORSE_BUTTON_1);
+    morseButtonRightState = digitalRead(PIN_MORSE_BUTTON_2);
+    morseButtonSubmitState = digitalRead(PIN_MORSE_BUTTON_3);
 
-    // compare the buttonLeftState to its previous state
-    if (buttonLeftState != lastButtonLeftState) {
-      // if the state has changed, increment the counter
-      if (buttonLeftState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
+    // compare the morseButtonLeftState to its previous state
+    if (morseButtonLeftState != lastMorseButtonLeftState) {
+      if (morseButtonLeftState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("leftOn");
+          Serial.println("morseLeftOn");
         }
         morseLeftButtonPressed();
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("leftOff");
+          Serial.println("morseLeftOff");
         }
       }
     }
     // save the current state as the last state, for next time through the loop
-    lastButtonLeftState = buttonLeftState;
+    lastMorseButtonLeftState = morseButtonLeftState;
 
-    // compare the buttonRightState to its previous state
-    if (buttonRightState != lastButtonRightState) {
-      // if the state has changed, increment the counter
-      if (buttonRightState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
+    // compare the morseButtonRightState to its previous state
+    if (morseButtonRightState != lastMorseButtonRightState) {
+      if (morseButtonRightState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("rightOn");
+          Serial.println("morseRightOn");
         }
         morseRightButtonPressed();
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("rightOff");
+          Serial.println("morseRightOff");
         }
       }
     }
     // save the current state as the last state, for next time through the loop
-    lastButtonRightState = buttonRightState;
+    lastMorseButtonRightState = morseButtonRightState;
 
-    // compare the buttonSubmitState to its previous state
-    if (buttonSubmitState != lastButtonSubmitState) {
-      // if the state has changed, increment the counter
-      if (buttonSubmitState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
+    // compare the morseButtonSubmitState to its previous state
+    if (morseButtonSubmitState != lastMorseButtonSubmitState) {
+      if (morseButtonSubmitState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("submitOn");
+          Serial.println("morseSubmitOn");
         }
         morseSubmitButtonPressed();
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("submitOff");
+          Serial.println("morseSubmitOff");
         }
       }
     }
     // save the current state as the last state, for next time through the loop
-    lastButtonSubmitState = buttonSubmitState;
+    lastMorseButtonSubmitState = morseButtonSubmitState;
 
 
     // -----------------------------------------------------------------------------
@@ -400,5 +383,5 @@ void morseModuleBoom()
   // if the bomb explodes the display with the frequency should clear and the flashing led should stop
   digitalWrite(PIN_MORSE_LED_1, LOW); // stop flashing yellow morse
   digitalWrite(PIN_MORSE_LED_GREEN, LOW); // turn of green module complete LED
-  morseDisplay(16); //shows "    " on module tx display
+  lc.shutdown(0,true); //shows "    " on module tx display
 }

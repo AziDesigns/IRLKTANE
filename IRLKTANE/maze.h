@@ -1,7 +1,6 @@
 //On the Subject of Mazes
 /*
   KNOWN ISSUES:
-  I AM OUT OF BUTTONS SO HAD TO REUSE BUTTONS FROM THE MORSE AND BUTTON MODULE. WHEN NEW BUTTONS ARRIVE I WILL FIX AND POINT TO CORRECT PINS
   STARTING AND FINISHING POINTS ARE FIXED CURRENTLY
     - IDEALLY THESE WOULD NOT BE FIXED AND WOULD BE RANDOM EVENTUALLY
   CURRENTLY PROGRAMED FOR RED ONLY LED MATRIX. WAITING ON HARDWARE TO WRITE/ UPDATE FOR RGB
@@ -16,11 +15,6 @@
    We wont be able to make a green circle around the 2 indicators but can light up the grid in green/ red/ and white for this module.
    We also cant get a 6x6 matrix unless we make it ourselves. Alt we use a 8x8 grid and black out the 1 line around all sides when mounting.
 */
-
-/////////////////////////////////
-/////////////////////////////////
-
-#include "LedControl.h"
 
 /*
   SETUP FOR A MAZE
@@ -524,13 +518,6 @@ void mazeLoop()
 
   if (!mazeModuleDefused) {
 
-    /**
-       NOTE: The following movement directions are setted supposing
-       the LED Matrix and the gyro are directly connected to a
-       breadboard without wires.
-       If you have a different setup you may need to modify this:
-    */
-
     // read the pushbutton input pins:
     mazeButtonLeftState = digitalRead(PIN_MAZE_LEFT);
     mazeButtonRightState = digitalRead(PIN_MAZE_RIGHT);
@@ -539,15 +526,12 @@ void mazeLoop()
 
     // compare the mazeButtonLeftState to its previous state
     if (mazeButtonLeftState != lastMazeButtonLeftState) {
-      // if the state has changed, increment the counter
       if (mazeButtonLeftState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeLeftOn");
         }
         mazeTryToMove(Left);
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeLeftOff");
         }
@@ -558,15 +542,12 @@ void mazeLoop()
 
     // compare the mazeButtonRightState to its previous state
     if (mazeButtonRightState != lastMazeButtonRightState) {
-      // if the state has changed, increment the counter
       if (mazeButtonRightState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeRightOn");
         }
         mazeTryToMove(Right);
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeRightOff");
         }
@@ -577,15 +558,12 @@ void mazeLoop()
 
     // compare the mazeButtonUpState to its previous state
     if (mazeButtonUpState != lastMazeButtonUpState) {
-      // if the state has changed, increment the counter
       if (mazeButtonUpState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeUpOn");
         }
         mazeTryToMove(Up);
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeUpOff");
         }
@@ -596,15 +574,12 @@ void mazeLoop()
 
     // compare the mazeButtonDownState to its previous state
     if (mazeButtonDownState != lastMazeButtonDownState) {
-      // if the state has changed, increment the counter
       if (mazeButtonDownState == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeDownOn");
         }
         mazeTryToMove(Down);
       } else {
-        // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
           Serial.println("mazeDownOff");
         }

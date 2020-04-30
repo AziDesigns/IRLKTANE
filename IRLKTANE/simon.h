@@ -1,8 +1,6 @@
 // On the Subject of Simon Says
 /*
   KNOWN ISSUES:
-  MODULE IS MOSTLY DONE BUT HAS NOT BEEN TESTED AT ALL.
-  NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
 */
 
 #define RED_LED_PIN 45
@@ -26,13 +24,13 @@ unsigned long currentMillisGreen = 0;
 unsigned long currentMillisYellow = 0;
 unsigned long currentMillisBlue = 0;
 
-int redLedState = 0;
-int greenLedState = 0;
-int yellowLedState = 0;
-int blueLedState = 0;
+int simonRedLedState = 0;
+int simonGreenLedState = 0;
+int simonYellowLedState = 0;
+int simonBlueLedState = 0;
 
-int ledPins[4] = {RED_LED_PIN, GREEN_LED_PIN, YELLOW_LED_PIN, BLUE_LED_PIN};
-int ledStates[4] = {0, 0, 0, 0};
+int simonLedPins[4] = {RED_LED_PIN, GREEN_LED_PIN, YELLOW_LED_PIN, BLUE_LED_PIN};
+int simonLedStates[4] = {0, 0, 0, 0};
 
 int ledsNumber = 1;
 int blinkingTime = 500;
@@ -95,7 +93,7 @@ bool checkForVowel()
 
 // function that checks if the pressed button is the correct one in the answer sequence and
 // turns on the specific led
-void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, unsigned long &currentMillis, int &ledState)
+void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, unsigned long &currentMillis, int &simonLedState)
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
@@ -104,11 +102,11 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
 
   if (reading == HIGH) {
     debounceTime = millis();
-    ledState = 1;
+    simonLedState = 1;
   }
 
   if (millis() - debounceTime > debounceDelay) {
-    if (ledState == 1) {
+    if (simonLedState == 1) {
       currentLed = ledsNumber;
       digitalWrite(RED_LED_PIN, LOW);
       digitalWrite(GREEN_LED_PIN, LOW);
@@ -159,12 +157,12 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
 
       digitalWrite(led, HIGH);
       currentMillis = millis();
-      ledState = 2;
+      simonLedState = 2;
     }
 
-    if (millis() - currentMillis >= blinkingTime && ledState == 2) {
+    if (millis() - currentMillis >= blinkingTime && simonLedState == 2) {
       digitalWrite(led, LOW);
-      ledState = 0;
+      simonLedState = 0;
     }
   }
 
@@ -184,7 +182,7 @@ void generateLedSequence()
 }
 
 // function that makes a led blink when a button is pressed
-void blinkLed(int led, int &ledState)
+void blinkLed(int led, int &simonLedState)
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
@@ -194,14 +192,14 @@ void blinkLed(int led, int &ledState)
   if (currentMillis - simonPreviousMillis >= blinkingTime) {
     simonPreviousMillis = currentMillis;
 
-    if (ledState == LOW) {
-      ledState = HIGH;
+    if (simonLedState == LOW) {
+      simonLedState = HIGH;
     } else {
-      ledState = LOW;
+      simonLedState = LOW;
       currentLed++;
     }
 
-    digitalWrite(led, ledState);
+    digitalWrite(led, simonLedState);
   }
 }
 
@@ -218,7 +216,7 @@ void ledAnimation()
     buttonsPressed = 0;
 
   if (currentLed < ledsNumber)
-    blinkLed(ledPins[ledSequence[currentLed] - 1], ledStates[ledSequence[currentLed] - 1]);
+    blinkLed(simonLedPins[ledSequence[currentLed] - 1], simonLedStates[ledSequence[currentLed] - 1]);
   else {
     if (currentLed == ledsNumber) {
       animationMillis = millis();
@@ -255,10 +253,10 @@ void simonLoop()
   }
   if (!simonModuleDefused) {
     ledAnimation();
-    pressButton(1, RED_BTN_PIN, RED_LED_PIN, lastDebounceTimeRed, currentMillisRed, redLedState);
-    pressButton(2, GREEN_BTN_PIN, GREEN_LED_PIN, lastDebounceTimeGreen, currentMillisGreen, greenLedState);
-    pressButton(3, YELLOW_BTN_PIN, YELLOW_LED_PIN, lastDebounceTimeYellow, currentMillisYellow, yellowLedState);
-    pressButton(4, BLUE_BTN_PIN, BLUE_LED_PIN, lastDebounceTimeBlue, currentMillisBlue, blueLedState);
+    pressButton(1, RED_BTN_PIN, RED_LED_PIN, lastDebounceTimeRed, currentMillisRed, simonRedLedState);
+    pressButton(2, GREEN_BTN_PIN, GREEN_LED_PIN, lastDebounceTimeGreen, currentMillisGreen, simonGreenLedState);
+    pressButton(3, YELLOW_BTN_PIN, YELLOW_LED_PIN, lastDebounceTimeYellow, currentMillisYellow, simonYellowLedState);
+    pressButton(4, BLUE_BTN_PIN, BLUE_LED_PIN, lastDebounceTimeBlue, currentMillisBlue, simonBlueLedState);
 
   }
 
