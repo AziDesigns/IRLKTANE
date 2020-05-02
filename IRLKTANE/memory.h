@@ -18,7 +18,11 @@
 // Unless its going to just be always off? Need to see how KTANE handles that module
 #define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
-LedControl lc = LedControl(x, x, x, 2); //DIN, CLK, LOAD, No. DRIVER
+int memoryLatch = 10; // 74HC595  pin 9 STCP
+int memoryClock = 12; // 74HC595  pin 10 SHCP
+int memoryData = 9; // 74HC595  pin 8 DS
+
+LedControl memorylc = LedControl(memoryData, memoryClock, memoryLatch, 2); //DIN, CLK, LOAD, No. DRIVER
 
 int previousButton, button; //the previos and the current button
 int rightPoz; //the answer to the current stage
@@ -73,11 +77,11 @@ void displayNumbers()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  lc.setDigit(0, 5, digits[0], false);
-  lc.setDigit(0, 0, digits[1], false);
-  lc.setDigit(0, 1, digits[2], false);
-  lc.setDigit(0, 2, digits[3], false);
-  lc.setDigit(0, 3, digits[4], false);
+  memorylc.setDigit(0, 5, digits[0], false);
+  memorylc.setDigit(0, 0, digits[1], false);
+  memorylc.setDigit(0, 1, digits[2], false);
+  memorylc.setDigit(0, 2, digits[3], false);
+  memorylc.setDigit(0, 3, digits[4], false);
 }
 
 // function that returns the postion of a digit
@@ -129,10 +133,10 @@ void memorySetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lc.shutdown(0, false); // turn off power saving, enables display
+  memorylc.shutdown(0, false); // turn off power saving, enables display
 
-  lc.setIntensity(0, 4); // sets brightness (0~15 possible values)
-  lc.clearDisplay(0);// clear screen
+  memorylc.setIntensity(0, 4); // sets brightness (0~15 possible values)
+  memorylc.clearDisplay(0);// clear screen
 
   randomSeed(analogRead(0));
 
@@ -214,7 +218,7 @@ void memoryCheckButton() // function that checks if a button is pressed
       if (stageNumber == 5) { // if it's the last stage, the module is defused 
         turnOffLeds();
         digitalWrite(PIN_MEMORY_LED_GREEN, HIGH);
-        lc.clearDisplay(0);
+        memorylc.clearDisplay(0);
         memoryModuleDefused = true;
         defusedModuleBuzzer();
         stageNumber++;
@@ -235,7 +239,7 @@ void memoryModuleBoom()  // if the bomb explodes what should the module display
   digitalWrite(PIN_MEMORY_LED_3, LOW);
   digitalWrite(PIN_MEMORY_LED_4, LOW);
   digitalWrite(PIN_MEMORY_LED_GREEN, LOW);
-  lc.clearDisplay(0);
+  memorylc.clearDisplay(0);
 }
 
 void memoryLoop() // if module not defused keep looping

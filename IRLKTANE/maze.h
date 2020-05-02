@@ -38,7 +38,7 @@ const int MAZE_LEDS_BRIGHTNESS = 8; // Intensity of the led, a number between 1-
 
 #define MAZE_BLINK_DELAY 300
 
-LedControl lc = LedControl(MAZE_OUTPUT_DATA_PIN, MAZE_OUTPUT_CLOCK_PIN, MAZE_OUTPUT_LOAD_PIN, MAZE_MAX_MODULE_COUNT);
+LedControl mazelc = LedControl(MAZE_OUTPUT_DATA_PIN, MAZE_OUTPUT_CLOCK_PIN, MAZE_OUTPUT_LOAD_PIN, MAZE_MAX_MODULE_COUNT);
 
 /**
    GAME
@@ -335,10 +335,10 @@ void mazePrintLevel() // DISPLAYS THE FRIENDLY VERSION NOT THE MOVEMENT/ PLAY VE
   for (int x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
     for (int y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
       if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'c') {
-        lc.setLed(0, x, y, true);
+        mazelc.setLed(0, x, y, true);
       }
       else if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'f') {
-        lc.setLed(0, x, y, true);
+        mazelc.setLed(0, x, y, true);
       }
     }
   }
@@ -349,7 +349,7 @@ void mazeInitLevel()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  lc.clearDisplay(0);
+  mazelc.clearDisplay(0);
 
   // sets startX, startY, finishX and finishY for MOVEMENT/ PLAY
   for (int x = 0; x < MAZE_LEVELS_ROWS; x++) {
@@ -389,7 +389,7 @@ void mazeShowPlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, true);
+  mazelc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, true);
 }
 
 void mazeHidePlayer() 
@@ -397,7 +397,7 @@ void mazeHidePlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, false);
+  mazelc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, false);
 }
 
 void mazeCheckWin() 
@@ -406,7 +406,7 @@ void mazeCheckWin()
     Serial.println (__func__);
   }
   if (MAZE_LEVELS[mazeCurrentLevel][mazeCurrentX][mazeCurrentY] == 'f') {
-    lc.clearDisplay(0);
+    mazelc.clearDisplay(0);
     digitalWrite(PIN_MAZE_LED_GREEN, HIGH);
     mazeModuleDefused = true;
   }
@@ -488,11 +488,11 @@ void mazeSetup()
     The MAX72XX is in power-saving mode on startup,
     we have to do a wakeup call
   */
-  lc.shutdown(0, false);
+  mazelc.shutdown(0, false);
   /* Set the brightness to a medium values */
-  lc.setIntensity(0, MAZE_LEDS_BRIGHTNESS);
+  mazelc.setIntensity(0, MAZE_LEDS_BRIGHTNESS);
   /* and clear the display */
-  lc.clearDisplay(0);
+  mazelc.clearDisplay(0);
   mazeInitLevel();
 }
 
@@ -584,6 +584,6 @@ void mazeModuleBoom()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  lc.clearDisplay(0);
+  mazelc.clearDisplay(0);
   digitalWrite(PIN_MAZE_LED_GREEN, LOW);
 }

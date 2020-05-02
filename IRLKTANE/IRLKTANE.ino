@@ -26,16 +26,29 @@
 
 bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
 
+// for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
+bool
+buttonModuleIncluded = false,
+dischargeModuleIncluded = false,
+knobModuleIncluded = false,
+mazeModuleIncluded = false,
+memoryModuleIncluded = false,
+morseModuleIncluded = true,
+passwordModuleIncluded = false,
+simonModuleIncluded = false,
+ventingModuleIncluded = false,
+whoModuleIncluded = false;
+
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
-//buttonModuleDefused = false,
+buttonModuleDefused = false,
 knobModuleStike = false,
-//mazeModuleDefused = false,
-//memoryModuleDefused = false,
-morseModuleDefused = false; //,
-//passwordModuleDefused = false,
-//simonModuleDefused = false,
-//whoModuleDefused= false;
+mazeModuleDefused = false,
+memoryModuleDefused = false,
+morseModuleDefused = false,
+passwordModuleDefused = false,
+simonModuleDefused = false,
+whoModuleDefused= false;
 
 bool explodedFromStrikes = false; // is bomb exploded from strikes default value false
 int nrStrikes = 0; // number of strikes default starting is 0 (could be changed in future to allow only 1 strike, etc)
@@ -59,16 +72,16 @@ void generateSerialCode() // function that generates the serial number for the b
 #include "time.h"
 #include "indicator.h"
 #include "batteries.h"
-//#include "button.h"
+#include "button.h"
 #include "discharge.h"
-//#include "knob.h"
-//#include "maze.h"
-//#include "memory.h"
-//#include "morse.h"
-//#include "password.h"
-//#include "simon.h"
-//#include "venting.h"
-//#include "who.h"
+#include "knob.h"
+#include "maze.h"
+#include "memory.h"
+#include "morse.h"
+#include "password.h"
+#include "simon.h"
+#include "venting.h"
+#include "who.h"
 
 void setup() // this section includes all setups for all modules to define INPUTS/OUTPUTS/DEFAULT VALUES/ ETC
 {
@@ -87,18 +100,53 @@ void setup() // this section includes all setups for all modules to define INPUT
   digitalWrite(PIN_STRIKE_LED_3, LOW);
 
   generateSerialCode();
-
-  //buttonSetup();
-  dischargeSetup();
-  //knobSetup();
-  //mazeSetup();
-  //memorySetup();
-  //morseSetup();
-  //passwordSetup();
-  //simonSetup();
   timeSetup();
-  //ventingSetup();
-  //whoSetup();
+
+  if (buttonModuleIncluded==true) {
+    buttonSetup();
+  } else {
+    buttonModuleDefused = true;  
+  }
+  if (dischargeModuleIncluded==true) {
+    dischargeSetup();
+  } else {  
+  }
+  if (knobModuleIncluded==true) {
+    knobSetup();
+  }
+  if (mazeModuleIncluded==true) {
+    mazeSetup();
+  } else {
+    mazeModuleDefused = true; 
+  }
+  if (memoryModuleIncluded==true) {
+    memorySetup();
+  } else {
+    memoryModuleDefused = true; 
+  }
+  if (morseModuleIncluded==true) {
+    morseSetup();
+  } else {
+    morseModuleDefused = true; 
+  }
+  if (passwordModuleIncluded==true) {
+    passwordSetup();
+  } else {
+    passwordModuleDefused = true; 
+  }
+  if (simonModuleIncluded==true) {
+    simonSetup();
+  } else {
+    simonModuleDefused = true;
+  }
+  if (ventingModuleIncluded==true) {
+    ventingSetup();
+  }
+  if (whoModuleIncluded==true) {
+    whoSetup();
+  } else {
+    whoModuleDefused= true;
+  }
 }
 
 void bombExploded() // what should each module do when exploded
@@ -107,16 +155,37 @@ void bombExploded() // what should each module do when exploded
     Serial.println (__func__);
   }
   exploded = true;
-  //buttonModuleBoom();
-  dischargeModuleBoom();
-  //knobModuleBoom();
-  //mazeModuleBoom();
-  //memoryModuleBoom();
-  //morseModuleBoom();
-  //passwordModuleBoom();
-  //simonModuleBoom();
-  //ventingModuleBoom();
-  //whoModuleBoom();
+  
+  if (buttonModuleIncluded==true) {
+    buttonModuleBoom();
+  }
+  if (dischargeModuleIncluded==true) {
+    dischargeModuleBoom();
+  }
+  if (knobModuleIncluded==true) {
+    knobModuleBoom();
+  }
+  if (mazeModuleIncluded==true) {
+    mazeModuleBoom();
+  }
+  if (memoryModuleIncluded==true) {
+    memoryModuleBoom();
+  }
+  if (morseModuleIncluded==true) {
+    morseModuleBoom();
+  }
+  if (passwordModuleIncluded==true) {
+    passwordModuleBoom();
+  }
+  if (simonModuleIncluded==true) {
+    simonModuleBoom();
+  }
+  if (ventingModuleIncluded==true) {
+    ventingModuleBoom();
+  }
+  if (whoModuleIncluded==true) {
+    whoModuleBoom();
+  }
   boomBuzzer();//needs to be last due to delays?
   timeModuleBoom();//needs to be last due to delays?
 }
@@ -147,28 +216,47 @@ void loop()
   timeLoop();
 
   if (!defused && !exploded) {
-    //buttonLoop();
-    dischargeLoop();
-    //mazeLoop();
-    //memoryLoop();
-    //morseLoop();
-    //passwordLoop();
-    //simonLoop();
-    //ventingLoop();
-    //whoLoop();
-    if (knobModuleStike==false) {
-      //knobLoop();
-    }
+    
+      if (buttonModuleIncluded==true) {
+        buttonLoop();
+      }
+      if (dischargeModuleIncluded==true) {
+        dischargeLoop();
+      }
+      if ((knobModuleIncluded==true) && (knobModuleStike==false)) {
+        knobLoop();
+      }
+      if (mazeModuleIncluded==true) {
+        mazeLoop();
+      }
+      if (memoryModuleIncluded==true) {
+        memoryLoop();
+      }
+      if (morseModuleIncluded==true) {
+        morseLoop();
+      }
+      if (passwordModuleIncluded==true) {
+        passwordLoop();
+      }
+      if (simonModuleIncluded==true) {
+        simonLoop();
+      }
+      if (ventingModuleIncluded==true) {
+        ventingLoop();
+      }
+      if (whoModuleIncluded==true) {
+        whoLoop();
+      }
   }
 
   if (!exploded && (
-        //buttonModuleDefused &&
-        //mazeModuleDefused &&
-        //memoryModuleDefused &&
-        morseModuleDefused //&&
-        //passwordModuleDefused &&
-        //simonModuleDefused &&
-        //whoModuleDefused
+        buttonModuleDefused &&
+        mazeModuleDefused &&
+        memoryModuleDefused &&
+        morseModuleDefused &&
+        passwordModuleDefused &&
+        simonModuleDefused &&
+        whoModuleDefused
       ))
   {
     if (victorySong==false) {
