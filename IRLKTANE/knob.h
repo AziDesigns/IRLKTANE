@@ -110,7 +110,21 @@ void knobDisplayTime() // function that displays the time on the clock
         knobSec=KNOB_DEFAULT_TIME + 1; // command to restart the countdown timer
         knobLEDArray = random(8); // choses a new random array of LED's to display
       } else {
-        bombExploded(); // if the time hits zero and the correct knob position is not set the bomb will go off
+        addStrike(); // if the time hits zero and the correct knob position is not set the bomb will add a stike
+        knobModuleStike = true;
+        knobTimer.print("  ");
+        digitalWrite (PIN_KNOB_LED_1, LOW);
+        digitalWrite (PIN_KNOB_LED_2, LOW);
+        digitalWrite (PIN_KNOB_LED_3, LOW);
+        digitalWrite (PIN_KNOB_LED_4, LOW);
+        digitalWrite (PIN_KNOB_LED_5, LOW);
+        digitalWrite (PIN_KNOB_LED_6, LOW);
+        digitalWrite (PIN_KNOB_LED_7, LOW);
+        digitalWrite (PIN_KNOB_LED_8, LOW);
+        digitalWrite (PIN_KNOB_LED_9, LOW);
+        digitalWrite (PIN_KNOB_LED_10, LOW);
+        digitalWrite (PIN_KNOB_LED_11, LOW);
+        digitalWrite (PIN_KNOB_LED_12, LOW);
       }
     }
   knobTimer.printTime(knobSec, false);

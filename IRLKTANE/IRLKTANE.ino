@@ -29,6 +29,7 @@ bool defused = false, exploded = false, victorySong = false; // is bomb defused 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
 //buttonModuleDefused = false,
+knobModuleStike = false,
 //mazeModuleDefused = false,
 //memoryModuleDefused = false,
 morseModuleDefused = false; //,
@@ -148,7 +149,6 @@ void loop()
   if (!defused && !exploded) {
     //buttonLoop();
     dischargeLoop();
-    //knobLoop();
     //mazeLoop();
     //memoryLoop();
     //morseLoop();
@@ -156,6 +156,9 @@ void loop()
     //simonLoop();
     //ventingLoop();
     //whoLoop();
+    if (knobModuleStike==false) {
+      //knobLoop();
+    }
   }
 
   if (!exploded && (

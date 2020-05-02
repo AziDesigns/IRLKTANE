@@ -63,7 +63,7 @@ void dischargeDisplayTime() // function that displays the time on the clock
     }
   }
   if (dischargeSec == -1) {
-    bombExploded(); // if the time hits zero the bomb will go off
+    addStrike(); // if the time hits zero the bomb will go off
   }
   dischargeTimer.printTime(dischargeSec, false);
 }
