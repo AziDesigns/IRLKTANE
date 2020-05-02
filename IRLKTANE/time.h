@@ -1,10 +1,7 @@
 // The Overall Bomb Timer/ Clock
 /*
   KNOWN ISSUES:
-  THERE IS NO LOGIC BUILT TO HANDLE CLOCK MOVING FASTER AFTER STRIKES AND NEEDS TO BE ADDED EVENTUALLY
-  NEED LOGIC FOR IF DEFUSED THEN SHOW TIME LEFT AND STOP DECREASING TIME
-  NEED LOGIC IN BOOM FOR IF EXPLODED FROM TIMEOUT THEN SHOW 00:00
-  NEED LOGIC IN BOOM FOR IF EXPLODED FROM STRIKES THEN SHOW TIME THAT WAS REMAINING
+  NEED LOGIC FOR IF DEFUSED THEN SHOW TIME LEFT AND STOP DECREASING TIME // THIS MAY ALREADY HAPPEN AS WE ARENT DISTINCTLY CLEARING THE DISPLAY ON DEFUSE
 */
 
 #define PIN_CLK 14 // countdown clock CLK
@@ -29,7 +26,13 @@ void displayTime() // function that displays the time on the clock
     Serial.println (__func__);
   }
   if (seconds < millis()) {
+    if (nrStrikes==2) {
+    seconds += (1000/1.5); // increased 1.5 rate of countdown for 2 strikes
+    } else if (nrStrikes==1) {
+    seconds += (1000/1.25); // increased 1.25 rate of countdown for 1 strikes
+    } else if(nrStrikes==0) {
     seconds += 1000;
+    }
     sec--;
     //countdownBuzzer(); //NEEDS TURNED BACK ON FOR GAMEPLAY. TURRNED OFF FOR TESTING
     if (sec == -1) {
@@ -63,6 +66,6 @@ void timeModuleBoom() // if the bomb explodes what should the module display
   }
   // if exploded from time show 00:00
   // if exploded from strikes show time remaining before explosion
-  if (explodedFromStrikes) timer.print("    BOMB EXPLODED    ");
-  else timer.printTime(mins, sec, true);
+  if (explodedFromStrikes) timer.printTime(mins, sec, true);
+  else timer.print("    BOMB EXPLODED    ");
 }

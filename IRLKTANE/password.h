@@ -4,11 +4,6 @@
   MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
   PIN ASSIGMENTS ARE ALL KINDS OF WRONG :)
 */
-/*
-  I know there is a lot of repetitive code inside this but when I tried to
-  refactor it, everything stopped working so I decided to keep it like this
-*/
-
 #define LCD_PASSWORD_CONTRAST 40
 #define PIN_PASSWORD_LED_GREEN 25
 

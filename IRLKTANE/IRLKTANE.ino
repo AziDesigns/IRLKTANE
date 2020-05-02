@@ -28,12 +28,12 @@ bool defused = false, exploded = false, victorySong = false; // is bomb defused 
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
-buttonModuleDefused = false,
+//buttonModuleDefused = false,
 //mazeModuleDefused = false,
 //memoryModuleDefused = false,
-morseModuleDefused = false,
+morseModuleDefused = false; //,
 //passwordModuleDefused = false,
-simonModuleDefused = false; //,
+//simonModuleDefused = false,
 //whoModuleDefused= false;
 
 bool explodedFromStrikes = false; // is bomb exploded from strikes default value false
@@ -58,14 +58,14 @@ void generateSerialCode() // function that generates the serial number for the b
 #include "time.h"
 #include "indicator.h"
 #include "batteries.h"
-#include "button.h"
-//#include "discharge.h"
+//#include "button.h"
+#include "discharge.h"
 //#include "knob.h"
 //#include "maze.h"
 //#include "memory.h"
-#include "morse.h"
+//#include "morse.h"
 //#include "password.h"
-#include "simon.h"
+//#include "simon.h"
 //#include "venting.h"
 //#include "who.h"
 
@@ -87,14 +87,14 @@ void setup() // this section includes all setups for all modules to define INPUT
 
   generateSerialCode();
 
-  buttonSetup();
-  //dischargeSetup();
+  //buttonSetup();
+  dischargeSetup();
   //knobSetup();
   //mazeSetup();
   //memorySetup();
-  morseSetup();
+  //morseSetup();
   //passwordSetup();
-  simonSetup();
+  //simonSetup();
   timeSetup();
   //ventingSetup();
   //whoSetup();
@@ -106,14 +106,14 @@ void bombExploded() // what should each module do when exploded
     Serial.println (__func__);
   }
   exploded = true;
-  buttonModuleBoom();
-  //dischargeModuleBoom();
+  //buttonModuleBoom();
+  dischargeModuleBoom();
   //knobModuleBoom();
   //mazeModuleBoom();
   //memoryModuleBoom();
-  morseModuleBoom();
+  //morseModuleBoom();
   //passwordModuleBoom();
-  simonModuleBoom();
+  //simonModuleBoom();
   //ventingModuleBoom();
   //whoModuleBoom();
   boomBuzzer();//needs to be last due to delays?
@@ -146,25 +146,25 @@ void loop()
   timeLoop();
 
   if (!defused && !exploded) {
-    buttonLoop();
-    //dischargeLoop();
+    //buttonLoop();
+    dischargeLoop();
     //knobLoop();
     //mazeLoop();
     //memoryLoop();
-    morseLoop();
+    //morseLoop();
     //passwordLoop();
-    simonLoop();
+    //simonLoop();
     //ventingLoop();
     //whoLoop();
   }
 
   if (!exploded && (
-        buttonModuleDefused &&
+        //buttonModuleDefused &&
         //mazeModuleDefused &&
         //memoryModuleDefused &&
-        morseModuleDefused &&
+        morseModuleDefused //&&
         //passwordModuleDefused &&
-        simonModuleDefused //&&
+        //simonModuleDefused &&
         //whoModuleDefused
       ))
   {
