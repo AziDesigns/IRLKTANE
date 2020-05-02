@@ -79,8 +79,8 @@ Next, connect the Arduino board to your computer and load the program to the boa
 | Module Type  | Module Name         | Sketched         | Coded            | Made             |
 | ------------ | ------------------- |:----------------:|:----------------:|:----------------:|
 | Normal       | Button              |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-| Needy        | Capacitor Discharge |:heavy_check_mark:|                  |                  |
-| Needy        | Knob                |:heavy_check_mark:|                  |                  |
+| Needy        | Capacitor Discharge |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+| Needy        | Knob                |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Normal       | Maze                |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Normal       | Memory              |:heavy_check_mark:|:heavy_check_mark:|                  |
 | Normal       | Morse               |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
