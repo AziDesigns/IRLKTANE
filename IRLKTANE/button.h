@@ -135,9 +135,6 @@ void buttonSetup()
   pinMode(PIN_BUTTON_LED_GREEN, OUTPUT);
   pinMode(V0_PIN, OUTPUT);
 
-  analogWrite(V0_PIN, LCD_BUTTON_CONTRAST);
-  lcdButton.begin(16, 2);
-
   //generating a seed to use in order to generate random numbers
   randomSeed(analogRead(0));
 

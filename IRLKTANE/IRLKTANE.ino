@@ -63,6 +63,7 @@ void generateSerialCode() // function that generates the serial number for the b
   char alphanumeric[50] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
   for ( int i = 0; i < 7; i++)
     serialCode[i] = alphanumeric[random(0, 35)];
+  Serial.println (serialCode);
 }
 
 // list all modules/ header files that should be included
@@ -99,7 +100,15 @@ void setup() // this section includes all setups for all modules to define INPUT
   digitalWrite(PIN_STRIKE_LED_2, LOW);
   digitalWrite(PIN_STRIKE_LED_3, LOW);
 
+  analogWrite(V0_PIN, LCD_BUTTON_CONTRAST);
+  lcdButton.begin(16, 2);
+
   generateSerialCode();
+  lcdButton.clear();
+  lcdButton.setCursor(0, 1);
+  lcdButton.print("Serial: ");
+  lcdButton.print(serialCode);
+  
   timeSetup();
 
   if (buttonModuleIncluded==true) {

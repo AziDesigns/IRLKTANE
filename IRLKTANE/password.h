@@ -18,7 +18,7 @@
 #define PIN_PASSWORD_BUTTON_9 57 // letter 4 down // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_10 53 // letter 5 down
 
-LiquidCrystal lcdPassword(28, 30, 34, 49, 51, 55);  // invalid pin (55) max number is 53
+LiquidCrystal lcdPassword(60, 61, 62, 63, 64, 65);  // invalid pin (55) max number is 53
 int passWordGen;
 
 void passwordModuleDefusedPrint()
