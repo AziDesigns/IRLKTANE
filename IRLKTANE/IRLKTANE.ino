@@ -12,17 +12,13 @@
 #define BOMB_TIMER_MINUTES 7 // total bomb starting time min
 #define BOMB_TIMER_SECONDS 0 // total bomb starting time sec
 
-#define PIN_STRIKE_LED_1 30 // strike 1 LED
-#define PIN_STRIKE_LED_2 31 // strike 2 LED
-#define PIN_STRIKE_LED_3 32  // strike 3 LED
-
 /*  LEVEL 0 = MINIMAL SERIAL PRINT
     LEVEL 1 = PER USER ACTION LOGGING & BOMB VALUES
     LEVEL 2 = PER FUNCTION CALL LOGGING
     LEVEL 3 = SAME AS L3 WITH loop, setup, morseDisplay, displayTime, and mazeOne FUNCTIONS INCLUDED
     MORE LEVELS IN THE FUTURE?
 */
-#define DEBUG_LEVEL 2
+#define DEBUG_LEVEL 4
 
 bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
 
@@ -33,11 +29,11 @@ dischargeModuleIncluded = false,
 knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
-morseModuleIncluded = true,
+morseModuleIncluded = false,
 passwordModuleIncluded = false,
 simonModuleIncluded = false,
 ventingModuleIncluded = false,
-whoModuleIncluded = false;
+whoModuleIncluded = true;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
@@ -71,6 +67,7 @@ void generateSerialCode() // function that generates the serial number for the b
 
 #include "buzzer.h"
 #include "time.h"
+#include "morse.h" //higher in list so the max7219 chain will be loaded before other modules that need it
 #include "indicator.h"
 #include "batteries.h"
 #include "button.h"
@@ -78,7 +75,6 @@ void generateSerialCode() // function that generates the serial number for the b
 #include "knob.h"
 #include "maze.h"
 #include "memory.h"
-#include "morse.h"
 #include "password.h"
 #include "simon.h"
 #include "venting.h"
@@ -92,14 +88,6 @@ void setup() // this section includes all setups for all modules to define INPUT
   Serial.begin(9600);
   randomSeed(analogRead(0));
 
-  pinMode(PIN_STRIKE_LED_1, OUTPUT);
-  pinMode(PIN_STRIKE_LED_2, OUTPUT);
-  pinMode(PIN_STRIKE_LED_3, OUTPUT);
-
-  digitalWrite(PIN_STRIKE_LED_1, LOW);
-  digitalWrite(PIN_STRIKE_LED_2, LOW);
-  digitalWrite(PIN_STRIKE_LED_3, LOW);
-
   analogWrite(V0_PIN, LCD_BUTTON_CONTRAST);
   lcdButton.begin(16, 2);
 
@@ -108,6 +96,10 @@ void setup() // this section includes all setups for all modules to define INPUT
   lcdButton.setCursor(0, 1);
   lcdButton.print("Serial: ");
   lcdButton.print(serialCode);
+
+  lc.shutdown(1,false); // moved from morse.h so strikes can function without morse active
+  lc.setIntensity(1,10);
+  lc.clearDisplay(1);
   
   timeSetup();
 
@@ -206,10 +198,9 @@ void addStrike() // function that adds a strike
   }
   nrStrikes++;
 
-  if (nrStrikes == 1) digitalWrite(PIN_STRIKE_LED_1, HIGH);
-  else if (nrStrikes == 2) digitalWrite(PIN_STRIKE_LED_2, HIGH);
+  if (nrStrikes == 1) lc.setDigit(1,0,9,true); // use to set strike #1 on
+  else if (nrStrikes == 2) lc.setDigit(1,1,9,true); // use to set strike #2 on
   else if (nrStrikes == 3) { // the maximum number of strikes is reached
-    digitalWrite(PIN_STRIKE_LED_3, HIGH);
     explodedFromStrikes = true;
     bombExploded();
   }

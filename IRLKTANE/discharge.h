@@ -14,15 +14,11 @@
    to the Expert who will then tell them which position to set the knob to.
 */
 
-#define DISCHARGE_PIN_CLK 14 // discharge countdown clock CLK
-#define DISCHARGE_PIN_DIO 15 // discharge countdown clock DIO
-#define DISCHARGE_DEFAULT_TIME 45 // default time per rotation
-#define PIN_DISCHARGE_LED_1  32 // turns on when button pressed
+#define PIN_DISCHARGE_LED_1  31 // turns on when button pressed
 #define PIN_DISCHARGE_BUTTON_1 30 // discharge button
-
 #define DISCHARGE_BUTTON_PRESS_DELAY 50 // time required to prevent button bounce
-
-SevenSegmentExtended dischargeTimer(PIN_CLK, PIN_DIO);
+#define DISCHARGE_DEFAULT_TIME 45 // default time per rotation
+    
 unsigned long dischargeSeconds = 0;
 int dischargeSec = DISCHARGE_DEFAULT_TIME + 1;
 
@@ -35,11 +31,153 @@ void dischargeSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  dischargeTimer.begin();            // initializes the display
-  dischargeTimer.setBacklight(100);  // set the brightness to 100%
   pinMode(PIN_DISCHARGE_LED_1, OUTPUT);
   pinMode(PIN_DISCHARGE_BUTTON_1, INPUT);
 };
+
+// THIS IS REQUIRED DUE TO THE DISPLAY I AM USING BEING PART OF A DAISY CHAIN WITH A ALPHANUMERIC 14 DIGIT DISPLAY AND USING A MAX 7219 THAT CANT HANDLE THAT MANY SEGMENTS. IT USES THE DP AS A PART OF D
+void dischargeDigitDisplay() 
+{
+    if (dischargeSec==45) {
+      lc.setDigit(1,3,5,true); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==44) {
+      lc.setDigit(1,3,4,true); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==43) {
+      lc.setDigit(1,3,3,true); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==42) {
+      lc.setDigit(1,3,2,true); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==41) {
+      lc.setDigit(1,3,1,false); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==40) {
+      lc.setDigit(1,3,0,false); 
+      lc.setDigit(1,2,4,true); 
+    } else if (dischargeSec==39) {
+      lc.setDigit(1,3,9,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==38) {
+      lc.setDigit(1,3,8,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==37) {
+      lc.setDigit(1,3,7,false); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==36) {
+      lc.setDigit(1,3,6,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==35) {
+      lc.setDigit(1,3,5,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==34) {
+      lc.setDigit(1,3,4,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==33) {
+      lc.setDigit(1,3,3,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==32) {
+      lc.setDigit(1,3,2,true); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==31) {
+      lc.setDigit(1,3,1,false); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==30) {
+      lc.setDigit(1,3,0,false); 
+      lc.setDigit(1,2,3,true); 
+    } else if (dischargeSec==29) {
+      lc.setDigit(1,3,9,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==28) {
+      lc.setDigit(1,3,8,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==27) {
+      lc.setDigit(1,3,7,false); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==26) {
+      lc.setDigit(1,3,6,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==25) {
+      lc.setDigit(1,3,5,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==24) {
+      lc.setDigit(1,3,4,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==23) {
+      lc.setDigit(1,3,3,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==22) {
+      lc.setDigit(1,3,2,true); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==21) {
+      lc.setDigit(1,3,1,false); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==20) {
+      lc.setDigit(1,3,0,false); 
+      lc.setDigit(1,2,2,true); 
+    } else if (dischargeSec==19) {
+      lc.setDigit(1,3,9,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==18) {
+      lc.setDigit(1,3,8,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==17) {
+      lc.setDigit(1,3,7,false); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==16) {
+      lc.setDigit(1,3,6,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==15) {
+      lc.setDigit(1,3,5,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==14) {
+      lc.setDigit(1,3,4,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==13) {
+      lc.setDigit(1,3,3,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==12) {
+      lc.setDigit(1,3,2,true); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==11) {
+      lc.setDigit(1,3,1,false); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==10) {
+      lc.setDigit(1,3,0,false); 
+      lc.setDigit(1,2,1,false); 
+    } else if (dischargeSec==9) {
+      lc.setDigit(1,3,9,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==8) {
+      lc.setDigit(1,3,8,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==7) {
+      lc.setDigit(1,3,7,false); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==6) {
+      lc.setDigit(1,3,6,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==5) {
+      lc.setDigit(1,3,5,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==4) {
+      lc.setDigit(1,3,4,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==3) {
+      lc.setDigit(1,3,3,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==2) {
+      lc.setDigit(1,3,2,true); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==1) {
+      lc.setDigit(1,3,1,false); 
+      lc.setDigit(1,2,0,false); 
+    } else if (dischargeSec==0) {
+      lc.setDigit(1,3,0,false);
+      lc.setDigit(1,2,0,false);
+    }
+}
 
 void dischargeDisplayTime() // function that displays the time on the clock
 {
@@ -65,7 +203,7 @@ void dischargeDisplayTime() // function that displays the time on the clock
   if (dischargeSec == -1) {
     addStrike(); // if the time hits zero the bomb will go off
   }
-  dischargeTimer.printTime(dischargeSec, false);
+  dischargeDigitDisplay();
 }
 
 void dischargeLoop()
@@ -105,7 +243,15 @@ void dischargeModuleBoom()
     Serial.println (__func__);
   }
   // when the bomb explodes the LED and so should countdown timer above module
-  if (explodedFromStrikes) dischargeTimer.printTime(dischargeSec, false);
-  else dischargeTimer.print("  ");
+  if (explodedFromStrikes) {
+    //NEED TO PRINT TO LC.... TO SAY DISPLAY TIME REMAINING //RIGHT NOW IT SHOWS '  '
+    lc.setDigit(1,3,' ',false);
+    lc.setDigit(1,2,' ',false); 
+  }
+  else {
+    //NEED TO PRINT TO LC.... TO SAY DISPLAY NOTHING
+    lc.setDigit(1,3,' ',false);
+    lc.setDigit(1,2,' ',false); 
+  }
   digitalWrite (PIN_DISCHARGE_LED_1, LOW);
 }

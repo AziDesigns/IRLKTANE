@@ -88,7 +88,7 @@ void map_arrays()
   arr_list[15] = morseWord15;
 }
 
-LedControl lc=LedControl(morseData,morseClock,morseLatch,1);
+LedControl lc=LedControl(morseData,morseClock,morseLatch,2);
 
 void morseSetup()
 {
