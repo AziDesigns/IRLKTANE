@@ -19,22 +19,22 @@
    to the Expert who will then tell them which position to set the knob to.
 */
 
-#define KNOB_PIN_CLK 14 // knob countdown clock CLK
-#define KNOB_PIN_DIO 15 // knob countdown clock DIO
+#define KNOB_PIN_CLK 82 // knob countdown clock CLK
+#define KNOB_PIN_DIO 83 // knob countdown clock DIO
 #define KNOB_DEFAULT_TIME 40 // default time per rotation
 #define KNOB_PIN_ROTARY_SWITCH A0 // rotary switch analog input pin
-#define PIN_KNOB_LED_1  13
-#define PIN_KNOB_LED_2  12
-#define PIN_KNOB_LED_3  11
-#define PIN_KNOB_LED_4  10
-#define PIN_KNOB_LED_5  9
-#define PIN_KNOB_LED_6  8
-#define PIN_KNOB_LED_7  7
-#define PIN_KNOB_LED_8  6
-#define PIN_KNOB_LED_9  28
-#define PIN_KNOB_LED_10 26
-#define PIN_KNOB_LED_11 24
-#define PIN_KNOB_LED_12 22
+#define PIN_KNOB_LED_1  70
+#define PIN_KNOB_LED_2  71
+#define PIN_KNOB_LED_3  72
+#define PIN_KNOB_LED_4  73
+#define PIN_KNOB_LED_5  74
+#define PIN_KNOB_LED_6  75
+#define PIN_KNOB_LED_7  76
+#define PIN_KNOB_LED_8  77
+#define PIN_KNOB_LED_9  78
+#define PIN_KNOB_LED_10 79
+#define PIN_KNOB_LED_11 80
+#define PIN_KNOB_LED_12 81
 #define KNOB_POSITION_1 200
 #define KNOB_POSITION_2 500
 #define KNOB_POSITION_3 900

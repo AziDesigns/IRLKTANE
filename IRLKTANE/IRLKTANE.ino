@@ -18,20 +18,20 @@
     LEVEL 3 = SAME AS L3 WITH loop, setup, morseDisplay, displayTime, and mazeOne FUNCTIONS INCLUDED
     MORE LEVELS IN THE FUTURE?
 */
-#define DEBUG_LEVEL 4
+#define DEBUG_LEVEL 1
 
 bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
-buttonModuleIncluded = false,
-dischargeModuleIncluded = false,
+buttonModuleIncluded = true,
+dischargeModuleIncluded = true,
 knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
-morseModuleIncluded = false,
+morseModuleIncluded = true,
 passwordModuleIncluded = false,
-simonModuleIncluded = false,
+simonModuleIncluded = true,
 ventingModuleIncluded = false,
 whoModuleIncluded = true;
 
@@ -88,7 +88,6 @@ void setup() // this section includes all setups for all modules to define INPUT
   Serial.begin(9600);
   randomSeed(analogRead(0));
 
-  analogWrite(V0_PIN, LCD_BUTTON_CONTRAST);
   lcdButton.begin(16, 2);
 
   generateSerialCode();

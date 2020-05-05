@@ -16,7 +16,6 @@
 
 #define PIN_DISCHARGE_LED_1  31 // turns on when button pressed
 #define PIN_DISCHARGE_BUTTON_1 30 // discharge button
-#define DISCHARGE_BUTTON_PRESS_DELAY 50 // time required to prevent button bounce
 #define DISCHARGE_DEFAULT_TIME 45 // default time per rotation
     
 unsigned long dischargeSeconds = 0;

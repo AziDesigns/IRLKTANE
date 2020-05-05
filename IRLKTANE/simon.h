@@ -33,7 +33,7 @@ int simonLedPins[4] = {RED_LED_PIN, GREEN_LED_PIN, YELLOW_LED_PIN, BLUE_LED_PIN}
 int simonLedStates[4] = {0, 0, 0, 0};
 
 int ledsNumber = 1;
-int blinkingTime = 500;
+int simonBlinkingTime = 500;
 unsigned long simonPreviousMillis = 0;
 int ledSequence[4];
 
@@ -160,12 +160,11 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
       simonLedState = 2;
     }
 
-    if (millis() - currentMillis >= blinkingTime && simonLedState == 2) {
+    if (millis() - currentMillis >= simonBlinkingTime && simonLedState == 2) {
       digitalWrite(led, LOW);
       simonLedState = 0;
     }
   }
-
 }
 
 // function that generates the led sequence that needs to be resolved
@@ -189,7 +188,7 @@ void blinkLed(int led, int &simonLedState)
   }
   unsigned long currentMillis = millis();
 
-  if (currentMillis - simonPreviousMillis >= blinkingTime) {
+  if (currentMillis - simonPreviousMillis >= simonBlinkingTime) {
     simonPreviousMillis = currentMillis;
 
     if (simonLedState == LOW) {
@@ -225,7 +224,6 @@ void ledAnimation()
     if (currentLed == ledsNumber + 1 && millis() - animationMillis > animationDelay)
       currentLed = 0;
   }
-
 }
 
 void simonSetup()
@@ -257,7 +255,5 @@ void simonLoop()
     pressButton(2, GREEN_BTN_PIN, GREEN_LED_PIN, lastDebounceTimeGreen, currentMillisGreen, simonGreenLedState);
     pressButton(3, YELLOW_BTN_PIN, YELLOW_LED_PIN, lastDebounceTimeYellow, currentMillisYellow, simonYellowLedState);
     pressButton(4, BLUE_BTN_PIN, BLUE_LED_PIN, lastDebounceTimeBlue, currentMillisBlue, simonBlueLedState);
-
   }
-
 }

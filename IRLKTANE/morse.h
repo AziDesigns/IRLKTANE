@@ -17,11 +17,9 @@
 #define PIN_MORSE_BUTTON_2 25 // right button
 #define PIN_MORSE_BUTTON_3 26 // TX (submit) button
 
-#define MORSE_BUTTON_PRESS_DELAY 50 // time required to prevent button bounce
-
-int morseLatch = 10; // 74HC595  pin 9 STCP
-int morseClock = 12; // 74HC595  pin 10 SHCP
-int morseData = 9; // 74HC595  pin 8 DS
+int morseLatch = 10; // MAX7219CNG  pin 9 STCP
+int morseClock = 12; // MAX7219CNG  pin 10 SHCP
+int morseData = 9; // MAX7219CNG  pin 8 DS
 
 int morseCurrentDisplayNumber = 0; // what station is displayed, default starting is 0
 int morseButtonLeftState = 0; // current state of the left button
@@ -110,7 +108,6 @@ void morseSetup()
   }
   map_arrays();
   morsePreviousMillis = 0;
-  // display starting number (always fixed lowest # in array)
 }
 
 void morseDisplay(unsigned char num)

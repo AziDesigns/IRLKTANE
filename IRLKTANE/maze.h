@@ -13,6 +13,11 @@
 #define PIN_MAZE_RIGHT A6
 #define PIN_MAZE_DOWN A7
 #define PIN_MAZE_LEFT A8
+#define MAZE_OUTPUT_DATA_PIN 92
+#define MAZE_OUTPUT_LOAD_PIN 91
+#define MAZE_OUTPUT_CLOCK_PIN 3
+#define MAZE_MAX_MODULE_COUNT 1
+#define MAZE_BLINK_DELAY 300
 
 int mazeButtonLeftState = 0; // current state of the left button
 int mazeButtonRightState = 0; // current state of the right button
@@ -23,27 +28,11 @@ int lastMazeButtonRightState = 0; // previous state of the right button
 int lastMazeButtonUpState = 0; // previous state of the up button
 int lastMazeButtonDownState = 0; // previous state of the down button
 
-#define MAZE_OUTPUT_DATA_PIN 12
-#define MAZE_OUTPUT_LOAD_PIN 10
-#define MAZE_OUTPUT_CLOCK_PIN 3
-#define MAZE_MAX_MODULE_COUNT 1
-
 const int MAZE_LEDS_BRIGHTNESS = 8; // Intensity of the led, a number between 1-15
-
-#define MAZE_DATA_ST 0
-#define MAZE_DATA_FIN 1
-#define MAZE_DATA_PT1 2
-#define MAZE_DATA_PT2 3
-#define MAZE_DATA_MZ 4
-
-#define MAZE_BLINK_DELAY 300
 
 LedControl mazelc = LedControl(MAZE_OUTPUT_DATA_PIN, MAZE_OUTPUT_CLOCK_PIN, MAZE_OUTPUT_LOAD_PIN, MAZE_MAX_MODULE_COUNT);
 
-/**
-   GAME
-*/
-// these are for movement/ play
+// these are for movement & play
 const int MAZE_LEVELS_ROWS = 13; // number of rows of each level
 const int MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each level
 // these are for matrix display only

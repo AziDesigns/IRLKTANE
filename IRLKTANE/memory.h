@@ -5,22 +5,22 @@
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
   LedControl needs to be mapped to the correct pins once able to physically test.
 */
-#define PIN_MEMORY_BUTTON_1 A6 // position 1 button
-#define PIN_MEMORY_BUTTON_2 A7 // position 2 button
-#define PIN_MEMORY_BUTTON_3 A8 // position 3 button
-#define PIN_MEMORY_BUTTON_4 A9 // position 4 button
+#define PIN_MEMORY_BUTTON_1 86 // position 1 button // PINOVERLAP
+#define PIN_MEMORY_BUTTON_2 87 // position 2 button // PINOVERLAP
+#define PIN_MEMORY_BUTTON_3 88 // position 3 button // PINOVERLAP
+#define PIN_MEMORY_BUTTON_4 89 // position 4 button
 
-#define PIN_MEMORY_LED_1 31 // stage 1 complete LED
+#define PIN_MEMORY_LED_1 84 // stage 1 complete LED //PINOVERLAP
 #define PIN_MEMORY_LED_2 33 // stage 2 complete LED
-#define PIN_MEMORY_LED_3 35 // stage 3 complete LED
+#define PIN_MEMORY_LED_3 85 // stage 3 complete LED
 #define PIN_MEMORY_LED_4 37 // stage 4 complete LED
 // I think there should be a stage 5 complete LED even though that means the module is defused.
 // Unless its going to just be always off? Need to see how KTANE handles that module
 #define PIN_MEMORY_LED_GREEN 32 // module complete LED
 
-int memoryLatch = 10; // 74HC595  pin 9 STCP
-int memoryClock = 12; // 74HC595  pin 10 SHCP
-int memoryData = 9; // 74HC595  pin 8 DS
+int memoryLatch = 90; // 74HC595  pin 9 STCP
+int memoryClock = 93; // 74HC595  pin 10 SHCP
+int memoryData = 8; // 74HC595  pin 8 DS
 
 LedControl memorylc = LedControl(memoryData, memoryClock, memoryLatch, 2); //DIN, CLK, LOAD, No. DRIVER
 

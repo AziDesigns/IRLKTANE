@@ -3,7 +3,6 @@
   KNOWN ISSUES:
 */
 
-#define LCD_BUTTON_CONTRAST 40
 #define PIN_BUTTON_LED_GREEN 22 // module complete LED
 #define BUTTON_BTN_PIN 23
 #define LEFT_LED_RED_PIN 13
@@ -12,7 +11,6 @@
 #define RIGHT_LED_RED_PIN 6
 #define RIGHT_LED_GREEN_PIN 5
 #define RIGHT_LED_BLUE_PIN 4
-#define V0_PIN 13
 
 LiquidCrystal lcdButton(39, 38, 40, 41, 42, 43);
 
@@ -20,7 +18,6 @@ int buttonBtnState = LOW;
 int lastBtnState = LOW;
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelayButton = 50;
-int moduleFinished = 0;
 int lengthOfPress = 0;
 int leftLedColor;
 int rightLedColor;
@@ -133,7 +130,6 @@ void buttonSetup()
   pinMode(RIGHT_LED_BLUE_PIN, OUTPUT);
   pinMode(BUTTON_BTN_PIN, INPUT);
   pinMode(PIN_BUTTON_LED_GREEN, OUTPUT);
-  pinMode(V0_PIN, OUTPUT);
 
   //generating a seed to use in order to generate random numbers
   randomSeed(analogRead(0));

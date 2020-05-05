@@ -5,7 +5,7 @@
   PIN ASSIGMENTS ARE ALL KINDS OF WRONG :)
 */
 #define LCD_PASSWORD_CONTRAST 40
-#define PIN_PASSWORD_LED_GREEN 25
+#define PIN_PASSWORD_LED_GREEN 28
 
 #define PIN_PASSWORD_BUTTON_1 62 // letter 1 up // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_2 61 // letter 2 up // invalid pin max number is 53
@@ -13,21 +13,13 @@
 #define PIN_PASSWORD_BUTTON_4 58 // letter 4 up // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_5 56 // letter 5 up // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_6 54 // letter 1 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_7 52 // letter 2 down
+#define PIN_PASSWORD_BUTTON_7 55 // letter 2 down
 #define PIN_PASSWORD_BUTTON_8 59 // letter 3 down // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_9 57 // letter 4 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_10 53 // letter 5 down
+#define PIN_PASSWORD_BUTTON_10 63 // letter 5 down
 
-LiquidCrystal lcdPassword(60, 61, 62, 63, 64, 65);  // invalid pin (55) max number is 53
+LiquidCrystal lcdPassword(66, 67, 68, 69, 64, 65);  // invalid pin (55) max number is 53
 int passWordGen;
-
-void passwordModuleDefusedPrint()
-{
-  if (DEBUG_LEVEL >= 2) {
-    Serial.println (__func__);
-  }
-  passwordModuleDefused = true;
-}
 
 void passwordModuleBoom()
 {
@@ -266,7 +258,6 @@ void printPasswordModuleDefused()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  passwordModuleDefusedPrint();
   lcdPassword.clear();
   lcdPassword.setCursor(1, 0);
   lcdPassword.print("MODULE DEFUSED");
@@ -291,7 +282,6 @@ void passwordSetup()
   pinMode(PIN_PASSWORD_BUTTON_9, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_10, INPUT);
 
-  analogWrite(V0_PIN, LCD_PASSWORD_CONTRAST);
   lcdPassword.begin(16, 2);
 
   //generating a seed to use in order to generate random numbers
