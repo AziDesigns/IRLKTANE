@@ -46,11 +46,11 @@ In order for the code to work, you will need the following libraries:
     5 - Repeat steps 3 and 4 for each library
     6 - Download the files in this repository and put all of them in the Arduino folder (sub-folder name must match .ino file name)
 
-A Fritzing scheme will be added to this repository with instructions to build the circuit once each module is tested.
+A Fritzing scheme has been added to this repository with instructions to build the circuit. It is a *WIP*, and as each module gets tested I will continue to update the pin mapping. (For example, right now each LED goes directly to the arduino, in the future they will all be run from a MAX7219 to reduce pin usage)
 
 Next, connect the Arduino board to your computer and load the program to the board.
 
-#### 2. Components
+#### 2. Components (List Subject to Change)
     1 - Arduino MEGA 2560 R3
     2 - Neopixel Stick
     1 - Red 7-segment clock display
