@@ -5,7 +5,7 @@
   PIN ASSIGMENTS ARE ALL KINDS OF WRONG :)
 */
 #define LCD_PASSWORD_CONTRAST 40
-#define PIN_PASSWORD_LED_GREEN 28
+#define PIN_PASSWORD_LED_GREEN 97
 
 #define PIN_PASSWORD_BUTTON_1 62 // letter 1 up // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_2 61 // letter 2 up // invalid pin max number is 53

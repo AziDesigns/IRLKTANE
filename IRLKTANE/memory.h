@@ -11,18 +11,18 @@
 #define PIN_MEMORY_BUTTON_4 89 // position 4 button
 
 #define PIN_MEMORY_LED_1 84 // stage 1 complete LED //PINOVERLAP
-#define PIN_MEMORY_LED_2 33 // stage 2 complete LED
+#define PIN_MEMORY_LED_2 96 // stage 2 complete LED
 #define PIN_MEMORY_LED_3 85 // stage 3 complete LED
-#define PIN_MEMORY_LED_4 37 // stage 4 complete LED
+#define PIN_MEMORY_LED_4 98 // stage 4 complete LED
 // I think there should be a stage 5 complete LED even though that means the module is defused.
 // Unless its going to just be always off? Need to see how KTANE handles that module
-#define PIN_MEMORY_LED_GREEN 32 // module complete LED
+#define PIN_MEMORY_LED_GREEN 95 // module complete LED
 
-int memoryLatch = 90; // 74HC595  pin 9 STCP
-int memoryClock = 93; // 74HC595  pin 10 SHCP
-int memoryData = 8; // 74HC595  pin 8 DS
+#define PIN_MEMORY_LATCH 90 // 74HC595  pin 9 STCP
+#define PIN_MEMORY_CLOCK 93 // 74HC595  pin 10 SHCP
+#define PIN_MEMORY_DATA 94 // 74HC595  pin 8 DS
 
-LedControl memorylc = LedControl(memoryData, memoryClock, memoryLatch, 2); //DIN, CLK, LOAD, No. DRIVER
+LedControl memorylc = LedControl(PIN_MEMORY_DATA, PIN_MEMORY_CLOCK, PIN_MEMORY_LATCH, 2); //DIN, CLK, LOAD, No. DRIVER
 
 int previousButton, button; //the previos and the current button
 int rightPoz; //the answer to the current stage

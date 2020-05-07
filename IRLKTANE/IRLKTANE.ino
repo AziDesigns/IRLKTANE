@@ -1,7 +1,7 @@
 //THIS BOMB USES KTANE BOMB DEFUSAL MANUAL VERSION 1 VERIFICATION CODE #241 ONLY
 /*
   KNOWN ISSUES:
-  ADD STRIKE NEEDS TO NOT PLAY STRIKE SOUND UPON EXPLODE.
+  Module lights are staying on after bomb is defused. Only lights that should stay on are module complete green leds
 */
 #include <LiquidCrystal.h>
 #include <LiquidCrystal_I2C.h>
@@ -25,7 +25,7 @@ bool defused = false, exploded = false, victorySong = false; // is bomb defused 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
 buttonModuleIncluded = true,
-dischargeModuleIncluded = true,
+dischargeModuleIncluded = false,
 knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,

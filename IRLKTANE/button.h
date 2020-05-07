@@ -4,13 +4,13 @@
 */
 
 #define PIN_BUTTON_LED_GREEN 22 // module complete LED
-#define BUTTON_BTN_PIN 23
-#define LEFT_LED_RED_PIN 13
-#define LEFT_LED_GREEN_PIN 7
-#define LEFT_LED_BLUE_PIN 11
-#define RIGHT_LED_RED_PIN 6
-#define RIGHT_LED_GREEN_PIN 5
-#define RIGHT_LED_BLUE_PIN 4
+#define PIN_BUTTON_BTN 23
+#define PIN_BUTTON_LEFT_LED_RED 13
+#define PIN_BUTTON_LEFT_LED_GREEN 7
+#define PIN_BUTTON_LEFT_LED_BLUE 11
+#define PIN_BUTTON_RIGHT_LED_RED 6
+#define PIN_BUTTON_RIGHT_LED_GREEN 5
+#define PIN_BUTTON_RIGHT_LED_BLUE 4
 
 LiquidCrystal lcdButton(39, 38, 40, 41, 42, 43);
 
@@ -40,8 +40,8 @@ void buttonModuleDefusedPrint()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  setColor(LEFT_LED_RED_PIN, 0, LEFT_LED_GREEN_PIN, 0, LEFT_LED_BLUE_PIN, 0);
-  setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 0);
+  setColor(PIN_BUTTON_LEFT_LED_RED, 0, PIN_BUTTON_LEFT_LED_GREEN, 0, PIN_BUTTON_LEFT_LED_BLUE, 0);
+  setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
   buttonModuleDefused = true;
   defusedModuleBuzzer();
   digitalWrite(PIN_BUTTON_LED_GREEN, HIGH);
@@ -58,8 +58,8 @@ void buttonModuleBoom()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  setColor(LEFT_LED_RED_PIN, 0, LEFT_LED_GREEN_PIN, 0, LEFT_LED_BLUE_PIN, 0);
-  setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 0);
+  setColor(PIN_BUTTON_LEFT_LED_RED, 0, PIN_BUTTON_LEFT_LED_GREEN, 0, PIN_BUTTON_LEFT_LED_BLUE, 0);
+  setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
   lcdButton.clear();
   lcdButton.setCursor(6, 0);
   lcdButton.print("BOMB");
@@ -122,13 +122,13 @@ void buttonSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(LEFT_LED_RED_PIN, OUTPUT);
-  pinMode(LEFT_LED_GREEN_PIN, OUTPUT);
-  pinMode(LEFT_LED_BLUE_PIN, OUTPUT);
-  pinMode(RIGHT_LED_RED_PIN, OUTPUT);
-  pinMode(RIGHT_LED_GREEN_PIN, OUTPUT);
-  pinMode(RIGHT_LED_BLUE_PIN, OUTPUT);
-  pinMode(BUTTON_BTN_PIN, INPUT);
+  pinMode(PIN_BUTTON_LEFT_LED_RED, OUTPUT);
+  pinMode(PIN_BUTTON_LEFT_LED_GREEN, OUTPUT);
+  pinMode(PIN_BUTTON_LEFT_LED_BLUE, OUTPUT);
+  pinMode(PIN_BUTTON_RIGHT_LED_RED, OUTPUT);
+  pinMode(PIN_BUTTON_RIGHT_LED_GREEN, OUTPUT);
+  pinMode(PIN_BUTTON_RIGHT_LED_BLUE, OUTPUT);
+  pinMode(PIN_BUTTON_BTN, INPUT);
   pinMode(PIN_BUTTON_LED_GREEN, OUTPUT);
 
   //generating a seed to use in order to generate random numbers
@@ -154,19 +154,19 @@ void setButtonStripColor()
   switch (rightLedColor) // right color is the light strip color for press and hold
     {
       case 1: {
-          setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 255);
+          setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 255);
         }
         break;
       case 2: {
-          setColor(RIGHT_LED_RED_PIN, 255, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 0);
+          setColor(PIN_BUTTON_RIGHT_LED_RED, 255, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
         }
         break;
       case 3: {
-          setColor(RIGHT_LED_RED_PIN, 255, RIGHT_LED_GREEN_PIN, 255, RIGHT_LED_BLUE_PIN, 0);
+          setColor(PIN_BUTTON_RIGHT_LED_RED, 255, PIN_BUTTON_RIGHT_LED_GREEN, 255, PIN_BUTTON_RIGHT_LED_BLUE, 0);
         }
         break;
       case 4: {
-          setColor(RIGHT_LED_RED_PIN, 255, RIGHT_LED_GREEN_PIN, 255, RIGHT_LED_BLUE_PIN, 255);
+          setColor(PIN_BUTTON_RIGHT_LED_RED, 255, PIN_BUTTON_RIGHT_LED_GREEN, 255, PIN_BUTTON_RIGHT_LED_BLUE, 255);
         }
         break;
     }
@@ -281,26 +281,26 @@ void buttonLoop()
     switch (leftLedColor) // left color is the button color
     {
       case 1: {
-          setColor(LEFT_LED_RED_PIN, 0, LEFT_LED_GREEN_PIN, 0, LEFT_LED_BLUE_PIN, 255);
+          setColor(PIN_BUTTON_LEFT_LED_RED, 0, PIN_BUTTON_LEFT_LED_GREEN, 0, PIN_BUTTON_LEFT_LED_BLUE, 255);
         }
         break;
       case 2: {
-          setColor(LEFT_LED_RED_PIN, 255, LEFT_LED_GREEN_PIN, 0, LEFT_LED_BLUE_PIN, 0);
+          setColor(PIN_BUTTON_LEFT_LED_RED, 255, PIN_BUTTON_LEFT_LED_GREEN, 0, PIN_BUTTON_LEFT_LED_BLUE, 0);
         }
         break;
       case 3: {
-          setColor(LEFT_LED_RED_PIN, 255, LEFT_LED_GREEN_PIN, 255, LEFT_LED_BLUE_PIN, 0);
+          setColor(PIN_BUTTON_LEFT_LED_RED, 255, PIN_BUTTON_LEFT_LED_GREEN, 255, PIN_BUTTON_LEFT_LED_BLUE, 0);
         }
         break;
       case 4: {
-          setColor(LEFT_LED_RED_PIN, 255, LEFT_LED_GREEN_PIN, 255, LEFT_LED_BLUE_PIN, 255);
+          setColor(PIN_BUTTON_LEFT_LED_RED, 255, PIN_BUTTON_LEFT_LED_GREEN, 255, PIN_BUTTON_LEFT_LED_BLUE, 255);
         }
         break;
     }
     buttonColorSet = true;
   }
   
-    buttonBtnState = digitalRead(BUTTON_BTN_PIN);
+    buttonBtnState = digitalRead(PIN_BUTTON_BTN);
 
     // compare the buttonBtnState to its previous state
     if (buttonBtnState != lastBtnState) {
@@ -323,7 +323,7 @@ void buttonLoop()
         lengthOfPress=2; // 1=short, 2=long
         buttonCheckResult();
         }
-        setColor(RIGHT_LED_RED_PIN, 0, RIGHT_LED_GREEN_PIN, 0, RIGHT_LED_BLUE_PIN, 0);
+        setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
       }
     }
     // save the current state as the last state, for next time through the loop

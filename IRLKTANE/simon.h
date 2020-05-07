@@ -3,14 +3,14 @@
   KNOWN ISSUES:
 */
 
-#define RED_LED_PIN 45
-#define GREEN_LED_PIN 48
-#define YELLOW_LED_PIN 47
-#define BLUE_LED_PIN 46
-#define RED_BTN_PIN A1
-#define GREEN_BTN_PIN A4
-#define YELLOW_BTN_PIN A3
-#define BLUE_BTN_PIN A2
+#define PIN_SIMON_LED_RED 45
+#define PIN_SIMON_LED_GREEN 48
+#define PIN_SIMON_LED_YELLOW 47
+#define PIN_SIMON_LED_BLUE 46
+#define PIN_SIMON_BTN_RED A1
+#define PIN_SIMON_BTN_GREEN A4
+#define PIN_SIMON_BTN_YELLOW A3
+#define PIN_SIMON_BTN_BLUE A2
 #define PIN_SIMON_LED_GREEN 49
 
 unsigned long lastDebounceTimeRed = 0;
@@ -29,7 +29,7 @@ int simonGreenLedState = 0;
 int simonYellowLedState = 0;
 int simonBlueLedState = 0;
 
-int simonLedPins[4] = {RED_LED_PIN, GREEN_LED_PIN, YELLOW_LED_PIN, BLUE_LED_PIN};
+int simonLedPins[4] = {PIN_SIMON_LED_RED, PIN_SIMON_LED_GREEN, PIN_SIMON_LED_YELLOW, PIN_SIMON_LED_BLUE};
 int simonLedStates[4] = {0, 0, 0, 0};
 
 int ledsNumber = 1;
@@ -61,10 +61,10 @@ void simonModuleBoom()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  digitalWrite(RED_LED_PIN, LOW);
-  digitalWrite(GREEN_LED_PIN, LOW);
-  digitalWrite(YELLOW_LED_PIN, LOW);
-  digitalWrite(BLUE_LED_PIN, LOW);
+  digitalWrite(PIN_SIMON_LED_RED, LOW);
+  digitalWrite(PIN_SIMON_LED_GREEN, LOW);
+  digitalWrite(PIN_SIMON_LED_YELLOW, LOW);
+  digitalWrite(PIN_SIMON_LED_BLUE, LOW);
 }
 
 // function that sets the module as being defused
@@ -74,10 +74,10 @@ void simonModuleDefusedPrint()
     Serial.println (__func__);
   }
   simonModuleDefused = true;
-  digitalWrite(RED_LED_PIN, LOW);
-  digitalWrite(GREEN_LED_PIN, LOW);
-  digitalWrite(YELLOW_LED_PIN, LOW);
-  digitalWrite(BLUE_LED_PIN, LOW);
+  digitalWrite(PIN_SIMON_LED_RED, LOW);
+  digitalWrite(PIN_SIMON_LED_GREEN, LOW);
+  digitalWrite(PIN_SIMON_LED_YELLOW, LOW);
+  digitalWrite(PIN_SIMON_LED_BLUE, LOW);
   digitalWrite(PIN_SIMON_LED_GREEN, HIGH);
   defusedModuleBuzzer();
 }
@@ -108,10 +108,10 @@ void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, un
   if (millis() - debounceTime > debounceDelay) {
     if (simonLedState == 1) {
       currentLed = ledsNumber;
-      digitalWrite(RED_LED_PIN, LOW);
-      digitalWrite(GREEN_LED_PIN, LOW);
-      digitalWrite(YELLOW_LED_PIN, LOW);
-      digitalWrite(BLUE_LED_PIN, LOW);
+      digitalWrite(PIN_SIMON_LED_RED, LOW);
+      digitalWrite(PIN_SIMON_LED_GREEN, LOW);
+      digitalWrite(PIN_SIMON_LED_YELLOW, LOW);
+      digitalWrite(PIN_SIMON_LED_BLUE, LOW);
       buttonsPressed++;
       if (checkForVowel()) {
         if (answersWithVowel[nrStrikes][ledSequence[buttonsPressed - 1] - 1] == ledNr) {
@@ -231,15 +231,15 @@ void simonSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(RED_LED_PIN, OUTPUT);
-  pinMode(GREEN_LED_PIN, OUTPUT);
-  pinMode(YELLOW_LED_PIN, OUTPUT);
-  pinMode(BLUE_LED_PIN, OUTPUT);
+  pinMode(PIN_SIMON_LED_RED, OUTPUT);
   pinMode(PIN_SIMON_LED_GREEN, OUTPUT);
-  pinMode(RED_BTN_PIN, INPUT);
-  pinMode(GREEN_BTN_PIN, INPUT);
-  pinMode(YELLOW_BTN_PIN, INPUT);
-  pinMode(BLUE_BTN_PIN, INPUT);
+  pinMode(PIN_SIMON_LED_YELLOW, OUTPUT);
+  pinMode(PIN_SIMON_LED_BLUE, OUTPUT);
+  pinMode(PIN_SIMON_LED_GREEN, OUTPUT);
+  pinMode(PIN_SIMON_BTN_RED, INPUT);
+  pinMode(PIN_SIMON_BTN_GREEN, INPUT);
+  pinMode(PIN_SIMON_BTN_YELLOW, INPUT);
+  pinMode(PIN_SIMON_BTN_BLUE, INPUT);
 
   generateLedSequence();
 }
@@ -251,9 +251,9 @@ void simonLoop()
   }
   if (!simonModuleDefused) {
     ledAnimation();
-    pressButton(1, RED_BTN_PIN, RED_LED_PIN, lastDebounceTimeRed, currentMillisRed, simonRedLedState);
-    pressButton(2, GREEN_BTN_PIN, GREEN_LED_PIN, lastDebounceTimeGreen, currentMillisGreen, simonGreenLedState);
-    pressButton(3, YELLOW_BTN_PIN, YELLOW_LED_PIN, lastDebounceTimeYellow, currentMillisYellow, simonYellowLedState);
-    pressButton(4, BLUE_BTN_PIN, BLUE_LED_PIN, lastDebounceTimeBlue, currentMillisBlue, simonBlueLedState);
+    pressButton(1, PIN_SIMON_BTN_RED, PIN_SIMON_LED_RED, lastDebounceTimeRed, currentMillisRed, simonRedLedState);
+    pressButton(2, PIN_SIMON_BTN_GREEN, PIN_SIMON_LED_GREEN, lastDebounceTimeGreen, currentMillisGreen, simonGreenLedState);
+    pressButton(3, PIN_SIMON_BTN_YELLOW, PIN_SIMON_LED_YELLOW, lastDebounceTimeYellow, currentMillisYellow, simonYellowLedState);
+    pressButton(4, PIN_SIMON_BTN_BLUE, PIN_SIMON_LED_BLUE, lastDebounceTimeBlue, currentMillisBlue, simonBlueLedState);
   }
 }

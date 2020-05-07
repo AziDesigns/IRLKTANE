@@ -13,9 +13,9 @@
 #define PIN_MAZE_RIGHT A6
 #define PIN_MAZE_DOWN A7
 #define PIN_MAZE_LEFT A8
-#define MAZE_OUTPUT_DATA_PIN 92
-#define MAZE_OUTPUT_LOAD_PIN 91
-#define MAZE_OUTPUT_CLOCK_PIN 3
+#define PIN_MAZE_DATA 92
+#define PIN_MAZE_LOAD 91
+#define PIN_MAZE_CLOCK 102
 #define MAZE_MAX_MODULE_COUNT 1
 #define MAZE_BLINK_DELAY 300
 
@@ -30,7 +30,7 @@ int lastMazeButtonDownState = 0; // previous state of the down button
 
 const int MAZE_LEDS_BRIGHTNESS = 8; // Intensity of the led, a number between 1-15
 
-LedControl mazelc = LedControl(MAZE_OUTPUT_DATA_PIN, MAZE_OUTPUT_CLOCK_PIN, MAZE_OUTPUT_LOAD_PIN, MAZE_MAX_MODULE_COUNT);
+LedControl mazelc = LedControl(PIN_MAZE_DATA, PIN_MAZE_CLOCK, PIN_MAZE_LOAD, MAZE_MAX_MODULE_COUNT);
 
 // these are for movement & play
 const int MAZE_LEVELS_ROWS = 13; // number of rows of each level

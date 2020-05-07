@@ -236,6 +236,16 @@ void dischargeLoop()
   }
 }
 
+void dischargeBombDefused()
+{
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  lc.setDigit(1,3,' ',false);
+  lc.setDigit(1,2,' ',false); 
+  digitalWrite (PIN_DISCHARGE_LED_1, LOW);
+}
+
 void dischargeModuleBoom()
 {
   if (DEBUG_LEVEL >= 2) {

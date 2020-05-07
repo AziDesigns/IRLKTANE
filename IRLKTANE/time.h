@@ -4,10 +4,10 @@
   NEED LOGIC FOR IF DEFUSED THEN SHOW TIME LEFT AND STOP DECREASING TIME // THIS MAY ALREADY HAPPEN AS WE ARENT DISTINCTLY CLEARING THE DISPLAY ON DEFUSE
 */
 
-#define PIN_CLK 14 // countdown clock CLK
-#define PIN_DIO 15 // countdown clock DIO
+#define PIN_TIME_CLK 14 // countdown clock CLK
+#define PIN_TIME_DIO 15 // countdown clock DIO
 
-SevenSegmentExtended timer(PIN_CLK, PIN_DIO);
+SevenSegmentExtended timer(PIN_TIME_CLK, PIN_TIME_DIO);
 unsigned long seconds = 0;
 int mins = BOMB_TIMER_MINUTES, sec = BOMB_TIMER_SECONDS + 1;
 

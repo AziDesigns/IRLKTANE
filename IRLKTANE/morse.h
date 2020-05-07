@@ -16,10 +16,9 @@
 #define PIN_MORSE_BUTTON_1 24 // left button
 #define PIN_MORSE_BUTTON_2 25 // right button
 #define PIN_MORSE_BUTTON_3 26 // TX (submit) button
-
-int morseLatch = 10; // MAX7219CNG  pin 9 STCP
-int morseClock = 12; // MAX7219CNG  pin 10 SHCP
-int morseData = 9; // MAX7219CNG  pin 8 DS
+#define PIN_MORSE_LATCH 10 // MAX7219CNG  pin 9 STCP
+#define PIN_MORSE_CLOCK 12 // MAX7219CNG  pin 10 SHCP
+#define PIN_MORSE_DATA 9 // MAX7219CNG  pin 8 DS
 
 int morseCurrentDisplayNumber = 0; // what station is displayed, default starting is 0
 int morseButtonLeftState = 0; // current state of the left button
@@ -86,7 +85,7 @@ void map_arrays()
   arr_list[15] = morseWord15;
 }
 
-LedControl lc=LedControl(morseData,morseClock,morseLatch,2);
+LedControl lc=LedControl(PIN_MORSE_DATA,PIN_MORSE_CLOCK,PIN_MORSE_LATCH,2);
 
 void morseSetup()
 {
