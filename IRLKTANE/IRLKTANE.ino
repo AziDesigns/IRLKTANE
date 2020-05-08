@@ -24,16 +24,16 @@ bool defused = false, exploded = false, victorySong = false; // is bomb defused 
 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
-buttonModuleIncluded = true,
+buttonModuleIncluded = false,
 dischargeModuleIncluded = false,
 knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
-morseModuleIncluded = true,
+morseModuleIncluded = false,
 passwordModuleIncluded = false,
-simonModuleIncluded = true,
+simonModuleIncluded = false,
 ventingModuleIncluded = false,
-whoModuleIncluded = true;
+whoModuleIncluded = false;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
@@ -261,7 +261,6 @@ void loop()
     if (victorySong==false) {
     victoryBuzzer();
     defused = true;
-    victorySong=true;
     }
   }
 }

@@ -11,7 +11,7 @@
 #define PIN_SIMON_BTN_GREEN A4
 #define PIN_SIMON_BTN_YELLOW A3
 #define PIN_SIMON_BTN_BLUE A2
-#define PIN_SIMON_LED_GREEN 49
+#define PIN_SIMON_LED_FIN 49
 
 unsigned long lastDebounceTimeRed = 0;
 unsigned long lastDebounceTimeGreen = 0;
@@ -65,6 +65,7 @@ void simonModuleBoom()
   digitalWrite(PIN_SIMON_LED_GREEN, LOW);
   digitalWrite(PIN_SIMON_LED_YELLOW, LOW);
   digitalWrite(PIN_SIMON_LED_BLUE, LOW);
+  digitalWrite(PIN_SIMON_LED_FIN, LOW);
 }
 
 // function that sets the module as being defused
@@ -78,7 +79,7 @@ void simonModuleDefusedPrint()
   digitalWrite(PIN_SIMON_LED_GREEN, LOW);
   digitalWrite(PIN_SIMON_LED_YELLOW, LOW);
   digitalWrite(PIN_SIMON_LED_BLUE, LOW);
-  digitalWrite(PIN_SIMON_LED_GREEN, HIGH);
+  digitalWrite(PIN_SIMON_LED_FIN, HIGH);
   defusedModuleBuzzer();
 }
 
@@ -235,7 +236,7 @@ void simonSetup()
   pinMode(PIN_SIMON_LED_GREEN, OUTPUT);
   pinMode(PIN_SIMON_LED_YELLOW, OUTPUT);
   pinMode(PIN_SIMON_LED_BLUE, OUTPUT);
-  pinMode(PIN_SIMON_LED_GREEN, OUTPUT);
+  pinMode(PIN_SIMON_LED_FIN, OUTPUT);
   pinMode(PIN_SIMON_BTN_RED, INPUT);
   pinMode(PIN_SIMON_BTN_GREEN, INPUT);
   pinMode(PIN_SIMON_BTN_YELLOW, INPUT);

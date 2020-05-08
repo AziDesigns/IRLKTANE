@@ -3,7 +3,7 @@
   KNOWN ISSUES:
 */
 
-#define PIN_BUTTON_LED_GREEN 22 // module complete LED
+#define PIN_BUTTON_LED_FIN 22 // module complete LED
 #define PIN_BUTTON_BTN 23
 #define PIN_BUTTON_LEFT_LED_RED 13
 #define PIN_BUTTON_LEFT_LED_GREEN 7
@@ -44,7 +44,7 @@ void buttonModuleDefusedPrint()
   setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
   buttonModuleDefused = true;
   defusedModuleBuzzer();
-  digitalWrite(PIN_BUTTON_LED_GREEN, HIGH);
+  digitalWrite(PIN_BUTTON_LED_FIN, HIGH);
   lcdButton.clear();
   lcdButton.setCursor(1, 0);
   lcdButton.print("MODULE DEFUSED");
@@ -65,7 +65,7 @@ void buttonModuleBoom()
   lcdButton.print("BOMB");
   lcdButton.setCursor(4, 1);
   lcdButton.print("EXPLODED");
-  digitalWrite(PIN_BUTTON_LED_GREEN, LOW);
+  digitalWrite(PIN_BUTTON_LED_FIN, LOW);
 }
 
 bool checkClock(int value)
@@ -129,7 +129,7 @@ void buttonSetup()
   pinMode(PIN_BUTTON_RIGHT_LED_GREEN, OUTPUT);
   pinMode(PIN_BUTTON_RIGHT_LED_BLUE, OUTPUT);
   pinMode(PIN_BUTTON_BTN, INPUT);
-  pinMode(PIN_BUTTON_LED_GREEN, OUTPUT);
+  pinMode(PIN_BUTTON_LED_FIN, OUTPUT);
 
   //generating a seed to use in order to generate random numbers
   randomSeed(analogRead(0));

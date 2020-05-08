@@ -16,7 +16,7 @@
 #define PIN_MEMORY_LED_4 98 // stage 4 complete LED
 // I think there should be a stage 5 complete LED even though that means the module is defused.
 // Unless its going to just be always off? Need to see how KTANE handles that module
-#define PIN_MEMORY_LED_GREEN 95 // module complete LED
+#define PIN_MEMORY_LED_FIN 95 // module complete LED
 
 #define PIN_MEMORY_LATCH 90 // 74HC595  pin 9 STCP
 #define PIN_MEMORY_CLOCK 93 // 74HC595  pin 10 SHCP
@@ -41,7 +41,7 @@ void turnOffLeds()
   digitalWrite(PIN_MEMORY_LED_2, LOW);
   digitalWrite(PIN_MEMORY_LED_3, LOW);
   digitalWrite(PIN_MEMORY_LED_4, LOW);
-  digitalWrite(PIN_MEMORY_LED_GREEN, LOW);
+  digitalWrite(PIN_MEMORY_LED_FIN, LOW);
 }
 
 // function that generate a random digit from 1 to 4
@@ -144,7 +144,7 @@ void memorySetup()
   pinMode(PIN_MEMORY_LED_2, OUTPUT);
   pinMode(PIN_MEMORY_LED_3, OUTPUT);
   pinMode(PIN_MEMORY_LED_4, OUTPUT);
-  pinMode(PIN_MEMORY_LED_GREEN, OUTPUT);
+  pinMode(PIN_MEMORY_LED_FIN, OUTPUT);
 
   turnOffLeds();
 
@@ -217,7 +217,7 @@ void memoryCheckButton() // function that checks if a button is pressed
     if (button == rightPoz) { // if the right button was pressed 
       if (stageNumber == 5) { // if it's the last stage, the module is defused 
         turnOffLeds();
-        digitalWrite(PIN_MEMORY_LED_GREEN, HIGH);
+        digitalWrite(PIN_MEMORY_LED_FIN, HIGH);
         memorylc.clearDisplay(0);
         memoryModuleDefused = true;
         defusedModuleBuzzer();
@@ -238,7 +238,7 @@ void memoryModuleBoom()  // if the bomb explodes what should the module display
   digitalWrite(PIN_MEMORY_LED_2, LOW);
   digitalWrite(PIN_MEMORY_LED_3, LOW);
   digitalWrite(PIN_MEMORY_LED_4, LOW);
-  digitalWrite(PIN_MEMORY_LED_GREEN, LOW);
+  digitalWrite(PIN_MEMORY_LED_FIN, LOW);
   memorylc.clearDisplay(0);
 }
 

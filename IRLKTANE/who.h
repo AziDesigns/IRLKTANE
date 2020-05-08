@@ -10,7 +10,7 @@
 #define PIN_WHO_LED_1 34 // stage 1 complete LED
 #define PIN_WHO_LED_2 35 // stage 2 complete LED
 #define PIN_WHO_LED_3 36 // stage 3 complete LED
-#define PIN_WHO_LED_GREEN 8 // module complete LED
+#define PIN_WHO_LED_FIN 8 // module complete LED
 
 #define PIN_WHO_BUTTON_1 A15 // Select button for Column 1 Row 1
 #define PIN_WHO_BUTTON_2 A14 // Select button for Column 1 Row 2
@@ -69,7 +69,7 @@ void whoModuleBoom() // if the bomb explodes what should the module display
   digitalWrite(PIN_WHO_LED_1, LOW);
   digitalWrite(PIN_WHO_LED_2, LOW);
   digitalWrite(PIN_WHO_LED_3, LOW);
-  digitalWrite(PIN_WHO_LED_GREEN, LOW);
+  digitalWrite(PIN_WHO_LED_FIN, LOW);
   lcd.clear();
   lcd.setCursor(0, 0); lcd.print("====================");
   lcd.setCursor(0, 3); lcd.print("====================");
@@ -86,7 +86,7 @@ void whoModuleDefusedPrint() // the module has been defused
   digitalWrite(PIN_WHO_LED_1, LOW);
   digitalWrite(PIN_WHO_LED_2, LOW);
   digitalWrite(PIN_WHO_LED_3, LOW);
-  digitalWrite(PIN_WHO_LED_GREEN, HIGH);
+  digitalWrite(PIN_WHO_LED_FIN, HIGH);
   defusedModuleBuzzer();
   whoModuleDefused = true;
   lcd.clear();
@@ -249,7 +249,7 @@ void whoSetup() // define outputs and inputs for who
   generateWords();
   printLabels();
 
-  pinMode(PIN_WHO_LED_GREEN, OUTPUT);
+  pinMode(PIN_WHO_LED_FIN, OUTPUT);
   pinMode(PIN_WHO_LED_1, OUTPUT);
   pinMode(PIN_WHO_LED_2, OUTPUT);
   pinMode(PIN_WHO_LED_3, OUTPUT);

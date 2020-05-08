@@ -12,7 +12,7 @@
 */
 
 #define PIN_MORSE_LED_1 29 // yellow flashing LED for morse
-#define PIN_MORSE_LED_GREEN 27 // module complete LED
+#define PIN_MORSE_LED_FIN 27 // module complete LED
 #define PIN_MORSE_BUTTON_1 24 // left button
 #define PIN_MORSE_BUTTON_2 25 // right button
 #define PIN_MORSE_BUTTON_3 26 // TX (submit) button
@@ -96,7 +96,7 @@ void morseSetup()
   lc.setIntensity(0,8);
   lc.clearDisplay(0);
   pinMode(PIN_MORSE_LED_1, OUTPUT);
-  pinMode(PIN_MORSE_LED_GREEN, OUTPUT);
+  pinMode(PIN_MORSE_LED_FIN, OUTPUT);
   pinMode(PIN_MORSE_BUTTON_1, INPUT);
   pinMode(PIN_MORSE_BUTTON_2, INPUT);
   pinMode(PIN_MORSE_BUTTON_3, INPUT);
@@ -243,7 +243,7 @@ void morseSubmitButtonPressed()
     if (DEBUG_LEVEL >= 1) {
       Serial.println("Morse Module Defused");
     }
-    digitalWrite(PIN_MORSE_LED_GREEN, HIGH); // turn on module complete light
+    digitalWrite(PIN_MORSE_LED_FIN, HIGH); // turn on module complete light
     digitalWrite(PIN_MORSE_LED_1, LOW); // turn off flashing light upon success
     lc.shutdown(0,true); //shows "    " on module tx display
     defusedModuleBuzzer();
@@ -378,6 +378,6 @@ void morseModuleBoom()
   }
   // if the bomb explodes the display with the frequency should clear and the flashing led should stop
   digitalWrite(PIN_MORSE_LED_1, LOW); // stop flashing yellow morse
-  digitalWrite(PIN_MORSE_LED_GREEN, LOW); // turn of green module complete LED
+  digitalWrite(PIN_MORSE_LED_FIN, LOW); // turn of green module complete LED
   lc.shutdown(0,true); //shows "    " on module tx display
 }

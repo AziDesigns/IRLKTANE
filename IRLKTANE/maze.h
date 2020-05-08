@@ -8,7 +8,7 @@
   SETUP FOR A MAZE
 */
 
-#define PIN_MAZE_LED_GREEN 44
+#define PIN_MAZE_LED_FIN 44
 #define PIN_MAZE_UP A5
 #define PIN_MAZE_RIGHT A6
 #define PIN_MAZE_DOWN A7
@@ -396,7 +396,7 @@ void mazeCheckWin()
   }
   if (MAZE_LEVELS[mazeCurrentLevel][mazeCurrentX][mazeCurrentY] == 'f') {
     mazelc.clearDisplay(0);
-    digitalWrite(PIN_MAZE_LED_GREEN, HIGH);
+    digitalWrite(PIN_MAZE_LED_FIN, HIGH);
     mazeModuleDefused = true;
   }
 }
@@ -574,5 +574,5 @@ void mazeModuleBoom()
     Serial.println (__func__);
   }
   mazelc.clearDisplay(0);
-  digitalWrite(PIN_MAZE_LED_GREEN, LOW);
+  digitalWrite(PIN_MAZE_LED_FIN, LOW);
 }
