@@ -95,8 +95,7 @@ void countdownBuzzer()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  //tone(buzzer, countdownMelody[0], countdownMelodyDuration);
-  tone(buzzer, countdownMelody[1], countdownMelodyDuration);
+  tone(buzzer, countdownMelody[2], countdownMelodyDuration);
 }
 
 void defusedModuleBuzzer() 
@@ -104,7 +103,7 @@ void defusedModuleBuzzer()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (int thisNote = 0; thisNote < 2; thisNote++) {
+  for (int thisNote = 0; thisNote < defusedModuleNotes * 2; thisNote = thisNote + 2) {
     tone(buzzer, defusedModuleMelody[thisNote], defusedModuleMelodyDuration);
   }
 }
@@ -115,7 +114,7 @@ void strikeBuzzer()
     Serial.println (__func__);
   }
   if (exploded==false) {
-    for (int thisNote = 0; thisNote < 2; thisNote++) {
+    for (int thisNote = 0; thisNote < strikeNotes * 2; thisNote = thisNote + 2) {
       tone(buzzer, strikeMelody[thisNote], strikeMelodyDuration);
     }
   }
