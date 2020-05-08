@@ -2,55 +2,48 @@
 
 // change this to make the song slower or faster
 int tempo = 108;
-int strikeMelodyDuration = 100;
-int countdownMelodyDuration = 50;
-int defusedModuleMelodyDuration = 200;
-
-// change this to whichever pin you want to use
 int buzzer = 2;
+
+void buzzerSetup()
+{
+  pinMode(buzzer, OUTPUT);
+}
 
 // notes of the moledy followed by the duration.
 // a 4 means a quarter note, 8 an eighteenth , 16 sixteenth, so on
 // !!negative numbers are used to represent dotted notes,
 // so -4 means a dotted quarter note, that is, a quarter plus an eighteenth!!
 int victoryMelody[] = {
-
+  
+  NOTE_C5,32, NOTE_F5,32, NOTE_G5,32, NOTE_C6,32, 
+  NOTE_F6,32, NOTE_G6,32, NOTE_C7,32,
+  REST,4,
   NOTE_D4,16, NOTE_C4,16, NOTE_D4,16, NOTE_F4,16, REST,8, 
   NOTE_G4,16, NOTE_F4,16, NOTE_G4,16, NOTE_A4,16, REST,8, 
   NOTE_B4,16, REST,16, NOTE_C5,16, REST,16, NOTE_D5,2,
   
 };
 
-int countdownMelody[] = {
-
-  NOTE_C7,32, NOTE_A6,32,
-  
-};
-
-int defusedModuleMelody[] = {
-
-  NOTE_C5,32, NOTE_C6,32,
-  
-};
-
-int strikeMelody[] = {
-
-  NOTE_GS5,32, NOTE_DS4,32,
-  
-};
-
 int boomMelody[] = {
 
-  NOTE_GS5,16, NOTE_C5,16, NOTE_DS4,2,
+  NOTE_C4,32, NOTE_CS4,32, NOTE_D4,16, REST,16, REST,8,
+  NOTE_B3,16, NOTE_F4,16, REST,16, NOTE_F4,16, 
+  NOTE_F4,-16, NOTE_E4,-16, NOTE_D4,16, 
+  NOTE_C4,16, NOTE_E3,16, REST,16, 
+  NOTE_E3,16, NOTE_C3,16, REST,16, REST,8,
+
+  NOTE_C4,16, REST,8, NOTE_G3,16, 
+  REST,8, NOTE_E3,8, 
+  NOTE_A3,-16, NOTE_B3,-16, NOTE_A3,16,
+  NOTE_GS3,8, NOTE_AS3,8,
+  NOTE_GS3,8, NOTE_E3,16, NOTE_D3,16,
+  NOTE_E3,2,
   
 };
 
 // sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
 // there are two values per note (pitch and duration), so for each note there are four bytes
 int victoryNotes = sizeof(victoryMelody) / sizeof(victoryMelody[0]) / 2;
-int countdownNotes = sizeof(countdownMelody) / sizeof(countdownMelody[0]) / 2;
-int defusedModuleNotes = sizeof(defusedModuleMelody) / sizeof(defusedModuleMelody[0]) / 2;
-int strikeNotes = sizeof(strikeMelody) / sizeof(strikeMelody[0]) / 2;
 int boomNotes = sizeof(boomMelody) / sizeof(boomMelody[0]) / 2;
 
 // this calculates the duration of a whole note in ms
@@ -90,36 +83,6 @@ void victoryBuzzer()
   victorySong=true;
 }
 
-void countdownBuzzer() 
-{
-  if (DEBUG_LEVEL >= 2) {
-    Serial.println (__func__);
-  }
-  tone(buzzer, countdownMelody[2], countdownMelodyDuration);
-}
-
-void defusedModuleBuzzer() 
-{
-  if (DEBUG_LEVEL >= 2) {
-    Serial.println (__func__);
-  }
-  for (int thisNote = 0; thisNote < defusedModuleNotes * 2; thisNote = thisNote + 2) {
-    tone(buzzer, defusedModuleMelody[thisNote], defusedModuleMelodyDuration);
-  }
-}
-
-void strikeBuzzer() 
-{
-  if (DEBUG_LEVEL >= 2) {
-    Serial.println (__func__);
-  }
-  if (exploded==false) {
-    for (int thisNote = 0; thisNote < strikeNotes * 2; thisNote = thisNote + 2) {
-      tone(buzzer, strikeMelody[thisNote], strikeMelodyDuration);
-    }
-  }
-}
-
 void boomBuzzer() 
 {
   if (DEBUG_LEVEL >= 2) {
@@ -148,5 +111,124 @@ void boomBuzzer()
     
     // stop the waveform generation before the next note.
     noTone(buzzer);
+  }
+}
+
+// PLAY TONES WITHOUT DELAY =================================
+// Pulse the speaker to play a tone for a particular duration
+// Only needed for sounds that occur during the gameplay
+
+// MELODY and TIMING  =======================================
+//  melody[] is an array of notes, accompanied by beats[],
+//  which sets each note's relative length (higher #, longer note)
+int countdownMelody[] = {  NOTE_CS7,  NOTE_AS6 };
+int countdownBeats[]  = { 8, 4 };
+int countdownMAX_COUNT = sizeof(countdownMelody) / 2; // Melody length, for looping.
+
+int defusedModuleMelody[] = {  NOTE_C5, NOTE_C6 };
+int defusedModuleBeats[]  = { 8, 16 };
+int defusedModuleMAX_COUNT = sizeof(defusedModuleMelody) / 2; // Melody length, for looping.
+
+int strikeMelody[] = {  NOTE_B3, NOTE_C4, NOTE_B3 };
+int strikeBeats[]  = { 4, 2, 4 };
+int strikeMAX_COUNT = sizeof(strikeMelody) / 2; // Melody length, for looping.
+
+int maxCountdownPlays = 1;
+int maxDefusedModulePlays = 1;
+int maxStrikePlays = 1;
+int runCountdownXTimes = 0;
+int runDefusedModuleXTimes = 0;
+int runStrikeXTimes = 0;
+
+// Set overall tempo
+long noDelayTempo = 10000;
+// Set length of pause between notes
+int pause = 1000;
+// Loop variable to increase Rest length
+int rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
+
+// Initialize core variables
+int tone_ = 0;
+int beat = 0;
+long duration  = 0;
+
+void playTone() {
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  long elapsed_time = 0;
+  if (tone_ > 0) { // if this isn't a Rest beat, while the tone has
+    //  played less long than 'duration', pulse speaker HIGH and LOW
+    while (elapsed_time < duration) {
+
+      digitalWrite(buzzer,HIGH);
+      delayMicroseconds(tone_ / 2);
+
+      // DOWN
+      digitalWrite(buzzer, LOW);
+      delayMicroseconds(tone_ / 2);
+
+      // Keep track of how long we pulsed
+      elapsed_time += (tone_);
+    }
+  }
+  else { // Rest beat; loop times delay
+    for (int j = 0; j < rest_count; j++) { // See NOTE on rest_count
+      delayMicroseconds(duration);  
+    }                                
+  }                                
+}
+
+void countdownBuzzer() 
+{
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  // Set up a counter to pull from melody[] and beats[]
+  for (int i=0; i<countdownMAX_COUNT; i++) {
+    tone_ = (1000000/countdownMelody[i]);
+    beat = countdownBeats[i];
+    duration = beat * noDelayTempo; // Set up timing
+    playTone();
+    // A pause between notes...
+    delayMicroseconds(pause);
+  }
+}
+
+void defusedModuleBuzzer() 
+{
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  // Set up a counter to pull from melody[] and beats[]
+  for (int i=0; i<defusedModuleMAX_COUNT; i++) {
+    tone_ = (1000000/defusedModuleMelody[i]);
+    beat = defusedModuleBeats[i];
+    duration = beat * noDelayTempo; // Set up timing
+    playTone();
+    // A pause between notes...
+    delayMicroseconds(pause);
+  }
+}
+
+void strikeBuzzer() 
+{
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  if (exploded==false) {
+  // Set up a counter to pull from melody[] and beats[]
+    for (int i=0; i<strikeMAX_COUNT; i++) {
+      tone_ = (1000000/strikeMelody[i]);
+      Serial.println (tone_);
+      beat = strikeBeats[i];
+      Serial.println (beat);
+      duration = beat * noDelayTempo; // Set up timing
+      Serial.println (duration);
+      playTone();
+      Serial.println ("tone played");
+      // A pause between notes...
+      delayMicroseconds(pause);
+    }
   }
 }

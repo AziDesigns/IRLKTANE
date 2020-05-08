@@ -33,7 +33,7 @@ morseModuleIncluded = false,
 passwordModuleIncluded = false,
 simonModuleIncluded = false,
 ventingModuleIncluded = false,
-whoModuleIncluded = false;
+whoModuleIncluded = true;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool
@@ -101,7 +101,8 @@ void setup() // this section includes all setups for all modules to define INPUT
   lc.clearDisplay(1);
   
   timeSetup();
-
+  buzzerSetup();
+  
   if (buttonModuleIncluded==true) {
     buttonSetup();
   } else {
@@ -146,6 +147,8 @@ void setup() // this section includes all setups for all modules to define INPUT
     whoSetup();
   } else {
     whoModuleDefused= true;
+    lcdWho.init();
+    lcdWho.off();
   }
 }
 

@@ -19,7 +19,7 @@
 #define PIN_WHO_BUTTON_5 A11 // Select button for Column 2 Row 2
 #define PIN_WHO_BUTTON_6 A10 // Select button for Column 2 Row 3
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+LiquidCrystal_I2C lcdWho(0x27, 20, 4);
 
 char labels[LABELS_LENGTH][10] = { "YES", "FIRST", "DISPLAY", "OKAY", "SAYS", "NOTHING", "", "BLANK", "NO", "LED", "LEAD", "READ", "RED", "REED", "LEED", "HOLD ON", "YOU", "YOU ARE", "YOUR", "YOU'RE", "UR", "THERE", "THEY'RE", "THEIR", "THEY ARE", "SEE", "C", "CEE" };
 char allLabels[LABELS_LENGTH][10] = { "YES", "BLANK", "NOTHING", "DONE", "LIKE", "FIRST", "NEXT", "HOLD", "UHHH", "UH UH", "UH HUH", "LEFT", "MIDDLE", "RIGHT", "OKAY", "PRESS", "NO", "READY", "SURE", "WAIT", "U", "UR", "YOU", "YOUR", "YOU'RE", "YOU ARE", "WHAT", "WHAT?"  };
@@ -70,11 +70,11 @@ void whoModuleBoom() // if the bomb explodes what should the module display
   digitalWrite(PIN_WHO_LED_2, LOW);
   digitalWrite(PIN_WHO_LED_3, LOW);
   digitalWrite(PIN_WHO_LED_FIN, LOW);
-  lcd.clear();
-  lcd.setCursor(0, 0); lcd.print("====================");
-  lcd.setCursor(0, 3); lcd.print("====================");
-  lcd.setCursor(9, 1); lcd.print("BOMB");
-  lcd.setCursor(7, 2); lcd.print("EXPLODED");
+  lcdWho.clear();
+  lcdWho.setCursor(0, 0); lcdWho.print("====================");
+  lcdWho.setCursor(0, 3); lcdWho.print("====================");
+  lcdWho.setCursor(9, 1); lcdWho.print("BOMB");
+  lcdWho.setCursor(7, 2); lcdWho.print("EXPLODED");
 
 }
 
@@ -89,11 +89,11 @@ void whoModuleDefusedPrint() // the module has been defused
   digitalWrite(PIN_WHO_LED_FIN, HIGH);
   defusedModuleBuzzer();
   whoModuleDefused = true;
-  lcd.clear();
-  lcd.setCursor(0, 0); lcd.print("====================");
-  lcd.setCursor(0, 3); lcd.print("====================");
-  lcd.setCursor(7, 1); lcd.print("MODULE");
-  lcd.setCursor(7, 2); lcd.print("DEFUSED");
+  lcdWho.clear();
+  lcdWho.setCursor(0, 0); lcdWho.print("====================");
+  lcdWho.setCursor(0, 3); lcdWho.print("====================");
+  lcdWho.setCursor(7, 1); lcdWho.print("MODULE");
+  lcdWho.setCursor(7, 2); lcdWho.print("DEFUSED");
 }
 
 // function that displays the labels
@@ -102,15 +102,15 @@ void printLabels()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  lcd.setCursor((20 - strlen(words[0])) / 2, 0);
-  lcd.print(words[0]);
+  lcdWho.setCursor((20 - strlen(words[0])) / 2, 0);
+  lcdWho.print(words[0]);
 
   for (int i = 1; i <= 3; i++)
   {
-    lcd.setCursor(0, i);
-    lcd.print(words[i]);
-    lcd.setCursor(20 - strlen(words[3 + i]), i);
-    lcd.print(words[3 + i]);
+    lcdWho.setCursor(0, i);
+    lcdWho.print(words[i]);
+    lcdWho.setCursor(20 - strlen(words[3 + i]), i);
+    lcdWho.print(words[3 + i]);
   }
 
 }
@@ -214,7 +214,7 @@ void nextLevel() // moves you to the next stage of who
     whoModuleDefusedPrint();
   }
   if (whoLevel != 4) { // if the module hasn't been defused yet, go to the next stage 
-    lcd.clear();
+    lcdWho.clear();
     generateWords();
     printLabels();
   }
@@ -231,7 +231,7 @@ void whoReset() // function that resets the module
     digitalWrite(PIN_WHO_LED_1, LOW);
     digitalWrite(PIN_WHO_LED_2, LOW);
     digitalWrite(PIN_WHO_LED_3, LOW);
-    lcd.clear();
+    lcdWho.clear();
     generateWords();
     printLabels();
   }
@@ -242,8 +242,8 @@ void whoSetup() // define outputs and inputs for who
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  lcd.init();
-  lcd.backlight();
+  lcdWho.init();
+  lcdWho.backlight();
 
   // first stage
   generateWords();
