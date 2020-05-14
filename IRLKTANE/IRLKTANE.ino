@@ -62,6 +62,38 @@ void generateSerialCode() // function that generates the serial number for the b
   Serial.println (serialCode);
 }
 
+unsigned int bitOut(void)
+{
+  static unsigned long firstTime=1, prev=0;
+  unsigned long bit1=0, bit0=0, x=0, port=0, limit=99;
+  if (firstTime)
+  {
+    firstTime=0;
+    prev=analogRead(port);
+  }
+  while (limit--)
+  {
+    x=analogRead(port);
+    bit1=(prev!=x?1:0);
+    prev=x;
+    x=analogRead(port);
+    bit0=(prev!=x?1:0);
+    prev=x;
+    if (bit1!=bit0)
+      break;
+  }
+  return bit1;
+}
+
+unsigned long seedOut(unsigned int noOfBits)
+{
+  // return value with 'noOfBits' random bits set
+  unsigned long seed=0;
+  for (int i=0;i<noOfBits;++i)
+    seed = (seed<<1) | bitOut();
+  return seed;
+}
+
 // list all modules/ header files that should be included
 // ** buzzer.h and time.h must be at the top as they are called by other functions
 
@@ -86,7 +118,9 @@ void setup() // this section includes all setups for all modules to define INPUT
     Serial.println (__func__);
   }
   Serial.begin(9600);
-  randomSeed(analogRead(0));
+// create 31 bit seed and show value, random results
+  unsigned long seed=seedOut(31);
+  randomSeed(seed);
 
   lcdButton.begin(16, 2);
 

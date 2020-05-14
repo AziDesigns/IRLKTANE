@@ -131,9 +131,6 @@ void buttonSetup()
   pinMode(PIN_BUTTON_BTN, INPUT);
   pinMode(PIN_BUTTON_LED_FIN, OUTPUT);
 
-  //generating a seed to use in order to generate random numbers
-  randomSeed(analogRead(0));
-
   //generating the colors for the left led and the right led
   leftLedColor = random(1, 5);
   rightLedColor = random(1, 5);

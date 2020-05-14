@@ -164,10 +164,8 @@ void genCorrectLetters()
   while (positionPopulated<5)
   {
     char letter = validWords[randomWord][positionPopulated];
-    int letterNumber = letter;
     positionVals[positionPopulated][0] = letter;
     positionPopulated ++;
-    randomArray[positionPopulated] = letterNumber;
   }
 }
 
@@ -184,10 +182,14 @@ void genRandLetters(int p)
       while(check == false){
           value = random(0, 26);
           check = true;
-          for(int j = 0; j<6; j++){
-              if(value == randomArray[j]){
-                  check = false;
-              }
+          for(int j = 1; j<6; j++){
+            if(value == randomArray[j]){
+              check = false;
+            } 
+          }
+          char valueLetter = value + 'a';
+          if (valueLetter == positionVals[p][0]) {
+            check = false;
           }
       }
       randomArray[i] = value;
@@ -374,7 +376,6 @@ void passwordSetup()
   pinMode(PIN_PASSWORD_BUTTON_10, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_SUBMIT, INPUT);
   
-  randomSeed(analogRead(0));
   genCorrectLetters();
   genRandLetters(0);
   genRandLetters(1);
@@ -388,12 +389,6 @@ void passwordSetup()
   setInitDisplayLetters(4);
 
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Display Letters");
-    for(int i = 0; i < 5; i++)
-    {
-      Serial.print(displayVals[i]);
-    }
-    Serial.println("");
     Serial.println("Correct Letters");
     for(int i = 0; i < 5; i++)
     {
@@ -428,6 +423,12 @@ void passwordSetup()
     for(int i = 0; i < 6; i++)
     {
       Serial.print(positionVals[4][i]);
+    }
+    Serial.println("");
+    Serial.println("Display Letters");
+    for(int i = 0; i < 5; i++)
+    {
+      Serial.print(displayVals[i]);
     }
     Serial.println("");
   }

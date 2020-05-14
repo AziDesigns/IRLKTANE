@@ -138,8 +138,6 @@ void memorySetup()
   memorylc.setIntensity(0, 4); // sets brightness (0~15 possible values)
   memorylc.clearDisplay(0);// clear screen
 
-  randomSeed(analogRead(0));
-
   pinMode(PIN_MEMORY_LED_1, OUTPUT);
   pinMode(PIN_MEMORY_LED_2, OUTPUT);
   pinMode(PIN_MEMORY_LED_3, OUTPUT);
