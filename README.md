@@ -84,10 +84,10 @@ Next, connect the Arduino board to your computer and load the program to the boa
 | Normal       | Maze                |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Normal       | Memory              |:heavy_check_mark:|:heavy_check_mark:|                  |
 | Normal       | Morse               |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-| Normal       | Password            |:heavy_check_mark:|                  |                  |
+| Normal       | Password            |:heavy_check_mark:|:heavy_check_mark:|                  |
 | Normal       | Simon Says          |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Needy        | Venting Gas         |:heavy_check_mark:|                  |                  |
-| Normal       | Who's On First      |:heavy_check_mark:|:heavy_check_mark:|                  |
+| Normal       | Who's On First      |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Widget       | Buzzer              |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Widget       | Timer               |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 | Widget       | Strikes             |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
