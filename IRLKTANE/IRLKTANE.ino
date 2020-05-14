@@ -18,7 +18,7 @@
     LEVEL 3 = SAME AS L3 WITH loop, setup, morseDisplay, displayTime, and mazeOne FUNCTIONS INCLUDED
     MORE LEVELS IN THE FUTURE?
 */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 2
 
 bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
 
@@ -30,10 +30,10 @@ knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
 morseModuleIncluded = false,
-passwordModuleIncluded = false,
+passwordModuleIncluded = true,
 simonModuleIncluded = false,
 ventingModuleIncluded = false,
-whoModuleIncluded = true;
+whoModuleIncluded = false;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
 bool

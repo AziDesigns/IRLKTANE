@@ -220,13 +220,9 @@ void strikeBuzzer()
   // Set up a counter to pull from melody[] and beats[]
     for (int i=0; i<strikeMAX_COUNT; i++) {
       tone_ = (1000000/strikeMelody[i]);
-      Serial.println (tone_);
       beat = strikeBeats[i];
-      Serial.println (beat);
       duration = beat * noDelayTempo; // Set up timing
-      Serial.println (duration);
       playTone();
-      Serial.println ("tone played");
       // A pause between notes...
       delayMicroseconds(pause);
     }
