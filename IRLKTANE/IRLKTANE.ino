@@ -18,7 +18,7 @@
     LEVEL 3 = SAME AS L3 WITH loop, setup, morseDisplay, displayTime, and mazeOne FUNCTIONS INCLUDED
     MORE LEVELS IN THE FUTURE?
 */
-#define DEBUG_LEVEL 2
+#define DEBUG_LEVEL 1
 
 bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
 

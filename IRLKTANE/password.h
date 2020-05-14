@@ -48,6 +48,8 @@ int lastPasswordSubmitState = 0; // previous state of the submit button
 
 char displayVals[5] = {0,0,0,0,0};
 
+int randomArray[6]{0,0,0,0,0,0};
+
 char positionVals[5][6] = {
  {0,0,0,0,0,0},
  {0,0,0,0,0,0},
@@ -162,8 +164,10 @@ void genCorrectLetters()
   while (positionPopulated<5)
   {
     char letter = validWords[randomWord][positionPopulated];
+    int letterNumber = letter;
     positionVals[positionPopulated][0] = letter;
     positionPopulated ++;
+    randomArray[positionPopulated] = letterNumber;
   }
 }
 
@@ -172,13 +176,23 @@ void genRandLetters(int p)
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  int generated=1;
-  while (generated<6)
-  {
-     byte randomValue = random(0, 26);
-     char letter = randomValue + 'a';
-     positionVals[p][generated] = letter;
-     generated ++;
+  
+  for(int i = 1; i<6; i++){
+      byte value;
+      boolean check = false;
+  
+      while(check == false){
+          value = random(0, 26);
+          check = true;
+          for(int j = 0; j<6; j++){
+              if(value == randomArray[j]){
+                  check = false;
+              }
+          }
+      }
+      randomArray[i] = value;
+      char letter = value + 'a';
+      positionVals[p][i] = letter;
   }
 }
 
@@ -373,7 +387,7 @@ void passwordSetup()
   setInitDisplayLetters(3);
   setInitDisplayLetters(4);
 
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 1) {
     Serial.println("Display Letters");
     for(int i = 0; i < 5; i++)
     {
