@@ -44,6 +44,7 @@ void buttonModuleDefusedPrint()
   setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
   buttonModuleDefused = true;
   defusedModuleBuzzer();
+  isAnyModuleDefused=true;
   digitalWrite(PIN_BUTTON_LED_FIN, HIGH);
   lcdButton.clear();
   lcdButton.setCursor(1, 0);

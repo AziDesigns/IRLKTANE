@@ -88,6 +88,7 @@ void whoModuleDefusedPrint() // the module has been defused
   digitalWrite(PIN_WHO_LED_3, LOW);
   digitalWrite(PIN_WHO_LED_FIN, HIGH);
   defusedModuleBuzzer();
+  isAnyModuleDefused=true;
   whoModuleDefused = true;
   lcdWho.clear();
   lcdWho.setCursor(0, 0); lcdWho.print("====================");
@@ -277,7 +278,7 @@ int whoPressedButton() // function that returns the pressed button
 
 void whoCheckButton() // function that checks if a button is pressed
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   currentButton = whoPressedButton();

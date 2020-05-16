@@ -398,6 +398,8 @@ void mazeCheckWin()
     mazelc.clearDisplay(0);
     digitalWrite(PIN_MAZE_LED_FIN, HIGH);
     mazeModuleDefused = true;
+    defusedModuleBuzzer();
+    isAnyModuleDefused=true;
   }
 }
 

@@ -81,6 +81,7 @@ void simonModuleDefusedPrint()
   digitalWrite(PIN_SIMON_LED_BLUE, LOW);
   digitalWrite(PIN_SIMON_LED_FIN, HIGH);
   defusedModuleBuzzer();
+  isAnyModuleDefused=true;
 }
 
 // function that checks if there's a vowel in the serial code and returns an answer accordingly

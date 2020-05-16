@@ -35,6 +35,10 @@ void displayTime() // function that displays the time on the clock
     }
     sec--;
     //countdownBuzzer(); //NEEDS TURNED BACK ON FOR GAMEPLAY. TURRNED OFF FOR TESTING
+    if (DEBUG_LEVEL >= 3) {
+    Serial.print(mins);
+    Serial.println(sec);
+    }
     if (sec == -1) {
       mins--;
       if (mins == -1)  bombExploded(); // if the time hits zero, the bomb will go off

@@ -16,7 +16,7 @@
 #define PIN_PASSWORD_BUTTON_10 22 // letter 5 down
 #define PIN_PASSWORD_BUTTON_SUBMIT 40 // submit button
 
-unsigned long switchMillis = 0;
+unsigned long PWswitchMillis = 0;
 
 int passwordPos1UpState = 0; // current state of the 1st pos up button
 int passwordPos2UpState = 0; // current state of the 2nd pos up button
@@ -198,7 +198,7 @@ void genRandLetters(int p)
   }
 }
 
-void checkSubmission()
+void checkPWSubmission()
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
@@ -210,14 +210,16 @@ void checkSubmission()
      (displayVals[4]==positionVals[4][0])) {
     Serial.println("PWmoduledefused");
     passwordModuleDefused = true;
+    defusedModuleBuzzer();
+    isAnyModuleDefused=true;
    } else {
       addStrike();
    }
 }
 
-void checkSwitches()
+void checkPWSwitches()
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   // put your main code here, to run repeatedly:
@@ -329,7 +331,7 @@ void checkSwitches()
 // compare the passwordPos5DownState to its previous state 
   if (passwordSubmitState != lastPasswordSubmitState) {
     if (passwordSubmitState == HIGH) {
-      checkSubmission();
+      checkPWSubmission();
     }
   }
   // save the current state as the last state, for next time through the loop
@@ -348,11 +350,11 @@ void passwordLoop()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  unsigned long currentMillis = millis();
-  if (currentMillis - switchMillis > 50) {
+  unsigned long PWcurrentMillis = millis();
+  if (PWcurrentMillis - PWswitchMillis > 50) {
     //restart the TIMER
-    switchMillis = currentMillis;
-    checkSwitches();
+    PWswitchMillis = PWcurrentMillis;
+    checkPWSwitches();
   }
 }
 
@@ -361,8 +363,6 @@ void passwordSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  Serial.begin(9600);
-  
   pinMode(PIN_PASSWORD_LED_FIN, OUTPUT);
   pinMode(PIN_PASSWORD_BUTTON_1, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_2, INPUT);
@@ -395,6 +395,8 @@ void passwordSetup()
       Serial.print(positionVals[i][0]);
     }
     Serial.println("");
+  }
+  if (DEBUG_LEVEL >= 2) {
     Serial.println("POS1 Letters");
     for(int i = 0; i < 6; i++)
     {
@@ -425,6 +427,8 @@ void passwordSetup()
       Serial.print(positionVals[4][i]);
     }
     Serial.println("");
+  }
+  if (DEBUG_LEVEL >= 1) {
     Serial.println("Display Letters");
     for(int i = 0; i < 5; i++)
     {

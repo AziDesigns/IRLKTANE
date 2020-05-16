@@ -60,145 +60,145 @@ void knobSetup()
 
 void knobDigitDisplay() 
 {
-    if (knobSec==45) {
-      lc.setDigit(1,5,5,true); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==44) {
-      lc.setDigit(1,5,4,true); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==43) {
-      lc.setDigit(1,5,3,true); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==42) {
-      lc.setDigit(1,5,2,true); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==41) {
-      lc.setDigit(1,5,1,false); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==40) {
-      lc.setDigit(1,5,0,false); 
-      lc.setDigit(1,4,4,true); 
-    } else if (knobSec==39) {
-      lc.setDigit(1,5,9,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==38) {
-      lc.setDigit(1,5,8,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==37) {
-      lc.setDigit(1,5,7,false); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==36) {
-      lc.setDigit(1,5,6,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==35) {
-      lc.setDigit(1,5,5,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==34) {
-      lc.setDigit(1,5,4,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==33) {
-      lc.setDigit(1,5,3,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==32) {
-      lc.setDigit(1,5,2,true); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==31) {
-      lc.setDigit(1,5,1,false); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==30) {
-      lc.setDigit(1,5,0,false); 
-      lc.setDigit(1,4,3,true); 
-    } else if (knobSec==29) {
-      lc.setDigit(1,5,9,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==28) {
-      lc.setDigit(1,5,8,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==27) {
-      lc.setDigit(1,5,7,false); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==26) {
-      lc.setDigit(1,5,6,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==25) {
-      lc.setDigit(1,5,5,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==24) {
-      lc.setDigit(1,5,4,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==23) {
-      lc.setDigit(1,5,3,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==22) {
-      lc.setDigit(1,5,2,true); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==21) {
-      lc.setDigit(1,5,1,false); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==20) {
-      lc.setDigit(1,5,0,false); 
-      lc.setDigit(1,4,2,true); 
-    } else if (knobSec==19) {
-      lc.setDigit(1,5,9,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==18) {
-      lc.setDigit(1,5,8,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==17) {
-      lc.setDigit(1,5,7,false); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==16) {
-      lc.setDigit(1,5,6,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==15) {
-      lc.setDigit(1,5,5,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==14) {
-      lc.setDigit(1,5,4,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==13) {
-      lc.setDigit(1,5,3,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==12) {
-      lc.setDigit(1,5,2,true); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==11) {
-      lc.setDigit(1,5,1,false); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==10) {
-      lc.setDigit(1,5,0,false); 
-      lc.setDigit(1,4,1,false); 
-    } else if (knobSec==9) {
-      lc.setDigit(1,5,9,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==8) {
-      lc.setDigit(1,5,8,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==7) {
-      lc.setDigit(1,5,7,false); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==6) {
-      lc.setDigit(1,5,6,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==5) {
-      lc.setDigit(1,5,5,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==4) {
-      lc.setDigit(1,5,4,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==3) {
-      lc.setDigit(1,5,3,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==2) {
-      lc.setDigit(1,5,2,true); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==1) {
-      lc.setDigit(1,5,1,false); 
-      lc.setDigit(1,4,0,false); 
-    } else if (knobSec==0) {
-      lc.setDigit(1,5,0,false);
-      lc.setDigit(1,4,0,false);
-    }
+  if (knobSec==45) {
+    lc.setDigit(1,5,5,true); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==44) {
+    lc.setDigit(1,5,4,true); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==43) {
+    lc.setDigit(1,5,3,true); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==42) {
+    lc.setDigit(1,5,2,true); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==41) {
+    lc.setDigit(1,5,1,false); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==40) {
+    lc.setDigit(1,5,0,false); 
+    lc.setDigit(1,4,4,true); 
+  } else if (knobSec==39) {
+    lc.setDigit(1,5,9,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==38) {
+    lc.setDigit(1,5,8,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==37) {
+    lc.setDigit(1,5,7,false); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==36) {
+    lc.setDigit(1,5,6,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==35) {
+    lc.setDigit(1,5,5,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==34) {
+    lc.setDigit(1,5,4,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==33) {
+    lc.setDigit(1,5,3,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==32) {
+    lc.setDigit(1,5,2,true); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==31) {
+    lc.setDigit(1,5,1,false); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==30) {
+    lc.setDigit(1,5,0,false); 
+    lc.setDigit(1,4,3,true); 
+  } else if (knobSec==29) {
+    lc.setDigit(1,5,9,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==28) {
+    lc.setDigit(1,5,8,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==27) {
+    lc.setDigit(1,5,7,false); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==26) {
+    lc.setDigit(1,5,6,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==25) {
+    lc.setDigit(1,5,5,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==24) {
+    lc.setDigit(1,5,4,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==23) {
+    lc.setDigit(1,5,3,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==22) {
+    lc.setDigit(1,5,2,true); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==21) {
+    lc.setDigit(1,5,1,false); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==20) {
+    lc.setDigit(1,5,0,false); 
+    lc.setDigit(1,4,2,true); 
+  } else if (knobSec==19) {
+    lc.setDigit(1,5,9,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==18) {
+    lc.setDigit(1,5,8,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==17) {
+    lc.setDigit(1,5,7,false); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==16) {
+    lc.setDigit(1,5,6,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==15) {
+    lc.setDigit(1,5,5,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==14) {
+    lc.setDigit(1,5,4,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==13) {
+    lc.setDigit(1,5,3,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==12) {
+    lc.setDigit(1,5,2,true); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==11) {
+    lc.setDigit(1,5,1,false); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==10) {
+    lc.setDigit(1,5,0,false); 
+    lc.setDigit(1,4,1,false); 
+  } else if (knobSec==9) {
+    lc.setDigit(1,5,9,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==8) {
+    lc.setDigit(1,5,8,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==7) {
+    lc.setDigit(1,5,7,false); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==6) {
+    lc.setDigit(1,5,6,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==5) {
+    lc.setDigit(1,5,5,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==4) {
+    lc.setDigit(1,5,4,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==3) {
+    lc.setDigit(1,5,3,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==2) {
+    lc.setDigit(1,5,2,true); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==1) {
+    lc.setDigit(1,5,1,false); 
+    lc.setDigit(1,4,0,false); 
+  } else if (knobSec==0) {
+    lc.setDigit(1,5,0,false);
+    lc.setDigit(1,4,0,false);
+  }
 }
 
 void knobCheckKnobPosition() // function that checks if the knob is in the correct position when it hits -1
@@ -259,7 +259,7 @@ void knobDisplayTime() // function that displays the time on the clock
         digitalWrite (PIN_KNOB_LED_12, LOW);
       }
     }
-  knobDigitDisplay();
+    knobDigitDisplay();
   }
 }
 
@@ -392,12 +392,33 @@ void knobLoop()
   }
 }
 
+
+void knobBombDefused()
+{
+  if (DEBUG_LEVEL >= 2) {
+    Serial.println (__func__);
+  }
+  // when the bomb is defused all 12 LEDs should turn off and module countdown should show remaining time
+  digitalWrite (PIN_KNOB_LED_1, LOW);
+  digitalWrite (PIN_KNOB_LED_2, LOW);
+  digitalWrite (PIN_KNOB_LED_3, LOW);
+  digitalWrite (PIN_KNOB_LED_4, LOW);
+  digitalWrite (PIN_KNOB_LED_5, LOW);
+  digitalWrite (PIN_KNOB_LED_6, LOW);
+  digitalWrite (PIN_KNOB_LED_7, LOW);
+  digitalWrite (PIN_KNOB_LED_8, LOW);
+  digitalWrite (PIN_KNOB_LED_9, LOW);
+  digitalWrite (PIN_KNOB_LED_10, LOW);
+  digitalWrite (PIN_KNOB_LED_11, LOW);
+  digitalWrite (PIN_KNOB_LED_12, LOW);
+}
+
 void knobModuleBoom()
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  // when the bomb explodes all 12 + 1 LEDs should turn off and so should countdown timer above module
+  // when the bomb explodes all 12 LEDs should turn off and so should countdown timer above module
   lc.setDigit(1,5,' ',false);
   lc.setDigit(1,4,' ',false); 
   digitalWrite (PIN_KNOB_LED_1, LOW);

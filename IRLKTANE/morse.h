@@ -247,6 +247,7 @@ void morseSubmitButtonPressed()
     digitalWrite(PIN_MORSE_LED_1, LOW); // turn off flashing light upon success
     lc.shutdown(0,true); //shows "    " on module tx display
     defusedModuleBuzzer();
+    isAnyModuleDefused=true;
   } else {
     addStrike();
   }

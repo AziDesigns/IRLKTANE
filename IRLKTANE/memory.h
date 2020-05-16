@@ -94,7 +94,7 @@ int positionOf(int nr)
 // function that calculates the answer for the current stage
 void stage(int nr)
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   if (nr == 1) {
@@ -173,7 +173,7 @@ void memoryReset() // function that resets the module
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  addStrike();
+  addStrike(); 
   if (nrStrikes < 3) {
     stageNumber = 0;
     changeStage();
@@ -183,7 +183,7 @@ void memoryReset() // function that resets the module
 
 int memoryPressedButton() // function that returns the pressed button
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   previousButton = button;
@@ -196,7 +196,7 @@ int memoryPressedButton() // function that returns the pressed button
 
 void memoryCheckButton() // function that checks if a button is pressed
 {
-  if (DEBUG_LEVEL >= 2) {
+  if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
   button = memoryPressedButton();
@@ -219,6 +219,7 @@ void memoryCheckButton() // function that checks if a button is pressed
         memorylc.clearDisplay(0);
         memoryModuleDefused = true;
         defusedModuleBuzzer();
+        isAnyModuleDefused=true;
         stageNumber++;
       } else
         changeStage(); // else go to the next stage

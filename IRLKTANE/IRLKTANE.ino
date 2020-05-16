@@ -18,9 +18,10 @@
     LEVEL 3 = SAME AS L3 WITH loop, setup, morseDisplay, displayTime, and mazeOne FUNCTIONS INCLUDED
     MORE LEVELS IN THE FUTURE?
 */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 2
 
-bool defused = false, exploded = false, victorySong = false; // is bomb defused or exploded default values false
+bool defused = false, exploded = false, victorySong = false, isAnyModuleDefused = false; // is bomb defused or exploded default values false
+
 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
@@ -30,9 +31,9 @@ knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
 morseModuleIncluded = false,
-passwordModuleIncluded = true,
+passwordModuleIncluded = true, // password has overlapping pins and can not be enabled with anything else currently
 simonModuleIncluded = false,
-ventingModuleIncluded = false,
+ventingModuleIncluded = true, // venting has overlapping pins and can not be enabled with anything else currently
 whoModuleIncluded = false;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
@@ -296,8 +297,11 @@ void loop()
       ))
   {
     if (victorySong==false) {
-    victoryBuzzer();
     defused = true;
+    dischargeBombDefused();
+    knobBombDefused();
+    ventingBombDefused();
+    victoryBuzzer();
     }
   }
 }
