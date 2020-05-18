@@ -3,11 +3,9 @@
   KNOWN ISSUES:
   Module lights are staying on after bomb is defused. Only lights that should stay on are module complete green leds
 */
-#include <LiquidCrystal.h>
 #include <LiquidCrystal_I2C.h>
 #include <LedControl.h>
 #include <SevenSegmentExtended.h>
-#include "LedControl.h"
 
 #define BOMB_TIMER_MINUTES 7 // total bomb starting time min
 #define BOMB_TIMER_SECONDS 0 // total bomb starting time sec
@@ -22,6 +20,14 @@
 
 bool defused = false, exploded = false, victorySong = false, isAnyModuleDefused = false; // is bomb defused or exploded default values false
 
+#define PIN_MAX7219_LATCH 10 // MAX7219CNG  pin 9 STCP
+#define PIN_MAX7219_CLOCK 12 // MAX7219CNG  pin 10 SHCP
+#define PIN_MAX7219_DATA 9 // MAX7219CNG  pin 8 DS
+
+#define DEBOUNCE_DELAY 50 // DELAY TO PREVENT DEBOUNCE ON SOME BUTTONS
+
+// initialize the max7219 daisy chain used across other modules // LAST NUMBER IS THE MAX NUMBER OF MAX7219's in the chain
+LedControl lc=LedControl(PIN_MAX7219_DATA,PIN_MAX7219_CLOCK,PIN_MAX7219_LATCH,2);
 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
@@ -31,9 +37,9 @@ knobModuleIncluded = false,
 mazeModuleIncluded = false,
 memoryModuleIncluded = false,
 morseModuleIncluded = false,
-passwordModuleIncluded = true, // password has overlapping pins and can not be enabled with anything else currently
+passwordModuleIncluded = false, // password has overlapping pins and can not be enabled with anything else currently
 simonModuleIncluded = false,
-ventingModuleIncluded = true, // venting has overlapping pins and can not be enabled with anything else currently
+ventingModuleIncluded = false, // venting has overlapping pins and can not be enabled with anything else currently
 whoModuleIncluded = false;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
@@ -48,7 +54,7 @@ simonModuleDefused = false,
 whoModuleDefused= false;
 
 bool explodedFromStrikes = false; // is bomb exploded from strikes default value false
-int nrStrikes = 0; // number of strikes default starting is 0 (could be changed in future to allow only 1 strike, etc)
+byte nrStrikes = 0; // number of strikes default starting is 0 (could be changed in future to allow only 1 strike, etc)
 
 char serialCode[10];
 
@@ -58,7 +64,7 @@ void generateSerialCode() // function that generates the serial number for the b
     Serial.println (__func__);
   }
   char alphanumeric[50] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-  for ( int i = 0; i < 7; i++)
+  for ( byte i = 0; i < 7; i++)
     serialCode[i] = alphanumeric[random(0, 35)];
   Serial.println (serialCode);
 }
@@ -103,6 +109,7 @@ unsigned long seedOut(unsigned int noOfBits)
 #include "morse.h" //higher in list so the max7219 chain will be loaded before other modules that need it
 #include "indicator.h"
 #include "batteries.h"
+#include "needydisplays.h"
 #include "button.h"
 #include "discharge.h"
 #include "knob.h"
@@ -128,7 +135,7 @@ void setup() // this section includes all setups for all modules to define INPUT
   generateSerialCode();
   lcdButton.clear();
   lcdButton.setCursor(0, 1);
-  lcdButton.print("Serial: ");
+  lcdButton.print(F("Serial: "));
   lcdButton.print(serialCode);
 
   lc.shutdown(1,false); // moved from morse.h so strikes can function without morse active

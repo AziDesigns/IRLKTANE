@@ -18,37 +18,37 @@
 
 unsigned long PWswitchMillis = 0;
 
-int passwordPos1UpState = 0; // current state of the 1st pos up button
-int passwordPos2UpState = 0; // current state of the 2nd pos up button
-int passwordPos3UpState = 0; // current state of the 3rd pos up button
-int passwordPos4UpState = 0; // current state of the 4th pos up button
-int passwordPos5UpState = 0; // current state of the 5th pos up button
+byte passwordPos1UpState = 0; // current state of the 1st pos up button
+byte passwordPos2UpState = 0; // current state of the 2nd pos up button
+byte passwordPos3UpState = 0; // current state of the 3rd pos up button
+byte passwordPos4UpState = 0; // current state of the 4th pos up button
+byte passwordPos5UpState = 0; // current state of the 5th pos up button
 
-int passwordPos1DownState = 0; // current state of the 1st pos Down button
-int passwordPos2DownState = 0; // current state of the 2nd pos Down button
-int passwordPos3DownState = 0; // current state of the 3rd pos Down button
-int passwordPos4DownState = 0; // current state of the 4th pos Down button
-int passwordPos5DownState = 0; // current state of the 5th pos Down button
+byte passwordPos1DownState = 0; // current state of the 1st pos Down button
+byte passwordPos2DownState = 0; // current state of the 2nd pos Down button
+byte passwordPos3DownState = 0; // current state of the 3rd pos Down button
+byte passwordPos4DownState = 0; // current state of the 4th pos Down button
+byte passwordPos5DownState = 0; // current state of the 5th pos Down button
 
-int passwordSubmitState = 0; // current state of the submit button
+byte passwordSubmitState = 0; // current state of the submit button
 
-int lastPasswordPos1UpState = 0; // previous state of the 1st pos up button
-int lastPasswordPos2UpState = 0; // previous state of the 2nd pos up button
-int lastPasswordPos3UpState = 0; // previous state of the 3rd pos up button
-int lastPasswordPos4UpState = 0; // previous state of the 4th pos up button
-int lastPasswordPos5UpState = 0; // previous state of the 5th pos up button
+byte lastPasswordPos1UpState = 0; // previous state of the 1st pos up button
+byte lastPasswordPos2UpState = 0; // previous state of the 2nd pos up button
+byte lastPasswordPos3UpState = 0; // previous state of the 3rd pos up button
+byte lastPasswordPos4UpState = 0; // previous state of the 4th pos up button
+byte lastPasswordPos5UpState = 0; // previous state of the 5th pos up button
 
-int lastPasswordPos1DownState = 0; // previous state of the 1st pos Down button
-int lastPasswordPos2DownState = 0; // previous state of the 2nd pos Down button
-int lastPasswordPos3DownState = 0; // previous state of the 3rd pos Down button
-int lastPasswordPos4DownState = 0; // previous state of the 4th pos Down button
-int lastPasswordPos5DownState = 0; // previous state of the 5th pos Down button
+byte lastPasswordPos1DownState = 0; // previous state of the 1st pos Down button
+byte lastPasswordPos2DownState = 0; // previous state of the 2nd pos Down button
+byte lastPasswordPos3DownState = 0; // previous state of the 3rd pos Down button
+byte lastPasswordPos4DownState = 0; // previous state of the 4th pos Down button
+byte lastPasswordPos5DownState = 0; // previous state of the 5th pos Down button
 
-int lastPasswordSubmitState = 0; // previous state of the submit button
+byte lastPasswordSubmitState = 0; // previous state of the submit button
 
 char displayVals[5] = {0,0,0,0,0};
 
-int randomArray[6]{0,0,0,0,0,0};
+byte randomArray[6]{0,0,0,0,0,0};
 
 char positionVals[5][6] = {
  {0,0,0,0,0,0},
@@ -58,7 +58,7 @@ char positionVals[5][6] = {
  {0,0,0,0,0,0}
 };
 
-int currentPositionPos[] = {0,0,0,0,0};
+byte currentPositionPos[] = {0,0,0,0,0};
 
 char validWords[35][5] = {
  {'a','b','o','u','t'},
@@ -104,7 +104,7 @@ char validWords[35][5] = {
  {'w','r','i','t','e'}
 };
 
-void setInitDisplayLetters(int p) 
+void setInitDisplayLetters(byte p) 
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
@@ -119,20 +119,20 @@ void updatePasswordDisplay()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for(int i = 0; i < 5; i++)
+  for(byte i = 0; i < 5; i++)
   {
     Serial.print(displayVals[i]);
   }
-  Serial.println("");
+  Serial.println(F(""));
 }
 
-void setDisplayLetters(int bp, bool pm)
+void setDisplayLetters(byte bp, bool pm)
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  int currentLetterPos = currentPositionPos[bp];
-  int nextLetterPos;
+  byte currentLetterPos = currentPositionPos[bp];
+  byte nextLetterPos;
   if (pm==true) {
     if (currentLetterPos==5) {
       nextLetterPos = 0;
@@ -160,7 +160,7 @@ void genCorrectLetters()
     Serial.println (__func__);
   }
   byte randomWord = random(0,35);
-  int positionPopulated = 0;
+  byte positionPopulated = 0;
   while (positionPopulated<5)
   {
     char letter = validWords[randomWord][positionPopulated];
@@ -169,20 +169,20 @@ void genCorrectLetters()
   }
 }
 
-void genRandLetters(int p)
+void genRandLetters(byte p)
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
   
-  for(int i = 1; i<6; i++){
+  for(byte i = 1; i<6; i++){
       byte value;
       boolean check = false;
   
       while(check == false){
           value = random(0, 26);
           check = true;
-          for(int j = 1; j<6; j++){
+          for(byte j = 1; j<6; j++){
             if(value == randomArray[j]){
               check = false;
             } 
@@ -208,7 +208,7 @@ void checkPWSubmission()
      (displayVals[2]==positionVals[2][0]) &&
      (displayVals[3]==positionVals[3][0]) &&
      (displayVals[4]==positionVals[4][0])) {
-    Serial.println("PWmoduledefused");
+    Serial.println(F("PWmoduledefused"));
     passwordModuleDefused = true;
     defusedModuleBuzzer();
     isAnyModuleDefused=true;
@@ -389,51 +389,51 @@ void passwordSetup()
   setInitDisplayLetters(4);
 
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Correct Letters");
-    for(int i = 0; i < 5; i++)
+    Serial.println(F("Correct Letters"));
+    for(byte i = 0; i < 5; i++)
     {
       Serial.print(positionVals[i][0]);
     }
-    Serial.println("");
+    Serial.println(F(""));
   }
   if (DEBUG_LEVEL >= 2) {
-    Serial.println("POS1 Letters");
-    for(int i = 0; i < 6; i++)
+    Serial.println(F("POS1 Letters"));
+    for(byte i = 0; i < 6; i++)
     {
       Serial.print(positionVals[0][i]);
     }
-    Serial.println("");
-    Serial.println("POS2 Letters");
-    for(int i = 0; i < 6; i++)
+    Serial.println(F(""));
+    Serial.println(F("POS2 Letters"));
+    for(byte i = 0; i < 6; i++)
     {
       Serial.print(positionVals[1][i]);
     }
-    Serial.println("");
-    Serial.println("POS3 Letters");
-    for(int i = 0; i < 6; i++)
+    Serial.println(F(""));
+    Serial.println(F("POS3 Letters"));
+    for(byte i = 0; i < 6; i++)
     {
       Serial.print(positionVals[2][i]);
     }
-    Serial.println("");
-    Serial.println("POS4 Letters");
-    for(int i = 0; i < 6; i++)
+    Serial.println(F(""));
+    Serial.println(F("POS4 Letters"));
+    for(byte i = 0; i < 6; i++)
     {
       Serial.print(positionVals[3][i]);
     }
-    Serial.println("");
-    Serial.println("POS5 Letters");
-    for(int i = 0; i < 6; i++)
+    Serial.println(F(""));
+    Serial.println(F("POS5 Letters"));
+    for(byte i = 0; i < 6; i++)
     {
       Serial.print(positionVals[4][i]);
     }
-    Serial.println("");
+    Serial.println(F(""));
   }
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Display Letters");
-    for(int i = 0; i < 5; i++)
+    Serial.println(F("Display Letters"));
+    for(byte i = 0; i < 5; i++)
     {
       Serial.print(displayVals[i]);
     }
-    Serial.println("");
+    Serial.println(F(""));
   }
 }

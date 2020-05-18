@@ -4,10 +4,7 @@
   STARTING AND FINISHING POINTS ARE FIXED CURRENTLY
     - IDEALLY THESE WOULD NOT BE FIXED AND WOULD BE RANDOM EVENTUALLY
   CURRENTLY PROGRAMED FOR RED ONLY LED MATRIX. WAITING ON HARDWARE TO WRITE/ UPDATE FOR RGB MATRIX
-/*
-  SETUP FOR A MAZE
 */
-
 #define PIN_MAZE_LED_FIN 44
 #define PIN_MAZE_UP A5
 #define PIN_MAZE_RIGHT A6
@@ -18,26 +15,25 @@
 #define PIN_MAZE_CLOCK 102
 #define MAZE_MAX_MODULE_COUNT 1
 #define MAZE_BLINK_DELAY 300
+#define MAZE_LEDS_BRIGHTNESS 8 // Intensity of the led, a number between 1-15
 
-int mazeButtonLeftState = 0; // current state of the left button
-int mazeButtonRightState = 0; // current state of the right button
-int mazeButtonUpState = 0; // current state of the up button
-int mazeButtonDownState = 0; // current state of the down button
-int lastMazeButtonLeftState = 0; // previous state of the left button
-int lastMazeButtonRightState = 0; // previous state of the right button
-int lastMazeButtonUpState = 0; // previous state of the up button
-int lastMazeButtonDownState = 0; // previous state of the down button
-
-const int MAZE_LEDS_BRIGHTNESS = 8; // Intensity of the led, a number between 1-15
+byte mazeButtonLeftState = 0; // current state of the left button
+byte mazeButtonRightState = 0; // current state of the right button
+byte mazeButtonUpState = 0; // current state of the up button
+byte mazeButtonDownState = 0; // current state of the down button
+byte lastMazeButtonLeftState = 0; // previous state of the left button
+byte lastMazeButtonRightState = 0; // previous state of the right button
+byte lastMazeButtonUpState = 0; // previous state of the up button
+byte lastMazeButtonDownState = 0; // previous state of the down button
 
 LedControl mazelc = LedControl(PIN_MAZE_DATA, PIN_MAZE_CLOCK, PIN_MAZE_LOAD, MAZE_MAX_MODULE_COUNT);
 
 // these are for movement & play
-const int MAZE_LEVELS_ROWS = 13; // number of rows of each level
-const int MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each level
+const byte MAZE_LEVELS_ROWS = 13; // number of rows of each level
+const byte MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each level
 // these are for matrix display only
-const int MAZE_DISPLAY_LEVELS_ROWS = 8; // number of rows of each level
-const int MAZE_DISPLAY_LEVELS_COLUMNS = MAZE_DISPLAY_LEVELS_ROWS; // number of columns of each level
+const byte MAZE_DISPLAY_LEVELS_ROWS = 8; // number of rows of each level
+const byte MAZE_DISPLAY_LEVELS_COLUMNS = MAZE_DISPLAY_LEVELS_ROWS; // number of columns of each level
 
 /**
    'c': green circle position
@@ -301,19 +297,19 @@ const char MAZE_DISPLAY_LEVELS[][MAZE_DISPLAY_LEVELS_ROWS][MAZE_DISPLAY_LEVELS_C
 /**
    GAME STATE
 */
-int mazeCurrentLevel; // Current level paying // FOR TESTING USE = 0;
-int mazeCurrentX; // Current player X position
-int mazeCurrentY; // Current player Y position
-int mazeStartX; // Current level start X position
-int mazeStartY; // Current level start Y position
-int mazeFinishX; // Current level finish X position
-int mazeFinishY; // Current level finish Y position
-int mazeDisplayCurrentX; // Current player X DISPLAY position
-int mazeDisplayCurrentY; // Current player Y DISPLAY position
-int mazeDisplayStartX; // Current DISPLAY level start X position
-int mazeDisplayStartY; // Current DISPLAY level start Y position
-int mazeDisplayFinishX; // Current level finish X position
-int mazeDisplayFinishY; // Current level finish Y position
+byte mazeCurrentLevel; // Current level paying // FOR TESTING USE = 0;
+byte mazeCurrentX; // Current player X position
+byte mazeCurrentY; // Current player Y position
+byte mazeStartX; // Current level start X position
+byte mazeStartY; // Current level start Y position
+byte mazeFinishX; // Current level finish X position
+byte mazeFinishY; // Current level finish Y position
+byte mazeDisplayCurrentX; // Current player X DISPLAY position
+byte mazeDisplayCurrentY; // Current player Y DISPLAY position
+byte mazeDisplayStartX; // Current DISPLAY level start X position
+byte mazeDisplayStartY; // Current DISPLAY level start Y position
+byte mazeDisplayFinishX; // Current level finish X position
+byte mazeDisplayFinishY; // Current level finish Y position
 enum mazeMove { Left, Right, Up, Down }; // Possible directions to move the player
 
 void mazePrintLevel() // DISPLAYS THE FRIENDLY VERSION NOT THE MOVEMENT/ PLAY VERSION
@@ -321,8 +317,8 @@ void mazePrintLevel() // DISPLAYS THE FRIENDLY VERSION NOT THE MOVEMENT/ PLAY VE
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (int x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
-    for (int y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
+  for (byte x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
+    for (byte y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
       if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'c') {
         mazelc.setLed(0, x, y, true);
       }
@@ -341,8 +337,8 @@ void mazeInitLevel()
   mazelc.clearDisplay(0);
 
   // sets startX, startY, finishX and finishY for MOVEMENT/ PLAY
-  for (int x = 0; x < MAZE_LEVELS_ROWS; x++) {
-    for (int y = 0; y < MAZE_LEVELS_COLUMNS; y++) {
+  for (byte x = 0; x < MAZE_LEVELS_ROWS; x++) {
+    for (byte y = 0; y < MAZE_LEVELS_COLUMNS; y++) {
       if (MAZE_LEVELS[mazeCurrentLevel][x][y] == 's') {
         mazeStartX = x;
         mazeStartY = y;
@@ -353,8 +349,8 @@ void mazeInitLevel()
     }
   }
   // sets startX, startY, finishX and finishY for DISPLAY
-  for (int x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
-    for (int y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
+  for (byte x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
+    for (byte y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
       if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 's') {
         mazeDisplayStartX = x;
         mazeDisplayStartY = y;
@@ -414,8 +410,8 @@ void mazeTryToMove(mazeMove movement)
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  int mazePossibleX = mazeCurrentX;
-  int mazePossibleY = mazeCurrentY;
+  byte mazePossibleX = mazeCurrentX;
+  byte mazePossibleY = mazeCurrentY;
 
   if (movement == Left) {
     mazeHidePlayer();
@@ -471,7 +467,7 @@ void mazeSetup()
   }
   mazeCurrentLevel = random(9);
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Maze Level Number 0-8: ");
+    Serial.println(F("Maze Level Number 0-8: "));
     Serial.println (mazeCurrentLevel);
   }
   //Setup Led
@@ -507,12 +503,12 @@ void mazeLoop()
     if (mazeButtonLeftState != lastMazeButtonLeftState) {
       if (mazeButtonLeftState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeLeftOn");
+          Serial.println(F("mazeLeftOn"));
         }
         mazeTryToMove(Left);
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeLeftOff");
+          Serial.println(F("mazeLeftOff"));
         }
       }
     }
@@ -523,12 +519,12 @@ void mazeLoop()
     if (mazeButtonRightState != lastMazeButtonRightState) {
       if (mazeButtonRightState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeRightOn");
+          Serial.println(F("mazeRightOn"));
         }
         mazeTryToMove(Right);
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeRightOff");
+          Serial.println(F("mazeRightOff"));
         }
       }
     }
@@ -539,12 +535,12 @@ void mazeLoop()
     if (mazeButtonUpState != lastMazeButtonUpState) {
       if (mazeButtonUpState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeUpOn");
+          Serial.println(F("mazeUpOn"));
         }
         mazeTryToMove(Up);
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeUpOff");
+          Serial.println(F("mazeUpOff"));
         }
       }
     }
@@ -555,12 +551,12 @@ void mazeLoop()
     if (mazeButtonDownState != lastMazeButtonDownState) {
       if (mazeButtonDownState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeDownOn");
+          Serial.println(F("mazeDownOn"));
         }
         mazeTryToMove(Down);
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("mazeDownOff");
+          Serial.println(F("mazeDownOff"));
         }
       }
     }

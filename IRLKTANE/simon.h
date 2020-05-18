@@ -2,7 +2,6 @@
 /*
   KNOWN ISSUES:
 */
-
 #define PIN_SIMON_LED_RED 45
 #define PIN_SIMON_LED_GREEN 48
 #define PIN_SIMON_LED_YELLOW 47
@@ -17,7 +16,6 @@ unsigned long lastDebounceTimeRed = 0;
 unsigned long lastDebounceTimeGreen = 0;
 unsigned long lastDebounceTimeYellow = 0;
 unsigned long lastDebounceTimeBlue = 0;
-unsigned long debounceDelay = 50;
 
 unsigned long currentMillisRed = 0;
 unsigned long currentMillisGreen = 0;
@@ -29,29 +27,30 @@ int simonGreenLedState = 0;
 int simonYellowLedState = 0;
 int simonBlueLedState = 0;
 
-int simonLedPins[4] = {PIN_SIMON_LED_RED, PIN_SIMON_LED_GREEN, PIN_SIMON_LED_YELLOW, PIN_SIMON_LED_BLUE};
+byte simonLedPins[4] = {PIN_SIMON_LED_RED, PIN_SIMON_LED_GREEN, PIN_SIMON_LED_YELLOW, PIN_SIMON_LED_BLUE};
 int simonLedStates[4] = {0, 0, 0, 0};
 
-int ledsNumber = 1;
+byte ledsNumber = 1;
 int simonBlinkingTime = 500;
 unsigned long simonPreviousMillis = 0;
-int ledSequence[4];
+byte ledSequence[4];
 
 // array that contains the answers when the serial number contains a vowel
-int answersWithVowel[3][4] = {{4, 3, 2, 1},
+byte answersWithVowel[3][4] = {{4, 3, 2, 1},
   {3, 4, 1, 2},
   {2, 3, 4, 1}
 };
 
 // array that contains the answers when the serial number doesn't contain a vowel
-int answersWithoutVowel[3][4] = {{4, 2, 1, 3},
+byte answersWithoutVowel[3][4] = {{4, 2, 1, 3},
   {1, 3, 2, 4},
   {3, 4, 1, 2}
 };
 
-int currentLed = 0, animationDelay = 5000;
+byte currentLed = 0;
+int animationDelay = 5000;
 unsigned long animationMillis = 0, beforeAnimationMillis;
-int buttonsPressed = 0;
+byte buttonsPressed = 0;
 
 int beforeAnimationDelay = 1000;
 
@@ -87,7 +86,7 @@ void simonModuleDefusedPrint()
 // function that checks if there's a vowel in the serial code and returns an answer accordingly
 bool checkForVowel()
 {
-  for (int i = 0; i < 7; i++)
+  for (byte i = 0; i < 7; i++)
     if (serialCode[i] == 'A' || serialCode[i] == 'E' || serialCode[i] == 'I' || serialCode[i] == 'O' || serialCode[i] == 'U')
       return 1;
   return 0;
@@ -95,19 +94,19 @@ bool checkForVowel()
 
 // function that checks if the pressed button is the correct one in the answer sequence and
 // turns on the specific led
-void pressButton(int ledNr, int btnPin, int led, unsigned long &debounceTime, unsigned long &currentMillis, int &simonLedState)
+void pressButton(byte ledNr, byte btnPin, byte led, unsigned long &debounceTime, unsigned long &currentMillis, int &simonLedState)
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  int reading = digitalRead(btnPin);
+  byte reading = digitalRead(btnPin);
 
   if (reading == HIGH) {
     debounceTime = millis();
     simonLedState = 1;
   }
 
-  if (millis() - debounceTime > debounceDelay) {
+  if (millis() - debounceTime > DEBOUNCE_DELAY) {
     if (simonLedState == 1) {
       currentLed = ledsNumber;
       digitalWrite(PIN_SIMON_LED_RED, LOW);
@@ -175,15 +174,15 @@ void generateLedSequence()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  for (int i = 0; i < 4; i++)
+  for (byte i = 0; i < 4; i++)
   {
-    int x = random(1, 5);
+    byte x = random(1, 5);
     ledSequence[i] = x;
   }
 }
 
 // function that makes a led blink when a button is pressed
-void blinkLed(int led, int &simonLedState)
+void blinkLed(byte led, int &simonLedState)
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);

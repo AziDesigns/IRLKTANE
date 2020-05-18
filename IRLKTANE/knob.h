@@ -10,7 +10,6 @@
       #define KNOB_POSITION_4 1200
   PINS FOR LED'S WILL CONFLICT ONCE MERGED WITH MAIN BRANCH. USING 2ND MEGA2560 FOR TESTING THIS MODULE
 */
-
 #define KNOB_DEFAULT_TIME 40 // default time per rotation
 #define PIN_KNOB_ROTARY_SWITCH A0 // rotary switch analog input pin
 #define PIN_KNOB_LED_1  70
@@ -31,12 +30,12 @@
 #define KNOB_POSITION_4 1200
 
 unsigned long knobSeconds = 0;
-int knobSec = KNOB_DEFAULT_TIME + 1;
+byte knobSec = KNOB_DEFAULT_TIME + 1;
 
-int knobLEDArray = 0;
+byte knobLEDArray = 0;
 int knobPositionValue = 0;
-int knobCurrentState = 0;
-int knobCorrectState = 0;
+byte knobCurrentState = 0;
+byte knobCorrectState = 0;
 
 void knobSetup() 
 {
@@ -58,170 +57,27 @@ void knobSetup()
   knobLEDArray = random(8);
 };
 
-void knobDigitDisplay() 
-{
-  if (knobSec==45) {
-    lc.setDigit(1,5,5,true); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==44) {
-    lc.setDigit(1,5,4,true); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==43) {
-    lc.setDigit(1,5,3,true); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==42) {
-    lc.setDigit(1,5,2,true); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==41) {
-    lc.setDigit(1,5,1,false); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==40) {
-    lc.setDigit(1,5,0,false); 
-    lc.setDigit(1,4,4,true); 
-  } else if (knobSec==39) {
-    lc.setDigit(1,5,9,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==38) {
-    lc.setDigit(1,5,8,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==37) {
-    lc.setDigit(1,5,7,false); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==36) {
-    lc.setDigit(1,5,6,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==35) {
-    lc.setDigit(1,5,5,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==34) {
-    lc.setDigit(1,5,4,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==33) {
-    lc.setDigit(1,5,3,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==32) {
-    lc.setDigit(1,5,2,true); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==31) {
-    lc.setDigit(1,5,1,false); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==30) {
-    lc.setDigit(1,5,0,false); 
-    lc.setDigit(1,4,3,true); 
-  } else if (knobSec==29) {
-    lc.setDigit(1,5,9,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==28) {
-    lc.setDigit(1,5,8,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==27) {
-    lc.setDigit(1,5,7,false); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==26) {
-    lc.setDigit(1,5,6,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==25) {
-    lc.setDigit(1,5,5,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==24) {
-    lc.setDigit(1,5,4,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==23) {
-    lc.setDigit(1,5,3,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==22) {
-    lc.setDigit(1,5,2,true); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==21) {
-    lc.setDigit(1,5,1,false); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==20) {
-    lc.setDigit(1,5,0,false); 
-    lc.setDigit(1,4,2,true); 
-  } else if (knobSec==19) {
-    lc.setDigit(1,5,9,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==18) {
-    lc.setDigit(1,5,8,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==17) {
-    lc.setDigit(1,5,7,false); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==16) {
-    lc.setDigit(1,5,6,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==15) {
-    lc.setDigit(1,5,5,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==14) {
-    lc.setDigit(1,5,4,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==13) {
-    lc.setDigit(1,5,3,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==12) {
-    lc.setDigit(1,5,2,true); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==11) {
-    lc.setDigit(1,5,1,false); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==10) {
-    lc.setDigit(1,5,0,false); 
-    lc.setDigit(1,4,1,false); 
-  } else if (knobSec==9) {
-    lc.setDigit(1,5,9,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==8) {
-    lc.setDigit(1,5,8,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==7) {
-    lc.setDigit(1,5,7,false); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==6) {
-    lc.setDigit(1,5,6,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==5) {
-    lc.setDigit(1,5,5,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==4) {
-    lc.setDigit(1,5,4,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==3) {
-    lc.setDigit(1,5,3,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==2) {
-    lc.setDigit(1,5,2,true); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==1) {
-    lc.setDigit(1,5,1,false); 
-    lc.setDigit(1,4,0,false); 
-  } else if (knobSec==0) {
-    lc.setDigit(1,5,0,false);
-    lc.setDigit(1,4,0,false);
-  }
-}
-
 void knobCheckKnobPosition() // function that checks if the knob is in the correct position when it hits -1
 {
   //knobPositionValue = analogRead(PIN_KNOB_ROTARY_SWITCH); // uncomment once the knob is wired up. Right now its not wired at all.
   if (knobPositionValue<=KNOB_POSITION_1){
     if (DEBUG_LEVEL >= 1) {
-      Serial.println("Position 1");
+      Serial.println(F("Position 1"));
     }
     knobCurrentState = 0;
   } else if (knobPositionValue<=KNOB_POSITION_2) {
     if (DEBUG_LEVEL >= 1) {
-      Serial.println("Position 2");
+      Serial.println(F("Position 2"));
     }
     knobCurrentState = 1;
   } else if (knobPositionValue<=KNOB_POSITION_3) {
     if (DEBUG_LEVEL >= 1) {
-      Serial.println("Position 3");
+      Serial.println(F("Position 3"));
     }
     knobCurrentState = 2;
   } else if (knobPositionValue<=KNOB_POSITION_4) {
     if (DEBUG_LEVEL >= 1) {
-      Serial.println("Position 4");
+      Serial.println(F("Position 4"));
     }
     knobCurrentState = 3;
   }
@@ -259,7 +115,7 @@ void knobDisplayTime() // function that displays the time on the clock
         digitalWrite (PIN_KNOB_LED_12, LOW);
       }
     }
-    knobDigitDisplay();
+    needyDigitDisplay(1, 4, 5, knobSec);
   }
 }
 

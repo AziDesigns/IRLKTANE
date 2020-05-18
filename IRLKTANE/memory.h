@@ -24,11 +24,11 @@
 
 LedControl memorylc = LedControl(PIN_MEMORY_DATA, PIN_MEMORY_CLOCK, PIN_MEMORY_LATCH, 2); //DIN, CLK, LOAD, No. DRIVER
 
-int previousButton, button; //the previos and the current button
-int rightPoz; //the answer to the current stage
-int val[6], pos[6]; // the right values and positions of every stage
-int stageNumber = 1;
-int digits[5]; // the values of the current stage
+byte previousButton, button; //the previos and the current button
+byte rightPoz; //the answer to the current stage
+byte val[6], pos[6]; // the right values and positions of every stage
+byte stageNumber = 1;
+byte digits[5]; // the values of the current stage
 
 bool printAnswer = true;
 
@@ -45,7 +45,7 @@ void turnOffLeds()
 }
 
 // function that generate a random digit from 1 to 4
-int randomNumber()
+byte randomNumber()
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
@@ -85,14 +85,14 @@ void displayNumbers()
 }
 
 // function that returns the postion of a digit
-int positionOf(int nr)
+byte positionOf(byte nr)
 {
-  for (int i = 1; i < 5; i++)
+  for (byte i = 1; i < 5; i++)
     if (digits[i] == nr) return i;
 }
 
 // function that calculates the answer for the current stage
-void stage(int nr)
+void stage(byte nr)
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
@@ -181,7 +181,7 @@ void memoryReset() // function that resets the module
   }
 }
 
-int memoryPressedButton() // function that returns the pressed button
+byte memoryPressedButton() // function that returns the pressed button
 {
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
@@ -203,9 +203,9 @@ void memoryCheckButton() // function that checks if a button is pressed
   stage(stageNumber);
   if (printAnswer) { // print the answer to the current stage 
     if (DEBUG_LEVEL >= 1) {
-      Serial.print("Memory Stage ");
+      Serial.print(F("Memory Stage "));
       Serial.print(stageNumber);
-      Serial.print(" : ");
+      Serial.print(F(" : "));
       Serial.println(rightPoz);
     }
     printAnswer = false;

@@ -1,8 +1,8 @@
 #include "pitches.h"
+#define buzzer 2
 
 // change this to make the song slower or faster
-int tempo = 108;
-int buzzer = 2;
+byte tempo = 108;
 
 void buzzerSetup()
 {
@@ -43,8 +43,8 @@ int boomMelody[] = {
 
 // sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
 // there are two values per note (pitch and duration), so for each note there are four bytes
-int victoryNotes = sizeof(victoryMelody) / sizeof(victoryMelody[0]) / 2;
-int boomNotes = sizeof(boomMelody) / sizeof(boomMelody[0]) / 2;
+byte victoryNotes = sizeof(victoryMelody) / sizeof(victoryMelody[0]) / 2;
+byte boomNotes = sizeof(boomMelody) / sizeof(boomMelody[0]) / 2;
 
 // this calculates the duration of a whole note in ms
 int wholenote = (60000 * 4) / tempo;
@@ -58,7 +58,7 @@ void victoryBuzzer()
   }
   // iterate over the notes of the melody. 
   // Remember, the array is twice the number of notes (notes + durations)
-  for (int thisNote = 0; thisNote < victoryNotes * 2; thisNote = thisNote + 2) {
+  for (byte thisNote = 0; thisNote < victoryNotes * 2; thisNote = thisNote + 2) {
 
     // calculates the duration of each note
     divider = victoryMelody[thisNote + 1];
@@ -90,7 +90,7 @@ void boomBuzzer()
   }
   // iterate over the notes of the melody. 
   // Remember, the array is twice the number of notes (notes + durations)
-  for (int thisNote = 0; thisNote < boomNotes * 2; thisNote = thisNote + 2) {
+  for (byte thisNote = 0; thisNote < boomNotes * 2; thisNote = thisNote + 2) {
 
     // calculates the duration of each note
     divider = boomMelody[thisNote + 1];
@@ -122,34 +122,27 @@ void boomBuzzer()
 //  melody[] is an array of notes, accompanied by beats[],
 //  which sets each note's relative length (higher #, longer note)
 int countdownMelody[] = {  NOTE_CS7,  NOTE_AS6 };
-int countdownBeats[]  = { 8, 4 };
-int countdownMAX_COUNT = sizeof(countdownMelody) / 2; // Melody length, for looping.
+byte countdownBeats[]  = { 8, 4 };
+byte countdownMAX_COUNT = sizeof(countdownMelody) / 2; // Melody length, for looping.
 
 int defusedModuleMelody[] = {  NOTE_C5, NOTE_C6 };
-int defusedModuleBeats[]  = { 8, 16 };
-int defusedModuleMAX_COUNT = sizeof(defusedModuleMelody) / 2; // Melody length, for looping.
+byte defusedModuleBeats[]  = { 8, 16 };
+byte defusedModuleMAX_COUNT = sizeof(defusedModuleMelody) / 2; // Melody length, for looping.
 
 int strikeMelody[] = {  NOTE_B3, NOTE_C4, NOTE_B3 };
-int strikeBeats[]  = { 4, 2, 4 };
-int strikeMAX_COUNT = sizeof(strikeMelody) / 2; // Melody length, for looping.
-
-int maxCountdownPlays = 1;
-int maxDefusedModulePlays = 1;
-int maxStrikePlays = 1;
-int runCountdownXTimes = 0;
-int runDefusedModuleXTimes = 0;
-int runStrikeXTimes = 0;
+byte strikeBeats[]  = { 4, 2, 4 };
+byte strikeMAX_COUNT = sizeof(strikeMelody) / 2; // Melody length, for looping.
 
 // Set overall tempo
-long noDelayTempo = 10000;
+const int noDelayTempo = 10000;
 // Set length of pause between notes
-int pause = 1000;
+const int pause = 1000;
 // Loop variable to increase Rest length
-int rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
+byte rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
 
 // Initialize core variables
 int tone_ = 0;
-int beat = 0;
+byte beat = 0;
 long duration  = 0;
 
 void playTone() {
@@ -185,7 +178,7 @@ void countdownBuzzer()
     Serial.println (__func__);
   }
   // Set up a counter to pull from melody[] and beats[]
-  for (int i=0; i<countdownMAX_COUNT; i++) {
+  for (byte i=0; i<countdownMAX_COUNT; i++) {
     tone_ = (1000000/countdownMelody[i]);
     beat = countdownBeats[i];
     duration = beat * noDelayTempo; // Set up timing
@@ -201,7 +194,7 @@ void defusedModuleBuzzer()
     Serial.println (__func__);
   }
   // Set up a counter to pull from melody[] and beats[]
-  for (int i=0; i<defusedModuleMAX_COUNT; i++) {
+  for (byte i=0; i<defusedModuleMAX_COUNT; i++) {
     tone_ = (1000000/defusedModuleMelody[i]);
     beat = defusedModuleBeats[i];
     duration = beat * noDelayTempo; // Set up timing
@@ -218,7 +211,7 @@ void strikeBuzzer()
   }
   if (exploded==false) {
   // Set up a counter to pull from melody[] and beats[]
-    for (int i=0; i<strikeMAX_COUNT; i++) {
+    for (byte i=0; i<strikeMAX_COUNT; i++) {
       tone_ = (1000000/strikeMelody[i]);
       beat = strikeBeats[i];
       duration = beat * noDelayTempo; // Set up timing

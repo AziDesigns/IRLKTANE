@@ -3,16 +3,16 @@
   KNOWN ISSUES:
   MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
 */
-#define PIN_VENTING_BUTTON_1 6 // YES BUTTON // PINOVERLAP
-#define PIN_VENTING_BUTTON_2 7 // NO BUTTON // PINOVERLAP
+#define PIN_VENTING_BUTTON_1 24 // YES BUTTON // PINOVERLAP
+#define PIN_VENTING_BUTTON_2 25 // NO BUTTON // PINOVERLAP
 #define PIN_VENTING_LED_GREEN 101 // MODULE COMPLETE GREEN LED
 
 #define VENTING_DEFAULT_TIME 40 // STARTING TIME WHEN MODULE RESETS
 
 unsigned long ventSeconds;
-int ventSec;
+byte ventSec;
 
-unsigned long startVentMillisMax = 60000;
+unsigned long startVentMillisMax = 0;//60000; //MAX TIME IN MS BEFORE MODULE STARTS IF NO MODULE IS DEFUSED
 unsigned long startVentMillis = 0; //TIME UNTIL NEXT VENT NEEDED
 unsigned long ventCurrentMillis = 0; //TIME UNTIL NEXT VENT NEEDED
 unsigned long ventSwitchMillis = 0; // DEBOUNCE PREVENTION
@@ -20,174 +20,28 @@ unsigned long ventSwitchMillis = 0; // DEBOUNCE PREVENTION
 unsigned long ventingPreventsExplosionsTime; // if user presses no on vent gas track time since press
 bool ventingPreventsExplosionsTF = false;
 
-int ventYesState = 0; // current state of the yes button
-int ventNoState = 0; // current state of the no button
-int lastVentYesState = 0; // previous state of the yes button
-int lastVentNoState = 0; // previous state of the no button
+byte ventYesState = 0; // current state of the yes button
+byte ventNoState = 0; // current state of the no button
+byte lastVentYesState = 0; // previous state of the yes button
+byte lastVentNoState = 0; // previous state of the no button
 
-int questionSelect; // 0=vent gas ?, 1=detonate ?
+byte questionSelect; // 0=vent gas ?, 1=detonate ?
 
 bool ventStartedYN = false;
 bool isTimePassed = false;
 
 LiquidCrystal_I2C lcdVent(0x26, 16, 2);
 
-void ventDigitDisplay() 
-{
-  if (ventSec==45) {
-    lc.setDigit(1,7,5,true); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==44) {
-    lc.setDigit(1,7,4,true); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==43) {
-    lc.setDigit(1,7,3,true); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==42) {
-    lc.setDigit(1,7,2,true); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==41) {
-    lc.setDigit(1,7,1,false); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==40) {
-    lc.setDigit(1,7,0,false); 
-    lc.setDigit(1,6,4,true); 
-  } else if (ventSec==39) {
-    lc.setDigit(1,7,9,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==38) {
-    lc.setDigit(1,7,8,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==37) {
-    lc.setDigit(1,7,7,false); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==36) {
-    lc.setDigit(1,7,6,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==35) {
-    lc.setDigit(1,7,5,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==34) {
-    lc.setDigit(1,7,4,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==33) {
-    lc.setDigit(1,7,3,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==32) {
-    lc.setDigit(1,7,2,true); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==31) {
-    lc.setDigit(1,7,1,false); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==30) {
-    lc.setDigit(1,7,0,false); 
-    lc.setDigit(1,6,3,true); 
-  } else if (ventSec==29) {
-    lc.setDigit(1,7,9,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==28) {
-    lc.setDigit(1,7,8,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==27) {
-    lc.setDigit(1,7,7,false); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==26) {
-    lc.setDigit(1,7,6,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==25) {
-    lc.setDigit(1,7,5,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==24) {
-    lc.setDigit(1,7,4,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==23) {
-    lc.setDigit(1,7,3,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==22) {
-    lc.setDigit(1,7,2,true); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==21) {
-    lc.setDigit(1,7,1,false); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==20) {
-    lc.setDigit(1,7,0,false); 
-    lc.setDigit(1,6,2,true); 
-  } else if (ventSec==19) {
-    lc.setDigit(1,7,9,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==18) {
-    lc.setDigit(1,7,8,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==17) {
-    lc.setDigit(1,7,7,false); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==16) {
-    lc.setDigit(1,7,6,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==15) {
-    lc.setDigit(1,7,5,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==14) {
-    lc.setDigit(1,7,4,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==13) {
-    lc.setDigit(1,7,3,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==12) {
-    lc.setDigit(1,7,2,true); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==11) {
-    lc.setDigit(1,7,1,false); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==10) {
-    lc.setDigit(1,7,0,false); 
-    lc.setDigit(1,6,1,false); 
-  } else if (ventSec==9) {
-    lc.setDigit(1,7,9,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==8) {
-    lc.setDigit(1,7,8,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==7) {
-    lc.setDigit(1,7,7,false); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==6) {
-    lc.setDigit(1,7,6,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==5) {
-    lc.setDigit(1,7,5,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==4) {
-    lc.setDigit(1,7,4,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==3) {
-    lc.setDigit(1,7,3,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==2) {
-    lc.setDigit(1,7,2,true); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==1) {
-    lc.setDigit(1,7,1,false); 
-    lc.setDigit(1,6,0,false); 
-  } else if (ventSec==0) {
-    lc.setDigit(1,7,0,false);
-    lc.setDigit(1,6,0,false);
-  } else {
-    lc.setDigit(1,7,' ',false);
-    lc.setDigit(1,6,' ',false); 
-    }
-}
-
 void ventingPrintQuestion()
 {
   if (questionSelect>0) {
     lcdVent.clear();
-    lcdVent.setCursor(3, 0); lcdVent.print("VENT GAS?");
-    lcdVent.setCursor(6, 1); lcdVent.print("Y/N");
+    lcdVent.setCursor(3, 0); lcdVent.print(F("VENT GAS?"));
+    lcdVent.setCursor(6, 1); lcdVent.print(F("Y/N"));
   } else if (questionSelect==0) {
     lcdVent.clear();
-    lcdVent.setCursor(3, 0); lcdVent.print("DETONATE?");
-    lcdVent.setCursor(6, 1); lcdVent.print("Y/N");
+    lcdVent.setCursor(3, 0); lcdVent.print(F("DETONATE?"));
+    lcdVent.setCursor(6, 1); lcdVent.print(F("Y/N"));
   }
 }
 
@@ -201,16 +55,16 @@ void checkVentSubmission(byte yn)
       isTimePassed = false;
       isAnyModuleDefused = false;
       ventStartedYN = false;
-      lcdVent.setCursor(0, 0); lcdVent.print("VENTING COMPLETE");
-      lcdVent.setCursor(0, 1); lcdVent.print("================");
+      lcdVent.setCursor(0, 0); lcdVent.print(F("VENTING COMPLETE"));
+      lcdVent.setCursor(0, 1); lcdVent.print(F("================"));
       lc.setDigit(1,7,' ',false);
       lc.setDigit(1,6,' ',false); 
     } else if (yn==0) {
       // should keep counting down and show new text:
       // and then after a few seconds it will go back to displaying the original question "VENT GAS? Y/N" until time runs out
       lcdVent.clear();
-      lcdVent.setCursor(0, 0); lcdVent.print("VENTING PREVENTS");
-      lcdVent.setCursor(3, 1); lcdVent.print("EXPLOSIONS");
+      lcdVent.setCursor(0, 0); lcdVent.print(F("VENTING PREVENTS"));
+      lcdVent.setCursor(0, 1); lcdVent.print(F("ABCDEFGHIJKLMNOP"));
       ventingPreventsExplosionsTime = millis();
       ventingPreventsExplosionsTF = true;
     }
@@ -252,7 +106,7 @@ void checkVentSwitches()
   if (ventYesState != lastVentYesState) {
     if (ventYesState == HIGH) {
       if (DEBUG_LEVEL >= 2) {
-      Serial.println("VentButtonYESpressed");
+      Serial.println(F("VentButtonYESpressed"));
       }
       checkVentSubmission(1);
     }
@@ -264,7 +118,7 @@ void checkVentSwitches()
   if (ventNoState != lastVentNoState) {
     if (ventNoState == HIGH) {
       if (DEBUG_LEVEL >= 2) {
-      Serial.println("VentButtonNOpressed");
+      Serial.println(F("VentButtonNOpressed"));
       }
       checkVentSubmission(0);
     }
@@ -293,7 +147,7 @@ void ventingLoop()
   if (isAnyModuleDefused==true || isTimePassed==true) {
     if (ventStartedYN==false) {
       if (DEBUG_LEVEL >= 2) {
-      Serial.println("VentWasNotStarted-StartingNow");
+      Serial.println(F("VentWasNotStarted-StartingNow"));
       }
       ventSec = VENTING_DEFAULT_TIME + 1;
       ventSeconds = millis();
@@ -302,8 +156,8 @@ void ventingLoop()
       lcdVent.clear();
       questionSelect = random(0,10); 
       if (DEBUG_LEVEL >= 2) {
-      Serial.println("VentingOrDetonate");
-      Serial.println("?? > 0 Or = 0 ??");
+      Serial.println(F("VentingOrDetonate"));
+      Serial.println(F("?? > 0 Or = 0 ??"));
       Serial.println(questionSelect);
       }
       ventingPrintQuestion();
@@ -318,7 +172,7 @@ void ventingLoop()
           ventSeconds += 1000;
           ventSec--;
           Serial.println(ventSec);
-          ventDigitDisplay();
+          needyDigitDisplay(1, 6, 7, ventSec);
           if (ventSec == -1) {
             addStrike();
             startVentMillisMax = (random(5,30)*1000);
@@ -340,8 +194,8 @@ void ventingBombDefused()
     Serial.println (__func__);
   }
   lcdVent.clear();
-  lcdVent.setCursor(2, 0); lcdVent.print("BOMB DEFUSED");
-  lcdVent.setCursor(0, 1); lcdVent.print("================");
+  lcdVent.setCursor(2, 0); lcdVent.print(F("BOMB DEFUSED"));
+  lcdVent.setCursor(0, 1); lcdVent.print(F("================"));
   // when the bomb explodes the venting module should clear the timer and the display
   //clear the COUNTDOWN timer
 }
@@ -352,8 +206,8 @@ void ventingModuleBoom()
     Serial.println (__func__);
   }
   lcdVent.clear();
-  lcdVent.setCursor(6, 0); lcdVent.print("BOMB");
-  lcdVent.setCursor(4, 1); lcdVent.print("EXPLODED");
+  lcdVent.setCursor(6, 0); lcdVent.print(F("BOMB"));
+  lcdVent.setCursor(4, 1); lcdVent.print(F("EXPLODED"));
   // when the bomb explodes the venting module should clear the timer and the display
   //clear the COUNTDOWN timer
 }

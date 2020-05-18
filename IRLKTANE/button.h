@@ -2,7 +2,6 @@
 /*
   KNOWN ISSUES:
 */
-
 #define PIN_BUTTON_LED_FIN 22 // module complete LED
 #define PIN_BUTTON_BTN 23
 #define PIN_BUTTON_LEFT_LED_RED 13
@@ -12,20 +11,19 @@
 #define PIN_BUTTON_RIGHT_LED_GREEN 5
 #define PIN_BUTTON_RIGHT_LED_BLUE 4
 
-LiquidCrystal lcdButton(39, 38, 40, 41, 42, 43);
+LiquidCrystal_I2C lcdButton(0x25, 16, 2);
 
-int buttonBtnState = LOW;
-int lastBtnState = LOW;
+byte buttonBtnState = LOW;
+byte lastBtnState = LOW;
 unsigned long lastDebounceTime = 0;
-unsigned long debounceDelayButton = 50;
-int lengthOfPress = 0;
-int leftLedColor;
-int rightLedColor;
-int btnWordGen;
+byte lengthOfPress = 0;
+byte leftLedColor;
+byte rightLedColor;
+byte btnWordGen;
 bool buttonColorSet = false;
 bool buttonStripColorSet = false;
 
-void setColor (int redPin, int redValue, int greenPin, int greenValue, int bluePin, int blueValue)
+void setColor (byte redPin, byte redValue, byte greenPin, byte greenValue, byte bluePin, byte blueValue)
 {
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
@@ -48,9 +46,9 @@ void buttonModuleDefusedPrint()
   digitalWrite(PIN_BUTTON_LED_FIN, HIGH);
   lcdButton.clear();
   lcdButton.setCursor(1, 0);
-  lcdButton.print("MODULE DEFUSED");
+  lcdButton.print(F("MODULE DEFUSED"));
   lcdButton.setCursor(0, 1);
-  lcdButton.print("Serial: ");
+  lcdButton.print(F("Serial: "));
   lcdButton.print(serialCode);
 }
 
@@ -63,15 +61,15 @@ void buttonModuleBoom()
   setColor(PIN_BUTTON_RIGHT_LED_RED, 0, PIN_BUTTON_RIGHT_LED_GREEN, 0, PIN_BUTTON_RIGHT_LED_BLUE, 0);
   lcdButton.clear();
   lcdButton.setCursor(6, 0);
-  lcdButton.print("BOMB");
+  lcdButton.print(F("BOMB"));
   lcdButton.setCursor(4, 1);
-  lcdButton.print("EXPLODED");
+  lcdButton.print(F("EXPLODED"));
   digitalWrite(PIN_BUTTON_LED_FIN, LOW);
 }
 
-bool checkClock(int value)
+bool checkClock(byte value)
 {
-  int timer = sec;
+  byte timer = sec;
   while (timer > 0)
   {
     if (timer % 10 == value)
@@ -100,19 +98,19 @@ void printWord()
     case 1:
       { //HOLD
         lcdButton.setCursor(5, 0);
-        lcdButton.print("HOLD");
+        lcdButton.print(F("HOLD"));
       }
       break;
     case 2:
       { //DETONATE
         lcdButton.setCursor(4, 0);
-        lcdButton.print("DETONATE");
+        lcdButton.print(F("DETONATE"));
       }
       break;
     case 3:
       { //ABORT
         lcdButton.setCursor(5, 0);
-        lcdButton.print("ABORT");
+        lcdButton.print(F("ABORT"));
       }
       break;
   }
@@ -138,11 +136,11 @@ void buttonSetup()
   btnWordGen = random(1, 4);
 
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Left led color: ");
+    Serial.println(F("Left led color: "));
     Serial.println(leftLedColor);
-    Serial.println("Right led color: ");
+    Serial.println(F("Right led color: "));
     Serial.println(rightLedColor);
-    Serial.println("Word: ");
+    Serial.println(F("Word: "));
     Serial.println(btnWordGen);
   }
 }
@@ -273,7 +271,7 @@ void buttonLoop()
 
     printWord();
     lcdButton.setCursor(0, 1);
-    lcdButton.print("Serial: ");
+    lcdButton.print(F("Serial: "));
     lcdButton.print(serialCode);
 
     switch (leftLedColor) // left color is the button color
@@ -306,15 +304,15 @@ void buttonLoop()
       if (buttonBtnState == HIGH) {
         // if the current state is HIGH then the button went from off to on:
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("buttonBtnOn");
+          Serial.println(F("buttonBtnOn"));
         }
         lastDebounceTime = millis();
       } else {
         // if the current state is LOW then the button went from on to off:
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("buttonBtnOff");
+          Serial.println(F("buttonBtnOff"));
         }
-        if (millis()-lastDebounceTime<debounceDelayButton) {
+        if (millis()-lastDebounceTime<DEBOUNCE_DELAY) {
         lengthOfPress=1; // 1=short, 2=long
         buttonCheckResult();
         } else {
@@ -326,7 +324,7 @@ void buttonLoop()
     }
     // save the current state as the last state, for next time through the loop
     lastBtnState = buttonBtnState;
-    if ((buttonBtnState == HIGH) && (millis()-lastDebounceTime>debounceDelayButton)) {
+    if ((buttonBtnState == HIGH) && (millis()-lastDebounceTime>DEBOUNCE_DELAY)) {
       setButtonStripColor(); // if longer than delay light up strip
     }
   

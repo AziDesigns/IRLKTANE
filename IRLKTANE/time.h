@@ -3,13 +3,12 @@
   KNOWN ISSUES:
   NEED LOGIC FOR IF DEFUSED THEN SHOW TIME LEFT AND STOP DECREASING TIME // THIS MAY ALREADY HAPPEN AS WE ARENT DISTINCTLY CLEARING THE DISPLAY ON DEFUSE
 */
-
 #define PIN_TIME_CLK 14 // countdown clock CLK
 #define PIN_TIME_DIO 15 // countdown clock DIO
 
 SevenSegmentExtended timer(PIN_TIME_CLK, PIN_TIME_DIO);
 unsigned long seconds = 0;
-int mins = BOMB_TIMER_MINUTES, sec = BOMB_TIMER_SECONDS + 1;
+byte mins = BOMB_TIMER_MINUTES, sec = BOMB_TIMER_SECONDS + 1;
 
 void timeSetup() 
 {
@@ -71,5 +70,5 @@ void timeModuleBoom() // if the bomb explodes what should the module display
   // if exploded from time show 00:00
   // if exploded from strikes show time remaining before explosion
   if (explodedFromStrikes) timer.printTime(mins, sec, true);
-  else timer.print("    BOMB EXPLODED    ");
+  else timer.print(F("    BOMB EXPLODED    "));
 }

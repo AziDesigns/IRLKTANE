@@ -4,7 +4,6 @@
   MODULE IS MOSTLY DONE BUT HAS NOT BEEN TESTED AT ALL.
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
 */
-
 #define LABELS_LENGTH 28
 
 #define PIN_WHO_LED_1 34 // stage 1 complete LED
@@ -56,10 +55,10 @@ int indexOfButtonLabels[LABELS_LENGTH][15] = {{ 14, 13, 8, 12, 5, 26, 15, 17, 2,
 
 
 char words[7][10];
-int correctButton, correctLabel, whoLevel = 1;
+byte correctButton, correctLabel, whoLevel = 1;
 bool checkLabel[30];
 
-int currentButton, prevButton;
+byte currentButton, prevButton;
 
 void whoModuleBoom() // if the bomb explodes what should the module display
 {
@@ -71,10 +70,10 @@ void whoModuleBoom() // if the bomb explodes what should the module display
   digitalWrite(PIN_WHO_LED_3, LOW);
   digitalWrite(PIN_WHO_LED_FIN, LOW);
   lcdWho.clear();
-  lcdWho.setCursor(0, 0); lcdWho.print("====================");
-  lcdWho.setCursor(0, 3); lcdWho.print("====================");
-  lcdWho.setCursor(9, 1); lcdWho.print("BOMB");
-  lcdWho.setCursor(7, 2); lcdWho.print("EXPLODED");
+  lcdWho.setCursor(0, 0); lcdWho.print(F("===================="));
+  lcdWho.setCursor(0, 3); lcdWho.print(F("===================="));
+  lcdWho.setCursor(9, 1); lcdWho.print(F("BOMB"));
+  lcdWho.setCursor(7, 2); lcdWho.print(F("EXPLODED"));
 
 }
 
@@ -91,10 +90,10 @@ void whoModuleDefusedPrint() // the module has been defused
   isAnyModuleDefused=true;
   whoModuleDefused = true;
   lcdWho.clear();
-  lcdWho.setCursor(0, 0); lcdWho.print("====================");
-  lcdWho.setCursor(0, 3); lcdWho.print("====================");
-  lcdWho.setCursor(7, 1); lcdWho.print("MODULE");
-  lcdWho.setCursor(7, 2); lcdWho.print("DEFUSED");
+  lcdWho.setCursor(0, 0); lcdWho.print(F("===================="));
+  lcdWho.setCursor(0, 3); lcdWho.print(F("===================="));
+  lcdWho.setCursor(7, 1); lcdWho.print(F("MODULE"));
+  lcdWho.setCursor(7, 2); lcdWho.print(F("DEFUSED"));
 }
 
 // function that displays the labels
@@ -106,7 +105,7 @@ void printLabels()
   lcdWho.setCursor((20 - strlen(words[0])) / 2, 0);
   lcdWho.print(words[0]);
 
-  for (int i = 1; i <= 3; i++)
+  for (byte i = 1; i <= 3; i++)
   {
     lcdWho.setCursor(0, i);
     lcdWho.print(words[i]);
@@ -116,7 +115,7 @@ void printLabels()
 
 }
 
-int findCorrectLabel(int nr) // function that returns the index of the label you have to read, depending on the first label
+byte findCorrectLabel(byte nr) // function that returns the index of the label you have to read, depending on the first label
 {
   switch (nr) {
     case 0: return 2;
@@ -150,21 +149,21 @@ int findCorrectLabel(int nr) // function that returns the index of the label you
   }
 }
 
-int indexOfLabel(char word[10]) // function that returns the index of a word from allLabels[]
+byte indexOfLabel(char word[10]) // function that returns the index of a word from allLabels[]
 {
-  for (int i = 0; i < LABELS_LENGTH; i++)
+  for (byte i = 0; i < LABELS_LENGTH; i++)
     if (strcmp(word, allLabels[i]) == 0) return i;
 }
 
-int indexOfButton(int index) // function that returns the index of a button
+byte indexOfButton(byte index) // function that returns the index of a button
 {
-  for (int i = 1; i <= 6; i++)
+  for (byte i = 1; i <= 6; i++)
     if (strcmp(words[i], allLabels[index]) == 0) return i;
 }
 
-int findCorrectButton(int index) // function that returns the right button
+byte findCorrectButton(byte index) // function that returns the right button
 {
-  int k = 0;
+  byte k = 0;
   while (checkLabel[indexOfButtonLabels[index][k]] == 0) k++;
   return indexOfButton(indexOfButtonLabels[index][k]);
 }
@@ -174,30 +173,30 @@ void generateWords() // function that generates the words of the current stage
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  int number = random(LABELS_LENGTH);
-  for (int i = 0; i < 100; i++) number = random(LABELS_LENGTH);
+  byte number = random(LABELS_LENGTH);
+  for (byte i = 0; i < 100; i++) number = random(LABELS_LENGTH);
 
   strcpy(words[0], labels[number]); // the first label
   correctLabel = findCorrectLabel(number);
 
-  for (int i = 0; i < LABELS_LENGTH; i++) checkLabel[i] = 0; // we need this array so the words won't repeat
+  for (byte i = 0; i < LABELS_LENGTH; i++) checkLabel[i] = 0; // we need this array so the words won't repeat
 
-  for (int i = 1; i <= 6; i++)
+  for (byte i = 1; i <= 6; i++)
   {
-    int number = random(LABELS_LENGTH);
+    byte number = random(LABELS_LENGTH);
     while (checkLabel[number] == 1) number = random(LABELS_LENGTH); // if the words repeat generate another one
     checkLabel[number] = 1;
     strcpy(words[i], allLabels[number]);
   }
 
-  int index = indexOfLabel(words[correctLabel]);
+  byte index = indexOfLabel(words[correctLabel]);
   correctButton = findCorrectButton(index);
 
   // print the answer to the current stage
   if (DEBUG_LEVEL >= 1) {
-    Serial.print("Who's on First Stage ");
+    Serial.print(F("Who's on First Stage "));
     Serial.print(whoLevel);
-    Serial.print(" : ");
+    Serial.print(F(" : "));
     Serial.println(correctButton);
   }
 }
@@ -263,7 +262,7 @@ void whoSetup() // define outputs and inputs for who
   pinMode(PIN_WHO_BUTTON_6, INPUT);
 }
 
-int whoPressedButton() // function that returns the pressed button
+byte whoPressedButton() // function that returns the pressed button
 {
   prevButton = currentButton;
   if (digitalRead(PIN_WHO_BUTTON_1) == 1) return 1;

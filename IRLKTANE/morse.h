@@ -4,62 +4,52 @@
   THE FIRST LED FLASH IS SHORTER THAN ALL OTHERS FOR SOME REASON.
   - I BELIEVE THIS IS DUE TO WHERE I AM SETTING THE STARTING morsePreviousMillis value in setup rather than it being in the loop?
 */
-/*
-   The Morse Code module is a module that consists of a light flashing in Morse Code, a radio with a displayed frequency and a TX button.
-   The defuser must interpret the flashing Morse Light as dots and dashes to form a word in Morse Code.
-   This word corresponds to a radio frequency that the expert must tell the defuser to transmit.
-   The defuser must scroll to that frequency, and press the TX button to solve the module.
-*/
-
 #define PIN_MORSE_LED_1 29 // yellow flashing LED for morse
 #define PIN_MORSE_LED_FIN 27 // module complete LED
 #define PIN_MORSE_BUTTON_1 24 // left button
 #define PIN_MORSE_BUTTON_2 25 // right button
 #define PIN_MORSE_BUTTON_3 26 // TX (submit) button
-#define PIN_MORSE_LATCH 10 // MAX7219CNG  pin 9 STCP
-#define PIN_MORSE_CLOCK 12 // MAX7219CNG  pin 10 SHCP
-#define PIN_MORSE_DATA 9 // MAX7219CNG  pin 8 DS
 
-int morseCurrentDisplayNumber = 0; // what station is displayed, default starting is 0
-int morseButtonLeftState = 0; // current state of the left button
-int morseButtonRightState = 0; // current state of the right button
-int morseButtonSubmitState = 0; // current state of the submit button
-int lastMorseButtonLeftState = 0; // previous state of the left button
-int lastMorseButtonRightState = 0; // previous state of the right button
-int lastMorseButtonSubmitState = 0; // previous state of the submit button
-int morseCorrectNumber = 0; // picks which word will be correct is made random in setup.
+byte morseCurrentDisplayNumber = 0; // what station is displayed, default starting is 0
+byte morseButtonLeftState = 0; // current state of the left button
+byte morseButtonRightState = 0; // current state of the right button
+byte morseButtonSubmitState = 0; // current state of the submit button
+byte lastMorseButtonLeftState = 0; // previous state of the left button
+byte lastMorseButtonRightState = 0; // previous state of the right button
+byte lastMorseButtonSubmitState = 0; // previous state of the submit button
+byte morseCorrectNumber = 0; // picks which word will be correct is made random in setup.
 bool morseDisplayActivated = false;
 
-const unsigned long morseYellowLEDDot = 200; // how long should the dot last
-const unsigned long morseYellowLEDDash = 600; // how long should the dash last
-const unsigned long morseLetterLEDDelay = 850; // how long should the delay between letters be
-const unsigned long morseDotDashLEDDelay = 250; // lenthg of delay for between dot and dash in same letter
-const unsigned long morseWordLEDDelay = 4000; // delay for morse code between word repeat
-const unsigned long morseWrongTXDelay = 1500; // delay for wrong TX submited
+const byte morseYellowLEDDot = 200; // how long should the dot last
+const int morseYellowLEDDash = 600; // how long should the dash last
+const int morseLetterLEDDelay = 850; // how long should the delay between letters be
+const byte morseDotDashLEDDelay = 250; // lenthg of delay for between dot and dash in same letter
+const int morseWordLEDDelay = 4000; // delay for morse code between word repeat
+const int morseWrongTXDelay = 1500; // delay for wrong TX submited
 
 unsigned long morsePreviousMillis;
 
 // morse words where 1=dot 2=dash, 0=new letter pause, 3=repeat word pause, 4=new dot/dash pause
-int morseWord0[] = {1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 3}; // shell - 3.505 MHz
-int morseWord1[] = {1, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 3}; // halls - 3.515 MHz
-int morseWord2[] = {1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // slick - 3.522 MHz
-int morseWord3[] = {2, 0, 1, 4, 2, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // trick - 3.532 MHz
-int morseWord4[] = {2, 4, 1, 4, 1, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 2, 0, 1, 0, 1, 4, 1, 4, 1, 3}; // boxes - 3.535 MHz
-int morseWord5[] = {1, 4, 2, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 0, 1, 4, 1, 4, 1, 3}; // leaks - 3.542 MHz
-int morseWord6[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 2, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 1, 0, 1, 3}; // strobe - 3.545 MHz
-int morseWord7[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 1, 0, 1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 2, 4, 1, 0, 2, 4, 2, 4, 2, 3}; // bistro - 3.552 MHz
-int morseWord8[] = {1, 4, 1, 4, 2, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // flick - 3.555 MHz
-int morseWord9[] = {2, 4, 1, 4, 1, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 3}; // bombs - 3.565 MHz
-int morseWord10[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 3}; // break - 3.572 MHz
-int morseWord11[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // brick - 3.575 MHz
-int morseWord12[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 3}; // steak - 3.582 MHz
-int morseWord13[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 1, 0, 2, 4, 1, 0, 2, 4, 2, 4, 1, 3}; // sting - 3.592 MHz
-int morseWord14[] = {1, 4, 1, 4, 1, 4, 2, 0, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 0, 2, 4, 2, 4, 2, 0, 1, 4, 2, 4, 1, 3}; // vector - 3.595 MHz
-int morseWord15[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 0, 1, 4, 1, 4, 1, 3}; // beats - 3.600 MHz
+const byte morseWord0[] = {1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 3}; // shell - 3.505 MHz
+const byte morseWord1[] = {1, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 3}; // halls - 3.515 MHz
+const byte morseWord2[] = {1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // slick - 3.522 MHz
+const byte morseWord3[] = {2, 0, 1, 4, 2, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // trick - 3.532 MHz
+const byte morseWord4[] = {2, 4, 1, 4, 1, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 2, 0, 1, 0, 1, 4, 1, 4, 1, 3}; // boxes - 3.535 MHz
+const byte morseWord5[] = {1, 4, 2, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 0, 1, 4, 1, 4, 1, 3}; // leaks - 3.542 MHz
+const byte morseWord6[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 2, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 1, 0, 1, 3}; // strobe - 3.545 MHz
+const byte morseWord7[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 1, 0, 1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 2, 4, 1, 0, 2, 4, 2, 4, 2, 3}; // bistro - 3.552 MHz
+const byte morseWord8[] = {1, 4, 1, 4, 2, 4, 1, 0, 1, 4, 2, 4, 1, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // flick - 3.555 MHz
+const byte morseWord9[] = {2, 4, 1, 4, 1, 4, 1, 0, 2, 4, 2, 4, 2, 0, 2, 4, 2, 0, 2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 1, 4, 1, 3}; // bombs - 3.565 MHz
+const byte morseWord10[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 3}; // break - 3.572 MHz
+const byte morseWord11[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 4, 2, 4, 1, 0, 1, 4, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 4, 1, 4, 2, 3}; // brick - 3.575 MHz
+const byte morseWord12[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 0, 1, 4, 2, 0, 2, 4, 1, 4, 2, 3}; // steak - 3.582 MHz
+const byte morseWord13[] = {1, 4, 1, 4, 1, 0, 2, 0, 1, 4, 1, 0, 2, 4, 1, 0, 2, 4, 2, 4, 1, 3}; // sting - 3.592 MHz
+const byte morseWord14[] = {1, 4, 1, 4, 1, 4, 2, 0, 1, 0, 2, 4, 1, 4, 2, 4, 1, 0, 2, 0, 2, 4, 2, 4, 2, 0, 1, 4, 2, 4, 1, 3}; // vector - 3.595 MHz
+const byte morseWord15[] = {2, 4, 1, 4, 1, 4, 1, 0, 1, 0, 1, 4, 2, 0, 2, 0, 1, 4, 1, 4, 1, 3}; // beats - 3.600 MHz
 
 // array of all possible morse words // an array and pointers to arrays.
-const int* arr_list[16];
-const int arr_sizes[16] = { 32, 34, 32, 26, 30, 26, 30, 32, 34, 32, 26, 32, 20, 22, 32, 22 };  // array of the array sizes
+const byte* arr_list[16];
+const byte arr_sizes[16] = { 32, 34, 32, 26, 30, 26, 30, 32, 34, 32, 26, 32, 20, 22, 32, 22 };  // array of the array sizes
 
 void map_arrays() 
 {
@@ -68,7 +58,7 @@ void map_arrays()
   }        // list of pointers with the addresses of the
   // arrays
   arr_list[0] = morseWord0;
-  arr_list[1] = morseWord1;
+  //arr_list[1] = morseWord1;
   arr_list[2] = morseWord2;
   arr_list[3] = morseWord3;
   arr_list[4] = morseWord4;
@@ -85,8 +75,6 @@ void map_arrays()
   arr_list[15] = morseWord15;
 }
 
-LedControl lc=LedControl(PIN_MORSE_DATA,PIN_MORSE_CLOCK,PIN_MORSE_LATCH,2);
-
 void morseSetup()
 {
   if (DEBUG_LEVEL >= 3) {
@@ -102,7 +90,7 @@ void morseSetup()
   pinMode(PIN_MORSE_BUTTON_3, INPUT);
   morseCorrectNumber = random(16);
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Morse Correct Number: ");
+    Serial.println(F("Morse Correct Number: "));
     Serial.println(morseCorrectNumber);
   }
   map_arrays();
@@ -200,7 +188,6 @@ void morseDisplay(unsigned char num)
     lc.setDigit(0,1,0,false);
     lc.setDigit(0,0,0,false);
   }
-
 }
 
 void morseLeftButtonPressed() 
@@ -233,15 +220,15 @@ void morseSubmitButtonPressed()
     Serial.println (__func__);
   }
   if (DEBUG_LEVEL >= 1) {
-    Serial.println("Morse Number Submitted: ");
+    Serial.println(F("Morse Number Submitted: "));
     Serial.println(morseCurrentDisplayNumber);
-    Serial.println("Vs. Morse Correct Number: ");
+    Serial.println(F("Vs. Morse Correct Number: "));
     Serial.println(morseCorrectNumber);
   }
   if (morseCurrentDisplayNumber == morseCorrectNumber) {
     morseModuleDefused = true;
     if (DEBUG_LEVEL >= 1) {
-      Serial.println("Morse Module Defused");
+      Serial.println(F("Morse Module Defused"));
     }
     digitalWrite(PIN_MORSE_LED_FIN, HIGH); // turn on module complete light
     digitalWrite(PIN_MORSE_LED_1, LOW); // turn off flashing light upon success
@@ -272,12 +259,12 @@ void morseLoop()
     if (morseButtonLeftState != lastMorseButtonLeftState) {
       if (morseButtonLeftState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseLeftOn");
+          Serial.println(F("morseLeftOn"));
         }
         morseLeftButtonPressed();
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseLeftOff");
+          Serial.println(F("morseLeftOff"));
         }
       }
     }
@@ -288,12 +275,12 @@ void morseLoop()
     if (morseButtonRightState != lastMorseButtonRightState) {
       if (morseButtonRightState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseRightOn");
+          Serial.println(F("morseRightOn"));
         }
         morseRightButtonPressed();
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseRightOff");
+          Serial.println(F("morseRightOff"));
         }
       }
     }
@@ -304,12 +291,12 @@ void morseLoop()
     if (morseButtonSubmitState != lastMorseButtonSubmitState) {
       if (morseButtonSubmitState == HIGH) {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseSubmitOn");
+          Serial.println(F("morseSubmitOn"));
         }
         morseSubmitButtonPressed();
       } else {
         if (DEBUG_LEVEL >= 1) {
-          Serial.println("morseSubmitOff");
+          Serial.println(F("morseSubmitOff"));
         }
       }
     }
