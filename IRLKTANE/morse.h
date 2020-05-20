@@ -4,8 +4,8 @@
   THE FIRST LED FLASH IS SHORTER THAN ALL OTHERS FOR SOME REASON.
   - I BELIEVE THIS IS DUE TO WHERE I AM SETTING THE STARTING morsePreviousMillis value in setup rather than it being in the loop?
 */
-#define PIN_MORSE_LED_1 29 // yellow flashing LED for morse
-#define PIN_MORSE_LED_FIN 27 // module complete LED
+#define PIN_MORSE_LED_1 2,1,7 // yellow flashing LED for morse
+#define PIN_MORSE_LED_FIN 2,3,3 // module complete LED
 #define PIN_MORSE_BUTTON_1 24 // left button
 #define PIN_MORSE_BUTTON_2 25 // right button
 #define PIN_MORSE_BUTTON_3 26 // TX (submit) button
@@ -83,8 +83,6 @@ void morseSetup()
   lc.shutdown(0,false);
   lc.setIntensity(0,8);
   lc.clearDisplay(0);
-  pinMode(PIN_MORSE_LED_1, OUTPUT);
-  pinMode(PIN_MORSE_LED_FIN, OUTPUT);
   pinMode(PIN_MORSE_BUTTON_1, INPUT);
   pinMode(PIN_MORSE_BUTTON_2, INPUT);
   pinMode(PIN_MORSE_BUTTON_3, INPUT);
@@ -230,8 +228,8 @@ void morseSubmitButtonPressed()
     if (DEBUG_LEVEL >= 1) {
       Serial.println(F("Morse Module Defused"));
     }
-    digitalWrite(PIN_MORSE_LED_FIN, HIGH); // turn on module complete light
-    digitalWrite(PIN_MORSE_LED_1, LOW); // turn off flashing light upon success
+    lc.setLed(PIN_MORSE_LED_FIN,true); // turn on module complete light
+    lc.setLed(PIN_MORSE_LED_1,false); // turn off flashing light upon success
     lc.shutdown(0,true); //shows "    " on module tx display
     defusedModuleBuzzer();
     isAnyModuleDefused=true;
@@ -310,7 +308,7 @@ void morseLoop()
       static unsigned i = 0;
       switch (arr_list[morseCorrectNumber] [i])  {
         case 4:
-          digitalWrite (PIN_MORSE_LED_1, LOW);
+          lc.setLed(PIN_MORSE_LED_1,false);
           if (millis() - morsePreviousMillis >= morseDotDashLEDDelay) {
             morsePreviousMillis = millis(); // save the last time you blinked the LED
             i = i < arr_sizes[morseCorrectNumber] - 1 ? i + 1 : 0;
@@ -319,7 +317,7 @@ void morseLoop()
             break;
 
         case 3:
-          digitalWrite (PIN_MORSE_LED_1, LOW);
+          lc.setLed(PIN_MORSE_LED_1,false);
           if (millis() - morsePreviousMillis >= morseWordLEDDelay) {
             morsePreviousMillis = millis(); // save the last time you blinked the LED
             i = i < arr_sizes[morseCorrectNumber] - 1 ? i + 1 : 0;
@@ -328,7 +326,7 @@ void morseLoop()
             break;
 
         case 2:
-          digitalWrite (PIN_MORSE_LED_1, HIGH);
+          lc.setLed(PIN_MORSE_LED_1,true);
           if (millis() - morsePreviousMillis >= morseYellowLEDDash) {
             morsePreviousMillis = millis(); // save the last time you blinked the LED
             i = i < arr_sizes[morseCorrectNumber] - 1 ? i + 1 : 0;
@@ -337,7 +335,7 @@ void morseLoop()
             break;
 
         case 1:
-          digitalWrite (PIN_MORSE_LED_1, HIGH);
+          lc.setLed(PIN_MORSE_LED_1,true);
           if (millis() - morsePreviousMillis >= morseYellowLEDDot) {
             morsePreviousMillis = millis(); // save the last time you blinked the LED
             i = i < arr_sizes[morseCorrectNumber] - 1 ? i + 1 : 0;
@@ -347,7 +345,7 @@ void morseLoop()
 
         case 0:
         default:
-          digitalWrite (PIN_MORSE_LED_1, LOW);
+          lc.setLed(PIN_MORSE_LED_1,false);
           if (millis() - morsePreviousMillis >= morseLetterLEDDelay) {
             morsePreviousMillis = millis(); // save the last time you blinked the LED
             i = i < arr_sizes[morseCorrectNumber] - 1 ? i + 1 : 0;
@@ -365,7 +363,7 @@ void morseModuleBoom()
     Serial.println (__func__);
   }
   // if the bomb explodes the display with the frequency should clear and the flashing led should stop
-  digitalWrite(PIN_MORSE_LED_1, LOW); // stop flashing yellow morse
-  digitalWrite(PIN_MORSE_LED_FIN, LOW); // turn of green module complete LED
+  lc.setLed(PIN_MORSE_LED_1,false); // stop flashing yellow morse
+  lc.setLed(PIN_MORSE_LED_FIN,false); // turn of green module complete LED
   lc.shutdown(0,true); //shows "    " on module tx display
 }

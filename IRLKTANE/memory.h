@@ -5,22 +5,20 @@
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
   LedControl needs to be mapped to the correct pins once able to physically test.
 */
-#define PIN_MEMORY_BUTTON_1 86 // position 1 button // PINOVERLAP
-#define PIN_MEMORY_BUTTON_2 87 // position 2 button // PINOVERLAP
-#define PIN_MEMORY_BUTTON_3 88 // position 3 button // PINOVERLAP
-#define PIN_MEMORY_BUTTON_4 89 // position 4 button
+#define PIN_MEMORY_BUTTON_1 49 // position 1 button
+#define PIN_MEMORY_BUTTON_2 50 // position 2 button
+#define PIN_MEMORY_BUTTON_3 51 // position 3 button
+#define PIN_MEMORY_BUTTON_4 52 // position 4 button
 
-#define PIN_MEMORY_LED_1 84 // stage 1 complete LED //PINOVERLAP
-#define PIN_MEMORY_LED_2 96 // stage 2 complete LED
-#define PIN_MEMORY_LED_3 85 // stage 3 complete LED
-#define PIN_MEMORY_LED_4 98 // stage 4 complete LED
-// I think there should be a stage 5 complete LED even though that means the module is defused.
-// Unless its going to just be always off? Need to see how KTANE handles that module
-#define PIN_MEMORY_LED_FIN 95 // module complete LED
+#define PIN_MEMORY_LED_1 2,6,2 // stage 1 complete LED
+#define PIN_MEMORY_LED_2 2,7,2 // stage 2 complete LED
+#define PIN_MEMORY_LED_3 2,0,3 // stage 3 complete LED
+#define PIN_MEMORY_LED_4 2,1,3 // stage 4 complete LED
+#define PIN_MEMORY_LED_FIN 2,2,3 // module complete LED
 
-#define PIN_MEMORY_LATCH 90 // 74HC595  pin 9 STCP
-#define PIN_MEMORY_CLOCK 93 // 74HC595  pin 10 SHCP
-#define PIN_MEMORY_DATA 94 // 74HC595  pin 8 DS
+#define PIN_MEMORY_LATCH 63 // 74HC595  pin 9 STCP
+#define PIN_MEMORY_CLOCK 61 // 74HC595  pin 10 SHCP
+#define PIN_MEMORY_DATA 62 // 74HC595  pin 8 DS
 
 LedControl memorylc = LedControl(PIN_MEMORY_DATA, PIN_MEMORY_CLOCK, PIN_MEMORY_LATCH, 2); //DIN, CLK, LOAD, No. DRIVER
 
@@ -37,11 +35,11 @@ void turnOffLeds()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  digitalWrite(PIN_MEMORY_LED_1, LOW);
-  digitalWrite(PIN_MEMORY_LED_2, LOW);
-  digitalWrite(PIN_MEMORY_LED_3, LOW);
-  digitalWrite(PIN_MEMORY_LED_4, LOW);
-  digitalWrite(PIN_MEMORY_LED_FIN, LOW);
+  lc.setLed(PIN_MEMORY_LED_1,false);
+  lc.setLed(PIN_MEMORY_LED_2,false);
+  lc.setLed(PIN_MEMORY_LED_3,false);
+  lc.setLed(PIN_MEMORY_LED_4,false);
+  lc.setLed(PIN_MEMORY_LED_FIN,false);
 }
 
 // function that generate a random digit from 1 to 4
@@ -138,12 +136,6 @@ void memorySetup()
   memorylc.setIntensity(0, 4); // sets brightness (0~15 possible values)
   memorylc.clearDisplay(0);// clear screen
 
-  pinMode(PIN_MEMORY_LED_1, OUTPUT);
-  pinMode(PIN_MEMORY_LED_2, OUTPUT);
-  pinMode(PIN_MEMORY_LED_3, OUTPUT);
-  pinMode(PIN_MEMORY_LED_4, OUTPUT);
-  pinMode(PIN_MEMORY_LED_FIN, OUTPUT);
-
   turnOffLeds();
 
   // stage 1
@@ -157,10 +149,10 @@ void changeStage() // the next stage
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  if (stageNumber == 1) digitalWrite(PIN_MEMORY_LED_1, HIGH);
-  else if (stageNumber == 2) digitalWrite(PIN_MEMORY_LED_2, HIGH);
-  else if (stageNumber == 3) digitalWrite(PIN_MEMORY_LED_3, HIGH);
-  else if (stageNumber == 4) digitalWrite(PIN_MEMORY_LED_4, HIGH);
+  if (stageNumber == 1) lc.setLed(PIN_MEMORY_LED_1,true);
+  else if (stageNumber == 2) lc.setLed(PIN_MEMORY_LED_2,true);
+  else if (stageNumber == 3) lc.setLed(PIN_MEMORY_LED_3,true);
+  else if (stageNumber == 4) lc.setLed(PIN_MEMORY_LED_4,true);
 
   generateNumbers();
   stageNumber++;
@@ -215,7 +207,7 @@ void memoryCheckButton() // function that checks if a button is pressed
     if (button == rightPoz) { // if the right button was pressed 
       if (stageNumber == 5) { // if it's the last stage, the module is defused 
         turnOffLeds();
-        digitalWrite(PIN_MEMORY_LED_FIN, HIGH);
+        lc.setLed(PIN_MEMORY_LED_FIN,true);
         memorylc.clearDisplay(0);
         memoryModuleDefused = true;
         defusedModuleBuzzer();
@@ -233,11 +225,11 @@ void memoryModuleBoom()  // if the bomb explodes what should the module display
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  digitalWrite(PIN_MEMORY_LED_1, LOW);
-  digitalWrite(PIN_MEMORY_LED_2, LOW);
-  digitalWrite(PIN_MEMORY_LED_3, LOW);
-  digitalWrite(PIN_MEMORY_LED_4, LOW);
-  digitalWrite(PIN_MEMORY_LED_FIN, LOW);
+  lc.setLed(PIN_MEMORY_LED_1,false);
+  lc.setLed(PIN_MEMORY_LED_2,false);
+  lc.setLed(PIN_MEMORY_LED_3,false);
+  lc.setLed(PIN_MEMORY_LED_4,false);
+  lc.setLed(PIN_MEMORY_LED_FIN,false);
   memorylc.clearDisplay(0);
 }
 

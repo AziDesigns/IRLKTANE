@@ -12,18 +12,18 @@
 */
 #define KNOB_DEFAULT_TIME 40 // default time per rotation
 #define PIN_KNOB_ROTARY_SWITCH A0 // rotary switch analog input pin
-#define PIN_KNOB_LED_1  70
-#define PIN_KNOB_LED_2  71
-#define PIN_KNOB_LED_3  72
-#define PIN_KNOB_LED_4  73
-#define PIN_KNOB_LED_5  74
-#define PIN_KNOB_LED_6  75
-#define PIN_KNOB_LED_7  76
-#define PIN_KNOB_LED_8  77
-#define PIN_KNOB_LED_9  78
-#define PIN_KNOB_LED_10 79
-#define PIN_KNOB_LED_11 80
-#define PIN_KNOB_LED_12 81
+#define PIN_KNOB_LED_1  2,1,1
+#define PIN_KNOB_LED_2  2,2,1
+#define PIN_KNOB_LED_3  2,3,1
+#define PIN_KNOB_LED_4  2,4,1
+#define PIN_KNOB_LED_5  2,5,1
+#define PIN_KNOB_LED_6  2,6,1
+#define PIN_KNOB_LED_7  2,7,1
+#define PIN_KNOB_LED_8  2,0,2
+#define PIN_KNOB_LED_9  2,1,2
+#define PIN_KNOB_LED_10 2,2,2
+#define PIN_KNOB_LED_11 2,3,2
+#define PIN_KNOB_LED_12 2,4,2
 #define KNOB_POSITION_1 200
 #define KNOB_POSITION_2 500
 #define KNOB_POSITION_3 900
@@ -42,18 +42,6 @@ void knobSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(PIN_KNOB_LED_1, OUTPUT);
-  pinMode(PIN_KNOB_LED_2, OUTPUT);
-  pinMode(PIN_KNOB_LED_3, OUTPUT);
-  pinMode(PIN_KNOB_LED_4, OUTPUT);
-  pinMode(PIN_KNOB_LED_5, OUTPUT);
-  pinMode(PIN_KNOB_LED_6, OUTPUT);
-  pinMode(PIN_KNOB_LED_7, OUTPUT);
-  pinMode(PIN_KNOB_LED_8, OUTPUT);
-  pinMode(PIN_KNOB_LED_9, OUTPUT);
-  pinMode(PIN_KNOB_LED_10, OUTPUT);
-  pinMode(PIN_KNOB_LED_11, OUTPUT);
-  pinMode(PIN_KNOB_LED_12, OUTPUT);
   knobLEDArray = random(8);
 };
 
@@ -101,18 +89,18 @@ void knobDisplayTime() // function that displays the time on the clock
         knobModuleStike = true;
         lc.setDigit(1,5,' ',false);
         lc.setDigit(1,4,' ',false); 
-        digitalWrite (PIN_KNOB_LED_1, LOW);
-        digitalWrite (PIN_KNOB_LED_2, LOW);
-        digitalWrite (PIN_KNOB_LED_3, LOW);
-        digitalWrite (PIN_KNOB_LED_4, LOW);
-        digitalWrite (PIN_KNOB_LED_5, LOW);
-        digitalWrite (PIN_KNOB_LED_6, LOW);
-        digitalWrite (PIN_KNOB_LED_7, LOW);
-        digitalWrite (PIN_KNOB_LED_8, LOW);
-        digitalWrite (PIN_KNOB_LED_9, LOW);
-        digitalWrite (PIN_KNOB_LED_10, LOW);
-        digitalWrite (PIN_KNOB_LED_11, LOW);
-        digitalWrite (PIN_KNOB_LED_12, LOW);
+        lc.setLed(PIN_KNOB_LED_1,false);
+        lc.setLed(PIN_KNOB_LED_2,false);
+        lc.setLed(PIN_KNOB_LED_3,false);
+        lc.setLed(PIN_KNOB_LED_4,false);
+        lc.setLed(PIN_KNOB_LED_5,false);
+        lc.setLed(PIN_KNOB_LED_6,false);
+        lc.setLed(PIN_KNOB_LED_7,false);
+        lc.setLed(PIN_KNOB_LED_8,false);
+        lc.setLed(PIN_KNOB_LED_9,false);
+        lc.setLed(PIN_KNOB_LED_10,false);
+        lc.setLed(PIN_KNOB_LED_11,false);
+        lc.setLed(PIN_KNOB_LED_12,false);
       }
     }
     needyDigitDisplay(1, 4, 5, knobSec);
@@ -123,116 +111,116 @@ void knobDisplayLEDArray()
 {
   if (knobLEDArray==0) {
     knobCorrectState=0; // correct position = up
-    digitalWrite (PIN_KNOB_LED_1, LOW);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, HIGH);
-    digitalWrite (PIN_KNOB_LED_7, HIGH);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, HIGH);
-    digitalWrite (PIN_KNOB_LED_10, HIGH);
-    digitalWrite (PIN_KNOB_LED_11, LOW);
-    digitalWrite (PIN_KNOB_LED_12, HIGH);
+    lc.setLed(PIN_KNOB_LED_1,false);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,true);
+    lc.setLed(PIN_KNOB_LED_7,true);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,true);
+    lc.setLed(PIN_KNOB_LED_10,true);
+    lc.setLed(PIN_KNOB_LED_11,false);
+    lc.setLed(PIN_KNOB_LED_12,true);
   } else if (knobLEDArray==1) {
     knobCorrectState=0; // correct position = up
-    digitalWrite (PIN_KNOB_LED_1, HIGH);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, LOW);
-    digitalWrite (PIN_KNOB_LED_7, LOW);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, HIGH);
-    digitalWrite (PIN_KNOB_LED_10, LOW);
-    digitalWrite (PIN_KNOB_LED_11, HIGH);
-    digitalWrite (PIN_KNOB_LED_12, HIGH);
+    lc.setLed(PIN_KNOB_LED_1,true);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,false);
+    lc.setLed(PIN_KNOB_LED_7,false);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,true);
+    lc.setLed(PIN_KNOB_LED_10,false);
+    lc.setLed(PIN_KNOB_LED_11,true);
+    lc.setLed(PIN_KNOB_LED_12,true);
   } else if (knobLEDArray==2) {
     knobCorrectState=2; // correct position = down
-    digitalWrite (PIN_KNOB_LED_1, LOW);
-    digitalWrite (PIN_KNOB_LED_2, HIGH);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, LOW);
-    digitalWrite (PIN_KNOB_LED_6, HIGH);
-    digitalWrite (PIN_KNOB_LED_7, HIGH);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, HIGH);
-    digitalWrite (PIN_KNOB_LED_10, HIGH);
-    digitalWrite (PIN_KNOB_LED_11, LOW);
-    digitalWrite (PIN_KNOB_LED_12, HIGH);
+    lc.setLed(PIN_KNOB_LED_1,false);
+    lc.setLed(PIN_KNOB_LED_2,true);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,false);
+    lc.setLed(PIN_KNOB_LED_6,true);
+    lc.setLed(PIN_KNOB_LED_7,true);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,true);
+    lc.setLed(PIN_KNOB_LED_10,true);
+    lc.setLed(PIN_KNOB_LED_11,false);
+    lc.setLed(PIN_KNOB_LED_12,true);
   } else if (knobLEDArray==3) {
     knobCorrectState=2; // correct position = down
-    digitalWrite (PIN_KNOB_LED_1, HIGH);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, LOW);
-    digitalWrite (PIN_KNOB_LED_7, LOW);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, LOW);
-    digitalWrite (PIN_KNOB_LED_10, LOW);
-    digitalWrite (PIN_KNOB_LED_11, LOW);
-    digitalWrite (PIN_KNOB_LED_12, HIGH);
+    lc.setLed(PIN_KNOB_LED_1,true);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,false);
+    lc.setLed(PIN_KNOB_LED_7,false);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,false);
+    lc.setLed(PIN_KNOB_LED_10,false);
+    lc.setLed(PIN_KNOB_LED_11,false);
+    lc.setLed(PIN_KNOB_LED_12,true);
   } else if (knobLEDArray==4) {
     knobCorrectState=3; // correct position = left
-    digitalWrite (PIN_KNOB_LED_1, LOW);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, LOW);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, LOW);
-    digitalWrite (PIN_KNOB_LED_7, HIGH);
-    digitalWrite (PIN_KNOB_LED_8, LOW);
-    digitalWrite (PIN_KNOB_LED_9, LOW);
-    digitalWrite (PIN_KNOB_LED_10, HIGH);
-    digitalWrite (PIN_KNOB_LED_11, HIGH);
-    digitalWrite (PIN_KNOB_LED_12, HIGH);
+    lc.setLed(PIN_KNOB_LED_1,false);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,false);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,false);
+    lc.setLed(PIN_KNOB_LED_7,true);
+    lc.setLed(PIN_KNOB_LED_8,false);
+    lc.setLed(PIN_KNOB_LED_9,false);
+    lc.setLed(PIN_KNOB_LED_10,true);
+    lc.setLed(PIN_KNOB_LED_11,true);
+    lc.setLed(PIN_KNOB_LED_12,true);
   } else if (knobLEDArray==5) {
     knobCorrectState=3; // correct position = left
-    digitalWrite (PIN_KNOB_LED_1, LOW);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, LOW);
-    digitalWrite (PIN_KNOB_LED_4, LOW);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, LOW);
-    digitalWrite (PIN_KNOB_LED_7, LOW);
-    digitalWrite (PIN_KNOB_LED_8, LOW);
-    digitalWrite (PIN_KNOB_LED_9, LOW);
-    digitalWrite (PIN_KNOB_LED_10, HIGH);
-    digitalWrite (PIN_KNOB_LED_11, HIGH);
-    digitalWrite (PIN_KNOB_LED_12, LOW);
+    lc.setLed(PIN_KNOB_LED_1,false);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,false);
+    lc.setLed(PIN_KNOB_LED_4,false);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,false);
+    lc.setLed(PIN_KNOB_LED_7,false);
+    lc.setLed(PIN_KNOB_LED_8,false);
+    lc.setLed(PIN_KNOB_LED_9,false);
+    lc.setLed(PIN_KNOB_LED_10,true);
+    lc.setLed(PIN_KNOB_LED_11,true);
+    lc.setLed(PIN_KNOB_LED_12,false);
   } else if (knobLEDArray==6) {
     knobCorrectState=1; // correct position = right
-    digitalWrite (PIN_KNOB_LED_1, HIGH);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, HIGH);
-    digitalWrite (PIN_KNOB_LED_5, HIGH);
-    digitalWrite (PIN_KNOB_LED_6, HIGH);
-    digitalWrite (PIN_KNOB_LED_7, HIGH);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, HIGH);
-    digitalWrite (PIN_KNOB_LED_10, LOW);
-    digitalWrite (PIN_KNOB_LED_11, HIGH);
-    digitalWrite (PIN_KNOB_LED_12, LOW);
+    lc.setLed(PIN_KNOB_LED_1,true);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,true);
+    lc.setLed(PIN_KNOB_LED_5,true);
+    lc.setLed(PIN_KNOB_LED_6,true);
+    lc.setLed(PIN_KNOB_LED_7,true);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,true);
+    lc.setLed(PIN_KNOB_LED_10,false);
+    lc.setLed(PIN_KNOB_LED_11,true);
+    lc.setLed(PIN_KNOB_LED_12,false);
   } else if (knobLEDArray==7) {
     knobCorrectState=1; // correct position = right
-    digitalWrite (PIN_KNOB_LED_1, HIGH);
-    digitalWrite (PIN_KNOB_LED_2, LOW);
-    digitalWrite (PIN_KNOB_LED_3, HIGH);
-    digitalWrite (PIN_KNOB_LED_4, HIGH);
-    digitalWrite (PIN_KNOB_LED_5, LOW);
-    digitalWrite (PIN_KNOB_LED_6, LOW);
-    digitalWrite (PIN_KNOB_LED_7, HIGH);
-    digitalWrite (PIN_KNOB_LED_8, HIGH);
-    digitalWrite (PIN_KNOB_LED_9, HIGH);
-    digitalWrite (PIN_KNOB_LED_10, LOW);
-    digitalWrite (PIN_KNOB_LED_11, HIGH);
-    digitalWrite (PIN_KNOB_LED_12, LOW);
+    lc.setLed(PIN_KNOB_LED_1,true);
+    lc.setLed(PIN_KNOB_LED_2,false);
+    lc.setLed(PIN_KNOB_LED_3,true);
+    lc.setLed(PIN_KNOB_LED_4,true);
+    lc.setLed(PIN_KNOB_LED_5,false);
+    lc.setLed(PIN_KNOB_LED_6,false);
+    lc.setLed(PIN_KNOB_LED_7,true);
+    lc.setLed(PIN_KNOB_LED_8,true);
+    lc.setLed(PIN_KNOB_LED_9,true);
+    lc.setLed(PIN_KNOB_LED_10,false);
+    lc.setLed(PIN_KNOB_LED_11,true);
+    lc.setLed(PIN_KNOB_LED_12,false);
   }
 }
 
@@ -255,18 +243,18 @@ void knobBombDefused()
     Serial.println (__func__);
   }
   // when the bomb is defused all 12 LEDs should turn off and module countdown should show remaining time
-  digitalWrite (PIN_KNOB_LED_1, LOW);
-  digitalWrite (PIN_KNOB_LED_2, LOW);
-  digitalWrite (PIN_KNOB_LED_3, LOW);
-  digitalWrite (PIN_KNOB_LED_4, LOW);
-  digitalWrite (PIN_KNOB_LED_5, LOW);
-  digitalWrite (PIN_KNOB_LED_6, LOW);
-  digitalWrite (PIN_KNOB_LED_7, LOW);
-  digitalWrite (PIN_KNOB_LED_8, LOW);
-  digitalWrite (PIN_KNOB_LED_9, LOW);
-  digitalWrite (PIN_KNOB_LED_10, LOW);
-  digitalWrite (PIN_KNOB_LED_11, LOW);
-  digitalWrite (PIN_KNOB_LED_12, LOW);
+  lc.setLed(PIN_KNOB_LED_1,false);
+  lc.setLed(PIN_KNOB_LED_2,false);
+  lc.setLed(PIN_KNOB_LED_3,false);
+  lc.setLed(PIN_KNOB_LED_4,false);
+  lc.setLed(PIN_KNOB_LED_5,false);
+  lc.setLed(PIN_KNOB_LED_6,false);
+  lc.setLed(PIN_KNOB_LED_7,false);
+  lc.setLed(PIN_KNOB_LED_8,false);
+  lc.setLed(PIN_KNOB_LED_9,false);
+  lc.setLed(PIN_KNOB_LED_10,false);
+  lc.setLed(PIN_KNOB_LED_11,false);
+  lc.setLed(PIN_KNOB_LED_12,false);
 }
 
 void knobModuleBoom()
@@ -277,16 +265,16 @@ void knobModuleBoom()
   // when the bomb explodes all 12 LEDs should turn off and so should countdown timer above module
   lc.setDigit(1,5,' ',false);
   lc.setDigit(1,4,' ',false); 
-  digitalWrite (PIN_KNOB_LED_1, LOW);
-  digitalWrite (PIN_KNOB_LED_2, LOW);
-  digitalWrite (PIN_KNOB_LED_3, LOW);
-  digitalWrite (PIN_KNOB_LED_4, LOW);
-  digitalWrite (PIN_KNOB_LED_5, LOW);
-  digitalWrite (PIN_KNOB_LED_6, LOW);
-  digitalWrite (PIN_KNOB_LED_7, LOW);
-  digitalWrite (PIN_KNOB_LED_8, LOW);
-  digitalWrite (PIN_KNOB_LED_9, LOW);
-  digitalWrite (PIN_KNOB_LED_10, LOW);
-  digitalWrite (PIN_KNOB_LED_11, LOW);
-  digitalWrite (PIN_KNOB_LED_12, LOW);
+  lc.setLed(PIN_KNOB_LED_1,false);
+  lc.setLed(PIN_KNOB_LED_2,false);
+  lc.setLed(PIN_KNOB_LED_3,false);
+  lc.setLed(PIN_KNOB_LED_4,false);
+  lc.setLed(PIN_KNOB_LED_5,false);
+  lc.setLed(PIN_KNOB_LED_6,false);
+  lc.setLed(PIN_KNOB_LED_7,false);
+  lc.setLed(PIN_KNOB_LED_8,false);
+  lc.setLed(PIN_KNOB_LED_9,false);
+  lc.setLed(PIN_KNOB_LED_10,false);
+  lc.setLed(PIN_KNOB_LED_11,false);
+  lc.setLed(PIN_KNOB_LED_12,false);
 }

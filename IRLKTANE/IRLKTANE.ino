@@ -20,26 +20,26 @@
 
 bool defused = false, exploded = false, victorySong = false, isAnyModuleDefused = false; // is bomb defused or exploded default values false
 
-#define PIN_MAX7219_LATCH 10 // MAX7219CNG  pin 9 STCP
-#define PIN_MAX7219_CLOCK 12 // MAX7219CNG  pin 10 SHCP
-#define PIN_MAX7219_DATA 9 // MAX7219CNG  pin 8 DS
+#define PIN_MAX7219_LOAD 30 // MAX7219CNG  pin 9 STCP
+#define PIN_MAX7219_CLOCK 31 // MAX7219CNG  pin 10 SHCP
+#define PIN_MAX7219_DIN 32 // MAX7219CNG  pin 8 DS
 
 #define DEBOUNCE_DELAY 50 // DELAY TO PREVENT DEBOUNCE ON SOME BUTTONS
 
 // initialize the max7219 daisy chain used across other modules // LAST NUMBER IS THE MAX NUMBER OF MAX7219's in the chain
-LedControl lc=LedControl(PIN_MAX7219_DATA,PIN_MAX7219_CLOCK,PIN_MAX7219_LATCH,2);
+LedControl lc=LedControl(PIN_MAX7219_DIN,PIN_MAX7219_CLOCK,PIN_MAX7219_LOAD,3);
 
 // for testing purposes and potential future (ability to select modules) feature these flags will determine which flags below should be included/ excuded by setting the value to true/false.
 bool
 buttonModuleIncluded = false,
 dischargeModuleIncluded = false,
 knobModuleIncluded = false,
-mazeModuleIncluded = false,
+mazeModuleIncluded = true,
 memoryModuleIncluded = false,
 morseModuleIncluded = false,
 passwordModuleIncluded = false, // password has overlapping pins and can not be enabled with anything else currently
 simonModuleIncluded = false,
-ventingModuleIncluded = false, // venting has overlapping pins and can not be enabled with anything else currently
+ventingModuleIncluded = false,
 whoModuleIncluded = false;
 
 // on new bomb all modules start with default "is difused" state of False, set to true if you dont want to have to do the modules for testing
@@ -130,7 +130,8 @@ void setup() // this section includes all setups for all modules to define INPUT
   unsigned long seed=seedOut(31);
   randomSeed(seed);
 
-  lcdButton.begin(16, 2);
+  lcdButton.init();
+  lcdButton.backlight();
 
   generateSerialCode();
   lcdButton.clear();
@@ -138,9 +139,15 @@ void setup() // this section includes all setups for all modules to define INPUT
   lcdButton.print(F("Serial: "));
   lcdButton.print(serialCode);
 
-  lc.shutdown(1,false); // moved from morse.h so strikes can function without morse active
+  lc.shutdown(0,false);
+  lc.shutdown(1,false);
+  lc.shutdown(2,false);
+  lc.setIntensity(0,10);
   lc.setIntensity(1,10);
+  lc.setIntensity(2,10);
+  lc.clearDisplay(0);
   lc.clearDisplay(1);
+  lc.clearDisplay(2);
   
   timeSetup();
   buzzerSetup();
@@ -184,6 +191,9 @@ void setup() // this section includes all setups for all modules to define INPUT
   }
   if (ventingModuleIncluded==true) {
     ventingSetup();
+  } else {
+    lcdVent.init();
+    lcdVent.off();
   }
   if (whoModuleIncluded==true) {
     whoSetup();

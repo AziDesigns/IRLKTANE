@@ -3,18 +3,18 @@
   KNOWN ISSUES:
   PIN ASSIGMENTS ARE WRONG & NEED UPDATED :)
 */
-#define PIN_PASSWORD_LED_FIN 97 // module complete led
-#define PIN_PASSWORD_BUTTON_1 34 // letter 1 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_2 33 // letter 2 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_3 32 // letter 3 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_4 31 // letter 4 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_5 30 // letter 5 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_6 26 // letter 1 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_7 25 // letter 2 down
-#define PIN_PASSWORD_BUTTON_8 24 // letter 3 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_9 23 // letter 4 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_10 22 // letter 5 down
-#define PIN_PASSWORD_BUTTON_SUBMIT 40 // submit button
+#define PIN_PASSWORD_LED_FIN 2,4,3 // module complete led
+#define PIN_PASSWORD_BUTTON_1 33 // letter 1 up // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_2 34 // letter 2 up // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_3 35 // letter 3 up // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_4 36 // letter 4 up // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_5 37 // letter 5 up // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_6 38 // letter 1 down // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_7 39 // letter 2 down
+#define PIN_PASSWORD_BUTTON_8 40 // letter 3 down // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_9 41 // letter 4 down // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_10 42 // letter 5 down
+#define PIN_PASSWORD_BUTTON_SUBMIT 43 // submit button
 
 unsigned long PWswitchMillis = 0;
 
@@ -209,6 +209,7 @@ void checkPWSubmission()
      (displayVals[3]==positionVals[3][0]) &&
      (displayVals[4]==positionVals[4][0])) {
     Serial.println(F("PWmoduledefused"));
+    lc.setLed(PIN_PASSWORD_LED_FIN,true);
     passwordModuleDefused = true;
     defusedModuleBuzzer();
     isAnyModuleDefused=true;
@@ -363,7 +364,6 @@ void passwordSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(PIN_PASSWORD_LED_FIN, OUTPUT);
   pinMode(PIN_PASSWORD_BUTTON_1, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_2, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_3, INPUT);

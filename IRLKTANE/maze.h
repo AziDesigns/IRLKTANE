@@ -1,21 +1,22 @@
 //On the Subject of Mazes
+#include <Adafruit_NeoMatrix.h>
 /*
   KNOWN ISSUES:
   STARTING AND FINISHING POINTS ARE FIXED CURRENTLY
     - IDEALLY THESE WOULD NOT BE FIXED AND WOULD BE RANDOM EVENTUALLY
   CURRENTLY PROGRAMED FOR RED ONLY LED MATRIX. WAITING ON HARDWARE TO WRITE/ UPDATE FOR RGB MATRIX
 */
-#define PIN_MAZE_LED_FIN 44
+#define PIN_MAZE_LED_FIN 2,5,2
 #define PIN_MAZE_UP A5
 #define PIN_MAZE_RIGHT A6
 #define PIN_MAZE_DOWN A7
 #define PIN_MAZE_LEFT A8
-#define PIN_MAZE_DATA 92
-#define PIN_MAZE_LOAD 91
-#define PIN_MAZE_CLOCK 102
+#define PIN_MAZE_DATA 18
 #define MAZE_MAX_MODULE_COUNT 1
 #define MAZE_BLINK_DELAY 300
 #define MAZE_LEDS_BRIGHTNESS 8 // Intensity of the led, a number between 1-15
+#define MR 8
+#define MC 8
 
 byte mazeButtonLeftState = 0; // current state of the left button
 byte mazeButtonRightState = 0; // current state of the right button
@@ -26,7 +27,8 @@ byte lastMazeButtonRightState = 0; // previous state of the right button
 byte lastMazeButtonUpState = 0; // previous state of the up button
 byte lastMazeButtonDownState = 0; // previous state of the down button
 
-LedControl mazelc = LedControl(PIN_MAZE_DATA, PIN_MAZE_CLOCK, PIN_MAZE_LOAD, MAZE_MAX_MODULE_COUNT);
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(MC, MR, PIN_MAZE_DATA, 
+  NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_ROWS + NEO_MATRIX_PROGRESSIVE, NEO_GRB + NEO_KHZ800);
 
 // these are for movement & play
 const byte MAZE_LEVELS_ROWS = 13; // number of rows of each level
@@ -35,7 +37,7 @@ const byte MAZE_LEVELS_COLUMNS = MAZE_LEVELS_ROWS; // number of columns of each 
 const byte MAZE_DISPLAY_LEVELS_ROWS = 8; // number of rows of each level
 const byte MAZE_DISPLAY_LEVELS_COLUMNS = MAZE_DISPLAY_LEVELS_ROWS; // number of columns of each level
 
-/**
+/*
    'c': green circle position
    's': Start position
    'f': Finish position
@@ -320,13 +322,24 @@ void mazePrintLevel() // DISPLAYS THE FRIENDLY VERSION NOT THE MOVEMENT/ PLAY VE
   for (byte x = 0; x < MAZE_DISPLAY_LEVELS_ROWS; x++) {
     for (byte y = 0; y < MAZE_DISPLAY_LEVELS_COLUMNS; y++) {
       if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'c') {
-        mazelc.setLed(0, x, y, true);
+        matrix.drawPixel(y, x, matrix.Color(0, 30, 0)); //green 
+        matrix.show();
       }
       else if (MAZE_DISPLAY_LEVELS[mazeCurrentLevel][x][y] == 'f') {
-        mazelc.setLed(0, x, y, true);
+        matrix.drawPixel(y, x, matrix.Color(30, 0, 0)); //red  
+        matrix.show();
       }
     }
   }
+}
+
+void clearMatrix() {  
+  for (int i = 0; i < MR; i++) {
+    for (int j = 0; j < MC; j++) {
+      matrix.drawPixel(j, i, matrix.Color(0, 0, 0));      
+    }
+  }
+  matrix.show();
 }
 
 void mazeInitLevel() 
@@ -334,7 +347,7 @@ void mazeInitLevel()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  mazelc.clearDisplay(0);
+  clearMatrix();
 
   // sets startX, startY, finishX and finishY for MOVEMENT/ PLAY
   for (byte x = 0; x < MAZE_LEVELS_ROWS; x++) {
@@ -374,7 +387,8 @@ void mazeShowPlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  mazelc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, true);
+  matrix.drawPixel(mazeDisplayCurrentY, mazeDisplayCurrentX, matrix.Color(30, 30, 30)); //white    
+  matrix.show();
 }
 
 void mazeHidePlayer() 
@@ -382,7 +396,8 @@ void mazeHidePlayer()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  mazelc.setLed(0, mazeDisplayCurrentX, mazeDisplayCurrentY, false);
+  matrix.drawPixel(mazeDisplayCurrentY, mazeDisplayCurrentX, matrix.Color(0, 0, 0)); //off      
+  matrix.show();
 }
 
 void mazeCheckWin() 
@@ -391,8 +406,8 @@ void mazeCheckWin()
     Serial.println (__func__);
   }
   if (MAZE_LEVELS[mazeCurrentLevel][mazeCurrentX][mazeCurrentY] == 'f') {
-    mazelc.clearDisplay(0);
-    digitalWrite(PIN_MAZE_LED_FIN, HIGH);
+    clearMatrix();
+    lc.setLed(PIN_MAZE_LED_FIN,true);
     mazeModuleDefused = true;
     defusedModuleBuzzer();
     isAnyModuleDefused=true;
@@ -470,16 +485,9 @@ void mazeSetup()
     Serial.println(F("Maze Level Number 0-8: "));
     Serial.println (mazeCurrentLevel);
   }
-  //Setup Led
-  /*
-    The MAX72XX is in power-saving mode on startup,
-    we have to do a wakeup call
-  */
-  mazelc.shutdown(0, false);
-  /* Set the brightness to a medium values */
-  mazelc.setIntensity(0, MAZE_LEDS_BRIGHTNESS);
-  /* and clear the display */
-  mazelc.clearDisplay(0);
+  //Setup LedMatrix
+  matrix.begin();
+  matrix.show(); // initialize all pixels to 'off'  
   mazeInitLevel();
 }
 
@@ -571,6 +579,6 @@ void mazeModuleBoom()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  mazelc.clearDisplay(0);
-  digitalWrite(PIN_MAZE_LED_FIN, LOW);
+  clearMatrix();
+  lc.setLed(PIN_MAZE_LED_FIN,false);
 }

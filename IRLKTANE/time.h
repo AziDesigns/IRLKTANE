@@ -8,7 +8,7 @@
 
 SevenSegmentExtended timer(PIN_TIME_CLK, PIN_TIME_DIO);
 unsigned long seconds = 0;
-byte mins = BOMB_TIMER_MINUTES, sec = BOMB_TIMER_SECONDS + 1;
+int mins = BOMB_TIMER_MINUTES, sec = BOMB_TIMER_SECONDS + 1;
 
 void timeSetup() 
 {

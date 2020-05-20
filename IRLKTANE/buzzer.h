@@ -1,12 +1,12 @@
 #include "pitches.h"
-#define buzzer 2
+#define BUZZER 2
 
 // change this to make the song slower or faster
 byte tempo = 108;
 
 void buzzerSetup()
 {
-  pinMode(buzzer, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
 }
 
 // notes of the moledy followed by the duration.
@@ -72,13 +72,13 @@ void victoryBuzzer()
     }
 
     // we only play the note for 90% of the duration, leaving 10% as a pause
-    tone(buzzer, victoryMelody[thisNote], noteDuration*0.9);
+    tone(BUZZER, victoryMelody[thisNote], noteDuration*0.9);
 
     // Wait for the specief duration before playing the next note.
     delay(noteDuration);
     
     // stop the waveform generation before the next note.
-    noTone(buzzer);
+    noTone(BUZZER);
   }
   victorySong=true;
 }
@@ -104,13 +104,13 @@ void boomBuzzer()
     }
 
     // we only play the note for 90% of the duration, leaving 10% as a pause
-    tone(buzzer, boomMelody[thisNote], noteDuration*0.9);
+    tone(BUZZER, boomMelody[thisNote], noteDuration*0.9);
 
     // Wait for the specief duration before playing the next note.
     delay(noteDuration);
     
     // stop the waveform generation before the next note.
-    noTone(buzzer);
+    noTone(BUZZER);
   }
 }
 
@@ -154,11 +154,11 @@ void playTone() {
     //  played less long than 'duration', pulse speaker HIGH and LOW
     while (elapsed_time < duration) {
 
-      digitalWrite(buzzer,HIGH);
+      digitalWrite(BUZZER,HIGH);
       delayMicroseconds(tone_ / 2);
 
       // DOWN
-      digitalWrite(buzzer, LOW);
+      digitalWrite(BUZZER, LOW);
       delayMicroseconds(tone_ / 2);
 
       // Keep track of how long we pulsed

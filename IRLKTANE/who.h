@@ -6,10 +6,10 @@
 */
 #define LABELS_LENGTH 28
 
-#define PIN_WHO_LED_1 34 // stage 1 complete LED
-#define PIN_WHO_LED_2 35 // stage 2 complete LED
-#define PIN_WHO_LED_3 36 // stage 3 complete LED
-#define PIN_WHO_LED_FIN 8 // module complete LED
+#define PIN_WHO_LED_1 0,7,3 // stage 1 complete LED
+#define PIN_WHO_LED_2 0,0,4 // stage 2 complete LED
+#define PIN_WHO_LED_3 0,1,4 // stage 3 complete LED
+#define PIN_WHO_LED_FIN 0,2,4 // module complete LED
 
 #define PIN_WHO_BUTTON_1 A15 // Select button for Column 1 Row 1
 #define PIN_WHO_BUTTON_2 A14 // Select button for Column 1 Row 2
@@ -65,10 +65,10 @@ void whoModuleBoom() // if the bomb explodes what should the module display
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  digitalWrite(PIN_WHO_LED_1, LOW);
-  digitalWrite(PIN_WHO_LED_2, LOW);
-  digitalWrite(PIN_WHO_LED_3, LOW);
-  digitalWrite(PIN_WHO_LED_FIN, LOW);
+  lc.setLed(PIN_WHO_LED_1,false);
+  lc.setLed(PIN_WHO_LED_2,false);
+  lc.setLed(PIN_WHO_LED_3,false);
+  lc.setLed(PIN_WHO_LED_FIN,false);
   lcdWho.clear();
   lcdWho.setCursor(0, 0); lcdWho.print(F("===================="));
   lcdWho.setCursor(0, 3); lcdWho.print(F("===================="));
@@ -82,10 +82,10 @@ void whoModuleDefusedPrint() // the module has been defused
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  digitalWrite(PIN_WHO_LED_1, LOW);
-  digitalWrite(PIN_WHO_LED_2, LOW);
-  digitalWrite(PIN_WHO_LED_3, LOW);
-  digitalWrite(PIN_WHO_LED_FIN, HIGH);
+  lc.setLed(PIN_WHO_LED_1,false);
+  lc.setLed(PIN_WHO_LED_2,false);
+  lc.setLed(PIN_WHO_LED_3,false);
+  lc.setLed(PIN_WHO_LED_FIN,true);
   defusedModuleBuzzer();
   isAnyModuleDefused=true;
   whoModuleDefused = true;
@@ -207,10 +207,10 @@ void nextLevel() // moves you to the next stage of who
     Serial.println (__func__);
   }
   whoLevel++;
-  if (whoLevel == 2) digitalWrite(PIN_WHO_LED_1, HIGH);
-  else if (whoLevel == 3) digitalWrite(PIN_WHO_LED_2, HIGH);
+  if (whoLevel == 2) lc.setLed(PIN_WHO_LED_1,true);
+  else if (whoLevel == 3) lc.setLed(PIN_WHO_LED_2,true);
   else if (whoLevel == 4) {
-    digitalWrite(PIN_WHO_LED_3, HIGH);
+    lc.setLed(PIN_WHO_LED_3,true);
     whoModuleDefusedPrint();
   }
   if (whoLevel != 4) { // if the module hasn't been defused yet, go to the next stage 
@@ -228,9 +228,9 @@ void whoReset() // function that resets the module
   addStrike();
   if (nrStrikes < 3) {
     whoLevel = 1;
-    digitalWrite(PIN_WHO_LED_1, LOW);
-    digitalWrite(PIN_WHO_LED_2, LOW);
-    digitalWrite(PIN_WHO_LED_3, LOW);
+    lc.setLed(PIN_WHO_LED_1,false);
+    lc.setLed(PIN_WHO_LED_2,false);
+    lc.setLed(PIN_WHO_LED_3,false);
     lcdWho.clear();
     generateWords();
     printLabels();
@@ -248,11 +248,6 @@ void whoSetup() // define outputs and inputs for who
   // first stage
   generateWords();
   printLabels();
-
-  pinMode(PIN_WHO_LED_FIN, OUTPUT);
-  pinMode(PIN_WHO_LED_1, OUTPUT);
-  pinMode(PIN_WHO_LED_2, OUTPUT);
-  pinMode(PIN_WHO_LED_3, OUTPUT);
 
   pinMode(PIN_WHO_BUTTON_1, INPUT);
   pinMode(PIN_WHO_BUTTON_2, INPUT);

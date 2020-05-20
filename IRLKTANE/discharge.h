@@ -6,8 +6,8 @@
   PINS FOR LED AND BUTTON/LEVER WILL CONFLICT ONCE MERGED WITH MAIN BRANCH. USING 2ND MEGA2560 FOR TESTING THIS MODULE
   NEEDS ITS OWN TIMER / DISPLAY CURRENTLY USING SAME DISPLAY AS OVERALL TIME TO REDUCE EFFORT IN WRITING CODE
 */
-#define PIN_DISCHARGE_LED_1  31 // turns on when button pressed
-#define PIN_DISCHARGE_BUTTON_1 30 // discharge button
+#define PIN_DISCHARGE_LED_1 2,0,7 // turns on when button pressed
+#define PIN_DISCHARGE_BUTTON_1 29 // discharge button
 #define DISCHARGE_DEFAULT_TIME 45 // default time per rotation
     
 unsigned long dischargeSeconds = 0;
@@ -22,7 +22,6 @@ void dischargeSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  pinMode(PIN_DISCHARGE_LED_1, OUTPUT);
   pinMode(PIN_DISCHARGE_BUTTON_1, INPUT);
 };
 
@@ -70,13 +69,13 @@ void dischargeLoop()
           Serial.println(F("dischargeButtonOn"));
         }
         addOrSubtractTime=1; //this is what adds the time back
-        digitalWrite (PIN_DISCHARGE_LED_1, HIGH);
+        lc.setLed(PIN_DISCHARGE_LED_1,true);
       } else {
         if (DEBUG_LEVEL >= 1) {
           Serial.println(F("dischargeButtonOff"));
         }
         addOrSubtractTime=0; //reduces time when not pressed
-        digitalWrite (PIN_DISCHARGE_LED_1, LOW);
+        lc.setLed(PIN_DISCHARGE_LED_1,false);
       }
     }
     // save the current state as the last state, for next time through the loop
@@ -91,7 +90,7 @@ void dischargeBombDefused()
   }
   lc.setDigit(1,3,' ',false);
   lc.setDigit(1,2,' ',false); 
-  digitalWrite (PIN_DISCHARGE_LED_1, LOW);
+  lc.setLed(PIN_DISCHARGE_LED_1,false);
 }
 
 void dischargeModuleBoom()
@@ -110,5 +109,5 @@ void dischargeModuleBoom()
     lc.setDigit(1,3,' ',false);
     lc.setDigit(1,2,' ',false); 
   }
-  digitalWrite (PIN_DISCHARGE_LED_1, LOW);
+  lc.setLed(PIN_DISCHARGE_LED_1,false);
 }

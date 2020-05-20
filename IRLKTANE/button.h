@@ -2,7 +2,7 @@
 /*
   KNOWN ISSUES:
 */
-#define PIN_BUTTON_LED_FIN 22 // module complete LED
+#define PIN_BUTTON_LED_FIN 2,0,1 // module complete LED
 #define PIN_BUTTON_BTN 23
 #define PIN_BUTTON_LEFT_LED_RED 13
 #define PIN_BUTTON_LEFT_LED_GREEN 7
@@ -43,7 +43,7 @@ void buttonModuleDefusedPrint()
   buttonModuleDefused = true;
   defusedModuleBuzzer();
   isAnyModuleDefused=true;
-  digitalWrite(PIN_BUTTON_LED_FIN, HIGH);
+  lc.setLed(PIN_BUTTON_LED_FIN,true);
   lcdButton.clear();
   lcdButton.setCursor(1, 0);
   lcdButton.print(F("MODULE DEFUSED"));
@@ -64,7 +64,7 @@ void buttonModuleBoom()
   lcdButton.print(F("BOMB"));
   lcdButton.setCursor(4, 1);
   lcdButton.print(F("EXPLODED"));
-  digitalWrite(PIN_BUTTON_LED_FIN, LOW);
+  lc.setLed(PIN_BUTTON_LED_FIN,false);
 }
 
 bool checkClock(byte value)
@@ -128,13 +128,15 @@ void buttonSetup()
   pinMode(PIN_BUTTON_RIGHT_LED_GREEN, OUTPUT);
   pinMode(PIN_BUTTON_RIGHT_LED_BLUE, OUTPUT);
   pinMode(PIN_BUTTON_BTN, INPUT);
-  pinMode(PIN_BUTTON_LED_FIN, OUTPUT);
 
   //generating the colors for the left led and the right led
   leftLedColor = random(1, 5);
   rightLedColor = random(1, 5);
   btnWordGen = random(1, 4);
 
+  lcdButton.init();
+  lcdButton.backlight();
+  
   if (DEBUG_LEVEL >= 1) {
     Serial.println(F("Left led color: "));
     Serial.println(leftLedColor);
