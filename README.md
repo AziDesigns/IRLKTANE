@@ -34,7 +34,7 @@ In order for the code to work, you will need the following libraries:
 
 - SevenSegmentTM1637 - [link](https://github.com/bremme/arduino-tm1637) 
 - LedControl - [link](https://github.com/wayoda/LedControl)
-- LiquidCrystal - [link](https://www.arduinolibraries.info/libraries/liquid-crystal)
+- [REMOVED / NO LONGER NEEDED]~~LiquidCrystal~~ - [link](https://www.arduinolibraries.info/libraries/liquid-crystal)
 - LiquidCrystal_I2C - [link](https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c?fbclid=IwAR016eH4yHLd4HKqA-OcUghdO19ukQlUcGXE2mY0AUaA8aWecJZJvaQrt5E)
 - The files in this repository
 
@@ -50,12 +50,14 @@ A Fritzing scheme has been added to this repository with instructions to build t
 
 Next, connect the Arduino board to your computer and load the program to the board.
 
-#### 2. Components (List Subject to Change)
+#### 2. Components (List Subject to Change) - will be updated upon completion of final build as it continues to change.
     1 - Arduino MEGA 2560 R3
     2 - Neopixel Stick
     1 - Red 7-segment clock display
     3 - 7 Segment Display (2-Digit)
     1 - Adafruit NeoPixel NeoMatrix 8x8 - 64 RGB LED Pixel Matrix
+    4 - MAX7219 (DRIVES DISPLAYS AND LED MATRIX)
+    1 - CUSTOM LED Matrix PCB or Make your own DIY on perfboard
     27 - Green LED
     2 - Yellow LED
     1 - 7 Segment Display (Single Digit)
