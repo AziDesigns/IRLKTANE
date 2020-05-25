@@ -3,6 +3,8 @@
   KNOWN ISSUES:
   PIN ASSIGMENTS ARE WRONG & NEED UPDATED :)
 */
+#include "Adafruit_LEDBackpack.h"
+
 #define PIN_PASSWORD_LED_FIN 2,4,3 // module complete led
 #define PIN_PASSWORD_BUTTON_1 33 // letter 1 up // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_2 34 // letter 2 up // invalid pin max number is 53
@@ -15,6 +17,8 @@
 #define PIN_PASSWORD_BUTTON_9 41 // letter 4 down // invalid pin max number is 53
 #define PIN_PASSWORD_BUTTON_10 42 // letter 5 down
 #define PIN_PASSWORD_BUTTON_SUBMIT 43 // submit button
+
+Adafruit_AlphaNum4 alpha5 = Adafruit_AlphaNum4();
 
 unsigned long PWswitchMillis = 0;
 
@@ -61,47 +65,41 @@ char positionVals[5][6] = {
 byte currentPositionPos[] = {0,0,0,0,0};
 
 char validWords[35][5] = {
- {'a','b','o','u','t'},
- {'a','f','t','e','r'},
- {'a','g','a','i','n'},
- {'b','e','l','o','w'},
- {'c','o','u','l','d'},
-
- {'e','v','e','r','y'},
- {'f','i','r','s','t'},
- {'f','o','u','n','d'},
- {'g','r','e','a','t'},
- {'h','o','u','s','e'},
-
- {'l','a','r','g','e'},
- {'l','e','a','r','n'},
- {'n','e','v','e','r'},
- {'o','t','h','e','r'},
- {'p','l','a','c','e'},
-
- {'p','l','a','n','t'},
- {'p','o','i','n','t'},
- {'r','i','g','h','t'},
- {'s','m','a','l','l'},
- {'s','o','u','n','d'},
-
- {'s','p','e','l','l'},
- {'s','t','i','l','l'},
- {'s','t','u','d','y'},
- {'t','h','e','i','r'},
- {'t','h','e','r','e'},
-
- {'t','h','e','s','e'},
- {'t','h','i','n','g'},
- {'t','h','i','n','k'},
- {'t','h','r','e','e'},
- {'w','a','t','e','r'},
-
- {'w','h','e','r','e'},
- {'w','h','i','c','h'},
- {'w','o','r','l','d'},
- {'w','o','u','l','d'},
- {'w','r','i','t','e'}
+  {'A','B','O','U','T'},
+  {'A','F','T','E','R'},
+  {'A','G','A','I','N'},
+  {'B','E','L','O','W'},
+  {'C','O','U','L','D'},
+  {'E','V','E','R','Y'},
+  {'F','I','R','S','T'},
+  {'F','O','U','N','D'},
+  {'G','R','E','A','T'},
+  {'H','O','U','S','E'},
+  {'L','A','R','G','E'},
+  {'L','E','A','R','N'},
+  {'N','E','V','E','R'},
+  {'O','T','H','E','R'},
+  {'P','L','A','C','E'},
+  {'P','L','A','N','T'},
+  {'P','O','I','N','T'},
+  {'R','I','G','H','T'},
+  {'S','M','A','L','L'},
+  {'S','O','U','N','D'},
+  {'S','P','E','L','L'},
+  {'S','T','I','L','L'},
+  {'S','T','U','D','Y'},
+  {'T','H','E','I','R'},
+  {'T','H','E','R','E'},
+  {'T','H','E','S','E'},
+  {'T','H','I','N','G'},
+  {'T','H','I','N','K'},
+  {'T','H','R','E','E'},
+  {'W','A','T','E','R'},
+  {'W','H','E','R','E'},
+  {'W','H','I','C','H'},
+  {'W','O','R','L','D'},
+  {'W','O','U','L','D'},
+  {'W','R','I','T','E'}
 };
 
 void setInitDisplayLetters(byte p) 
@@ -122,6 +120,8 @@ void updatePasswordDisplay()
   for(byte i = 0; i < 5; i++)
   {
     Serial.print(displayVals[i]);
+    alpha5.writeDigitAscii(i, displayVals[i]);
+    alpha5.writeDisplay();
   }
   Serial.println(F(""));
 }
@@ -187,13 +187,13 @@ void genRandLetters(byte p)
               check = false;
             } 
           }
-          char valueLetter = value + 'a';
+          char valueLetter = value + 'A';
           if (valueLetter == positionVals[p][0]) {
             check = false;
           }
       }
       randomArray[i] = value;
-      char letter = value + 'a';
+      char letter = value + 'A';
       positionVals[p][i] = letter;
   }
 }
@@ -364,6 +364,10 @@ void passwordSetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
+  
+  alpha5.begin(0x70);
+  alpha5.clear();
+  
   pinMode(PIN_PASSWORD_BUTTON_1, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_2, INPUT);
   pinMode(PIN_PASSWORD_BUTTON_3, INPUT);
@@ -388,6 +392,8 @@ void passwordSetup()
   setInitDisplayLetters(3);
   setInitDisplayLetters(4);
 
+  updatePasswordDisplay();
+  
   if (DEBUG_LEVEL >= 1) {
     Serial.println(F("Correct Letters"));
     for(byte i = 0; i < 5; i++)

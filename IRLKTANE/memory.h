@@ -5,22 +5,16 @@
   NEEDS COMPARED TO ACTUAL GAME MANUAL FOR ACCURACY.
   LedControl needs to be mapped to the correct pins once able to physically test.
 */
-#define PIN_MEMORY_BUTTON_1 49 // position 1 button
-#define PIN_MEMORY_BUTTON_2 50 // position 2 button
-#define PIN_MEMORY_BUTTON_3 51 // position 3 button
-#define PIN_MEMORY_BUTTON_4 52 // position 4 button
+#define PIN_MEMORY_BUTTON_1 22 // position 1 button
+#define PIN_MEMORY_BUTTON_2 23 // position 2 button
+#define PIN_MEMORY_BUTTON_3 29 // position 3 button
+#define PIN_MEMORY_BUTTON_4 44 // position 4 button
 
 #define PIN_MEMORY_LED_1 2,6,2 // stage 1 complete LED
 #define PIN_MEMORY_LED_2 2,7,2 // stage 2 complete LED
 #define PIN_MEMORY_LED_3 2,0,3 // stage 3 complete LED
 #define PIN_MEMORY_LED_4 2,1,3 // stage 4 complete LED
 #define PIN_MEMORY_LED_FIN 2,2,3 // module complete LED
-
-#define PIN_MEMORY_LATCH 63 // 74HC595  pin 9 STCP
-#define PIN_MEMORY_CLOCK 61 // 74HC595  pin 10 SHCP
-#define PIN_MEMORY_DATA 62 // 74HC595  pin 8 DS
-
-LedControl memorylc = LedControl(PIN_MEMORY_DATA, PIN_MEMORY_CLOCK, PIN_MEMORY_LATCH, 2); //DIN, CLK, LOAD, No. DRIVER
 
 byte previousButton, button; //the previos and the current button
 byte rightPoz; //the answer to the current stage
@@ -75,11 +69,11 @@ void displayNumbers()
   if (DEBUG_LEVEL >= 2) {
     Serial.println (__func__);
   }
-  memorylc.setDigit(0, 5, digits[0], false);
-  memorylc.setDigit(0, 0, digits[1], false);
-  memorylc.setDigit(0, 1, digits[2], false);
-  memorylc.setDigit(0, 2, digits[3], false);
-  memorylc.setDigit(0, 3, digits[4], false);
+//  memorylc.setDigit(0, 5, digits[0], false);
+//  memorylc.setDigit(0, 0, digits[1], false);
+//  memorylc.setDigit(0, 1, digits[2], false);
+//  memorylc.setDigit(0, 2, digits[3], false);
+//  memorylc.setDigit(0, 3, digits[4], false);
 }
 
 // function that returns the postion of a digit
@@ -131,10 +125,10 @@ void memorySetup()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-  memorylc.shutdown(0, false); // turn off power saving, enables display
+//  memorylc.shutdown(0, false); // turn off power saving, enables display
 
-  memorylc.setIntensity(0, 4); // sets brightness (0~15 possible values)
-  memorylc.clearDisplay(0);// clear screen
+//  memorylc.setIntensity(0, 4); // sets brightness (0~15 possible values)
+//  memorylc.clearDisplay(0);// clear screen
 
   turnOffLeds();
 
@@ -208,7 +202,7 @@ void memoryCheckButton() // function that checks if a button is pressed
       if (stageNumber == 5) { // if it's the last stage, the module is defused 
         turnOffLeds();
         lc.setLed(PIN_MEMORY_LED_FIN,true);
-        memorylc.clearDisplay(0);
+//        memorylc.clearDisplay(0);
         memoryModuleDefused = true;
         defusedModuleBuzzer();
         isAnyModuleDefused=true;
@@ -230,7 +224,7 @@ void memoryModuleBoom()  // if the bomb explodes what should the module display
   lc.setLed(PIN_MEMORY_LED_3,false);
   lc.setLed(PIN_MEMORY_LED_4,false);
   lc.setLed(PIN_MEMORY_LED_FIN,false);
-  memorylc.clearDisplay(0);
+//  memorylc.clearDisplay(0);
 }
 
 void memoryLoop() // if module not defused keep looping

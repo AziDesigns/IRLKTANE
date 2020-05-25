@@ -7,7 +7,7 @@
   NEEDS ITS OWN TIMER / DISPLAY CURRENTLY USING SAME DISPLAY AS OVERALL TIME TO REDUCE EFFORT IN WRITING CODE
 */
 #define PIN_DISCHARGE_LED_1 2,0,7 // turns on when button pressed
-#define PIN_DISCHARGE_BUTTON_1 29 // discharge button
+#define PIN_DISCHARGE_BUTTON_1 A9 // discharge button
 #define DISCHARGE_DEFAULT_TIME 45 // default time per rotation
     
 unsigned long dischargeSeconds = 0;

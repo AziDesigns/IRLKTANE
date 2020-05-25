@@ -3,7 +3,7 @@
   KNOWN ISSUES:
 */
 #define PIN_BUTTON_LED_FIN 2,0,1 // module complete LED
-#define PIN_BUTTON_BTN 23
+#define PIN_BUTTON_BTN 49
 #define PIN_BUTTON_LEFT_LED_RED 13
 #define PIN_BUTTON_LEFT_LED_GREEN 7
 #define PIN_BUTTON_LEFT_LED_BLUE 11
