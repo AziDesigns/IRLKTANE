@@ -1,20 +1,19 @@
 // On the Subject of Passwords
 /*
   KNOWN ISSUES:
-  PIN ASSIGMENTS ARE WRONG & NEED UPDATED :)
 */
 #include "Adafruit_LEDBackpack.h"
 
 #define PIN_PASSWORD_LED_FIN 2,4,3 // module complete led
-#define PIN_PASSWORD_BUTTON_1 33 // letter 1 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_2 34 // letter 2 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_3 35 // letter 3 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_4 36 // letter 4 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_5 37 // letter 5 up // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_6 38 // letter 1 down // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_1 33 // letter 1 up
+#define PIN_PASSWORD_BUTTON_2 34 // letter 2 up
+#define PIN_PASSWORD_BUTTON_3 35 // letter 3 up
+#define PIN_PASSWORD_BUTTON_4 36 // letter 4 up
+#define PIN_PASSWORD_BUTTON_5 37 // letter 5 up
+#define PIN_PASSWORD_BUTTON_6 38 // letter 1 down
 #define PIN_PASSWORD_BUTTON_7 39 // letter 2 down
-#define PIN_PASSWORD_BUTTON_8 40 // letter 3 down // invalid pin max number is 53
-#define PIN_PASSWORD_BUTTON_9 41 // letter 4 down // invalid pin max number is 53
+#define PIN_PASSWORD_BUTTON_8 40 // letter 3 down
+#define PIN_PASSWORD_BUTTON_9 41 // letter 4 down
 #define PIN_PASSWORD_BUTTON_10 42 // letter 5 down
 #define PIN_PASSWORD_BUTTON_SUBMIT 43 // submit button
 

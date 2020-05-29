@@ -1,17 +1,16 @@
 // On the Subject of Venting Gas
 /*
   KNOWN ISSUES:
-  MODULE IS WIP AND THERE ARE MANY MANY ISSUES & MISSING LOGIC.
 */
-#define PIN_VENTING_BUTTON_1 27 // YES BUTTON // PINOVERLAP
-#define PIN_VENTING_BUTTON_2 28 // NO BUTTON // PINOVERLAP
+#define PIN_VENTING_BUTTON_1 27 // YES BUTTON
+#define PIN_VENTING_BUTTON_2 28 // NO BUTTON
 
 #define VENTING_DEFAULT_TIME 40 // STARTING TIME WHEN MODULE RESETS
 
 unsigned long ventSeconds;
 byte ventSec;
 
-unsigned long startVentMillisMax = 0;//60000; //MAX TIME IN MS BEFORE MODULE STARTS IF NO MODULE IS DEFUSED
+unsigned long startVentMillisMax = 60000; //MAX TIME IN MS BEFORE MODULE STARTS IF NO MODULE IS DEFUSED
 unsigned long startVentMillis = 0; //TIME UNTIL NEXT VENT NEEDED
 unsigned long ventCurrentMillis = 0; //TIME UNTIL NEXT VENT NEEDED
 unsigned long ventSwitchMillis = 0; // DEBOUNCE PREVENTION
@@ -63,7 +62,7 @@ void checkVentSubmission(byte yn)
       // and then after a few seconds it will go back to displaying the original question "VENT GAS? Y/N" until time runs out
       lcdVent.clear();
       lcdVent.setCursor(0, 0); lcdVent.print(F("VENTING PREVENTS"));
-      lcdVent.setCursor(0, 1); lcdVent.print(F("ABCDEFGHIJKLMNOP"));
+      lcdVent.setCursor(0, 1); lcdVent.print(F("   EXPLOSIONS   "));
       ventingPreventsExplosionsTime = millis();
       ventingPreventsExplosionsTF = true;
     }

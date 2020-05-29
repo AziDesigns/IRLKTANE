@@ -33,11 +33,11 @@ LedControl lc=LedControl(PIN_MAX7219_DIN,PIN_MAX7219_CLOCK,PIN_MAX7219_LOAD,3);
 bool
 buttonModuleIncluded = false,
 dischargeModuleIncluded = false,
-knobModuleIncluded = false,
+knobModuleIncluded = true,
 mazeModuleIncluded = true,
 memoryModuleIncluded = false,
 morseModuleIncluded = false,
-passwordModuleIncluded = true, // password has overlapping pins and can not be enabled with anything else currently
+passwordModuleIncluded = false,
 simonModuleIncluded = false,
 ventingModuleIncluded = false,
 whoModuleIncluded = false;

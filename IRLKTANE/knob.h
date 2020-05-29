@@ -1,14 +1,9 @@
 // On the Subject of Knobs
 /*
   KNOWN ISSUES:
-  MODULE FULLY FUNCTIONS FROM A LED RANDOMAZATION AND RESETTING TIME ETC,
-    HOWEVER THE KNOB (ROTARY SWITCH) HAS STILL NOT BEEN WIRED UP/ INSTALLED AND THAT LOGIC HAS NOT BEEN VERIFIED.
-  ALMOST 100% SURE I WILL NEED TO CHANGE THESE VALUES
-      #define KNOB_POSITION_1 200
-      #define KNOB_POSITION_2 500
-      #define KNOB_POSITION_3 900
-      #define KNOB_POSITION_4 1200
-  PINS FOR LED'S WILL CONFLICT ONCE MERGED WITH MAIN BRANCH. USING 2ND MEGA2560 FOR TESTING THIS MODULE
+  MODULE FULLY FUNCTIONS FROM A LED RANDOMAZATION, KNOB TRACKING, AND RESETTING TIME ETC,
+    HOWEVER THE UP POSITION HAS STILL NOT BEEN DETERMINED, IN GAME UP IS ROTATED TO BE LEFT RIGHT UP OR DOWN AT RANDOM EACH TIME IT RESETS. 
+    MINE IS CURRENTLY GOING TO BE HARD VALUE OF UP = UP AND NO MOVING LABEL. MAY ADD A MOTOR THAT ROTATES THE UP POSITION IN THE FUTURE.
 */
 #define KNOB_DEFAULT_TIME 40 // default time per rotation
 #define PIN_KNOB_ROTARY_SWITCH A0 // rotary switch analog input pin
@@ -17,17 +12,17 @@
 #define PIN_KNOB_LED_3  2,3,1
 #define PIN_KNOB_LED_4  2,4,1
 #define PIN_KNOB_LED_5  2,5,1
-#define PIN_KNOB_LED_6  2,6,1
+#define PIN_KNOB_LED_6  2,6,1l
 #define PIN_KNOB_LED_7  2,7,1
 #define PIN_KNOB_LED_8  2,0,2
 #define PIN_KNOB_LED_9  2,1,2
 #define PIN_KNOB_LED_10 2,2,2
 #define PIN_KNOB_LED_11 2,3,2
 #define PIN_KNOB_LED_12 2,4,2
-#define KNOB_POSITION_1 200
-#define KNOB_POSITION_2 500
-#define KNOB_POSITION_3 900
-#define KNOB_POSITION_4 1200
+#define KNOB_POSITION_4 200
+#define KNOB_POSITION_3 300
+#define KNOB_POSITION_2 450
+#define KNOB_POSITION_1 1023
 
 unsigned long knobSeconds = 0;
 byte knobSec = KNOB_DEFAULT_TIME + 1;
@@ -47,27 +42,27 @@ void knobSetup()
 
 void knobCheckKnobPosition() // function that checks if the knob is in the correct position when it hits -1
 {
-  //knobPositionValue = analogRead(PIN_KNOB_ROTARY_SWITCH); // uncomment once the knob is wired up. Right now its not wired at all.
-  if (knobPositionValue<=KNOB_POSITION_1){
+  knobPositionValue = analogRead(PIN_KNOB_ROTARY_SWITCH); // uncomment once the knob is wired up. Right now its not wired at all.
+  if (knobPositionValue<=KNOB_POSITION_4){
     if (DEBUG_LEVEL >= 1) {
-      Serial.println(F("Position 1"));
+      Serial.println(F("Position 4"));
     }
-    knobCurrentState = 0;
-  } else if (knobPositionValue<=KNOB_POSITION_2) {
-    if (DEBUG_LEVEL >= 1) {
-      Serial.println(F("Position 2"));
-    }
-    knobCurrentState = 1;
+    knobCurrentState = 4;
   } else if (knobPositionValue<=KNOB_POSITION_3) {
     if (DEBUG_LEVEL >= 1) {
       Serial.println(F("Position 3"));
     }
-    knobCurrentState = 2;
-  } else if (knobPositionValue<=KNOB_POSITION_4) {
-    if (DEBUG_LEVEL >= 1) {
-      Serial.println(F("Position 4"));
-    }
     knobCurrentState = 3;
+  } else if (knobPositionValue<=KNOB_POSITION_2) {
+    if (DEBUG_LEVEL >= 1) {
+      Serial.println(F("Position 2"));
+    }
+    knobCurrentState = 2;
+  } else if (knobPositionValue<=KNOB_POSITION_1) {
+    if (DEBUG_LEVEL >= 1) {
+      Serial.println(F("Position 1"));
+    }
+    knobCurrentState = 1;
   }
 }
 
@@ -229,7 +224,6 @@ void knobLoop()
   if (DEBUG_LEVEL >= 3) {
     Serial.println (__func__);
   }
-
   if (!defused && !exploded) {
     knobDisplayTime();
     knobDisplayLEDArray();
